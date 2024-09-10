@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface I_Product
 {
-    String getName();
-    E_Product_Status getStatus();
-    String getCategory();
-    String getSubCategory();
-
-    double getSize();
-    List<I_Item> getItems();
-
-    void addItem(I_Item item);
-
-    void removeItem(I_Item item);
+//    String getName();
+//    E_Product_Status getStatus();
+//    String getCategory();
+//    String getSubCategory();
+//
+//    double getSize();
+//    List<I_Item> getItems();
+//
+//    void addItem(I_Item item);
+//
+//    void removeItem(I_Item item);
 }
