@@ -9,64 +9,37 @@ public class Supplier {
     private String paymentMethod;
     private List<Product> productList;
     private Agreement supplierAgreement;
+    private SupplierContact contact; // New field for SupplierContact
 
-    public Supplier(String supplierID, String companyID, String bankAccount, String paymentMethod, List<Product> productList, Agreement supplierAgreement) {
+    public Supplier(String supplierID, String companyID, String bankAccount, String paymentMethod, List<Product> productList, Agreement supplierAgreement, SupplierContact contact) {
         this.supplierID = supplierID;
         this.companyID = companyID;
         this.bankAccount = bankAccount;
         this.paymentMethod = paymentMethod;
         this.productList = productList;
         this.supplierAgreement = supplierAgreement;
+        this.contact = contact; // Assign contact during initialization
     }
 
-    public void setSupplierID(String supplierID) {
-        this.supplierID = supplierID;
-    }
+    // Getters and Setters
+    public String getSupplierID() { return supplierID; }
+    public void setSupplierID(String supplierID) { this.supplierID = supplierID; }
 
-    public void setCompanyID(String companyID) {
-        this.companyID = companyID;
-    }
+    public String getCompanyID() { return companyID; }
+    public void setCompanyID(String companyID) { this.companyID = companyID; }
 
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
-    }
+    public String getBankAccount() { return bankAccount; }
+    public void setBankAccount(String bankAccount) { this.bankAccount = bankAccount; }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
+    public List<Product> getProductList() { return productList; }
+    public void setProductList(List<Product> productList) { this.productList = productList; }
 
-    public void setSupplierAgreement(Agreement supplierAgreement) {
-        this.supplierAgreement = supplierAgreement;
-    }
+    public Agreement getSupplierAgreement() { return supplierAgreement; }
+    public void setSupplierAgreement(Agreement supplierAgreement) { this.supplierAgreement = supplierAgreement; }
 
-    public String getSupplierID() {
-        return supplierID;
-    }
-
-    public String getCompanyID() {
-        return companyID;
-    }
-
-    public String getBankAccount() {
-        return bankAccount;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public Agreement getSupplierAgreement() {
-        return supplierAgreement;
-    }
-
-
+    public SupplierContact getContact() { return contact; } // Getter for contact
+    public void setContact(SupplierContact contact) { this.contact = contact; } // Setter for contact
 }
-
