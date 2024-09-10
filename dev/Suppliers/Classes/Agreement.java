@@ -19,6 +19,8 @@ public class Agreement {
         this.supplyDays = supplyDays;
     }
 
+    // Setters
+
     public void setAgreementID(int agreementID) {
         this.agreementID = agreementID;
     }
@@ -39,6 +41,7 @@ public class Agreement {
         this.supplyDays = supplyDays;
     }
 
+    // Getters
     public int getAgreementID() {
         return agreementID;
     }
@@ -58,6 +61,28 @@ public class Agreement {
     public String getSupplyDays() {
         return supplyDays;
     }
+
+
+    // Search for a product's catalog number in the discount details
+    public Map<Integer, Double> findDiscountDetails(String catalogNumber) {
+        if (discountDetails.containsKey(catalogNumber)) {
+            return discountDetails.get(catalogNumber); // return discount conditions for the catalog number
+        } else {
+            return null; // product not found
+        }
+    }
+
+    // Add a new catalog number with discount conditions to the discount details
+    public void addDiscountDetails(String catalogNumber, Map<Integer, Double> discountConditions) {
+        if (!discountDetails.containsKey(catalogNumber)) {
+            discountDetails.put(catalogNumber, discountConditions);
+        } else {
+            System.out.println("The product is already listed in the discount document.");
+        }
+    }
+
+
+
 }
 
 

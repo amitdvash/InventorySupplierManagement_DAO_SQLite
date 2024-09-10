@@ -23,4 +23,14 @@ public class Order {
     public Date getOrderDate() {
         return orderDate;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                ", orderDate=" + orderDate +
+                "orderID='" + orderID + '\'' +
+                ", supplierID='" + supplierID + '\'' +
+                '}';
+    }
+
 }
