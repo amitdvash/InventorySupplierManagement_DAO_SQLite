@@ -1,88 +1,70 @@
 package dev.Suppliers.Classes;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Date;
-import java.util.Map;
 
 public class Agreement {
     private int agreementID;
     private List<Product> productList;
     private Date agreementDate;
-    private Map<String, Map<Integer,Double>> discountDetails;
+    private HashMap<String, HashMap<Integer, Double>> discountDetails;
     private String supplyDays;
+    private boolean selfSupply;
+    private String paymentType;
 
-    public Agreement(int agreementID, List<Product> productList, Date agreementDate, Map<String, Map<Integer, Double>> discountDetails, String supplyDays) {
+    public Agreement(int agreementID, List<Product> productList, Date agreementDate, HashMap<String, HashMap<Integer, Double>> discountDetails, String supplyDays, boolean selfSupply, String paymentType) {
         this.agreementID = agreementID;
         this.productList = productList;
         this.agreementDate = agreementDate;
         this.discountDetails = discountDetails;
         this.supplyDays = supplyDays;
+        this.selfSupply = selfSupply;
+        this.paymentType = paymentType;
     }
 
-    // Setters
+    // Getters and Setters
+    public int getAgreementID() { return agreementID; }
+    public void setAgreementID(int agreementID) { this.agreementID = agreementID; }
 
-    public void setAgreementID(int agreementID) {
-        this.agreementID = agreementID;
-    }
+    public List<Product> getProductList() { return productList; }
+    public void setProductList(List<Product> productList) { this.productList = productList; }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
+    public Date getAgreementDate() { return agreementDate; }
+    public void setAgreementDate(Date agreementDate) { this.agreementDate = agreementDate; }
 
-    public void setAgreementDate(Date agreementDate) {
-        this.agreementDate = agreementDate;
-    }
+    public HashMap<String, HashMap<Integer, Double>> getDiscountDetails() { return discountDetails; }
+    public void setDiscountDetails(HashMap<String, HashMap<Integer, Double>> discountDetails) { this.discountDetails = discountDetails; }
 
-    public void setDiscountDetails(Map<String, Map<Integer, Double>> discountDetails) {
-        this.discountDetails = discountDetails;
-    }
+    public String getSupplyDays() { return supplyDays; }
+    public void setSupplyDays(String supplyDays) { this.supplyDays = supplyDays; }
 
-    public void setSupplyDays(String supplyDays) {
-        this.supplyDays = supplyDays;
-    }
+    public boolean isSelfSupply() { return selfSupply; }
+    public void setSelfSupply(boolean selfSupply) { this.selfSupply = selfSupply; }
 
-    // Getters
-    public int getAgreementID() {
-        return agreementID;
-    }
+    public String getPaymentType() { return this.paymentType; }
+    public void setPaymentType(String paymentType) { this.paymentType = paymentType; }
 
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public Date getAgreementDate() {
-        return agreementDate;
-    }
-
-    public Map<String, Map<Integer, Double>> getDiscountDetails() {
-        return discountDetails;
-    }
-
-    public String getSupplyDays() {
-        return supplyDays;
+    // Find discount details for a specific product by catalogID
+    public HashMap<Integer, Double> findDiscountDetails(String catalogID) {
+        return discountDetails.getOrDefault(catalogID, null);
     }
 
 
-    // Search for a product's catalog number in the discount details
-    public Map<Integer, Double> findDiscountDetails(String catalogNumber) {
-        if (discountDetails.containsKey(catalogNumber)) {
-            return discountDetails.get(catalogNumber); // return discount conditions for the catalog number
+
+    // Add new discount details for a product by catalogID
+    public void addDiscountDetails(String catalogID, HashMap<Integer, Double> newDiscountDetails) {
+        if (!discountDetails.containsKey(catalogID)) {
+            discountDetails.put(catalogID, newDiscountDetails);
+            System.out.println("Discount added for catalogID: " + catalogID);
         } else {
-            return null; // product not found
+            System.out.println("Discount for product already exists in agreement.");
         }
     }
 
-    // Add a new catalog number with discount conditions to the discount details
-    public void addDiscountDetails(String catalogNumber, Map<Integer, Double> discountConditions) {
-        if (!discountDetails.containsKey(catalogNumber)) {
-            discountDetails.put(catalogNumber, discountConditions);
-        } else {
-            System.out.println("The product is already listed in the discount document.");
-        }
+    // Update discount details when changed in Product (Synchronization)
+    public void updateDiscountDetails(String catalogID, HashMap<Integer, Double> discountConditions) {
+        discountDetails.put(catalogID, discountConditions);
+        System.out.println("Discounts synchronized in agreement for catalogID: " + catalogID);
     }
-
-
-
 }
-
-

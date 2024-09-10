@@ -1,15 +1,18 @@
 package dev.Suppliers.Classes;
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     private String orderID;
     private String supplierID;
     private Date orderDate;
+    private List<Product> productList;
 
-    public Order(String orderID, String supplierID, Date orderDate) {
+    public Order(String orderID, String supplierID, Date orderDate, List<Product> productList) {
         this.orderID = orderID;
         this.supplierID = supplierID;
         this.orderDate = orderDate;
+        this.productList = productList;
     }
 
     public String getOrderID() {
@@ -22,6 +25,10 @@ public class Order {
 
     public Date getOrderDate() {
         return orderDate;
+    }
+
+    public List<Product> getProductList() { // Getter for product list
+        return productList;
     }
 
     @Override
