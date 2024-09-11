@@ -28,21 +28,7 @@ public class OrderController {
     public void generateOrdersReport() {
         System.out.println("----- Orders Report -----");
         for (Order order : orders) {
-            System.out.println("Order ID: " + order.getOrderID());
-            System.out.println("Supplier ID: " + order.getSupplierID());
-
-            List<Product> products = order.getProductList();
-            if (products != null) {
-                for (Product product : products) {
-                    System.out.println("    Product Name: " + product.getName());
-                    System.out.println("    Catalog ID: " + product.getCatalogID());
-                    System.out.println("    Price: " + product.getPrice());
-                    System.out.println("    Discount: " + product.getDiscountDetails());
-                }
-            } else {
-                System.out.println("    No products in this order.");
-            }
-            System.out.println("---------------------------");
+            order.printOrderDetails();
         }
     }
 
@@ -50,6 +36,7 @@ public class OrderController {
     public void addSupplier(Supplier supplier) {
         suppliers.add(supplier);
     }
+
 
     public Supplier getSupplier(String supplierID) {
         for (Supplier supplier : suppliers) {
