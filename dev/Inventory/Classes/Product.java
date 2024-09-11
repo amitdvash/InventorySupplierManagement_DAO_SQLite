@@ -2,6 +2,7 @@ package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Product_Status;
+import dev.Inventory.Interfaces.I_Product;
 
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class Product
+public class Product implements I_Product
 {
     private HashMap<Integer , Item> items;
     private int quantity_in_store;

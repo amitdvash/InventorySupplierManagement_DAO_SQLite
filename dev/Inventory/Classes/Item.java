@@ -2,10 +2,11 @@ package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
+import dev.Inventory.Interfaces.I_Item;
 
 import java.time.LocalDate;
 
-public class Item
+public class Item implements I_Item
 {
     private String Name;
     private double cost_price;

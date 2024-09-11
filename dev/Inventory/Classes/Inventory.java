@@ -2,6 +2,8 @@ package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Product_Status;
+import dev.Inventory.Interfaces.I_Discount;
+import dev.Inventory.Interfaces.I_Inventory;
 
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.List;
 //Facade Design Pattern - Inventory
 //All the complexity of the Inventory is hidden from the user
 //The user only needs to interact with the Inventory class
-public class Inventory
+public class Inventory implements I_Inventory
 {
     //A Singleton Inventory
     //There is only one instance of the Inventory

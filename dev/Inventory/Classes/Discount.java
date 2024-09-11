@@ -1,8 +1,10 @@
 package dev.Inventory.Classes;
 
+import dev.Inventory.Interfaces.I_Discount;
+
 import java.time.LocalDate;
 
-public class Discount
+public class Discount implements I_Discount
 {
     private double discountRate;
     private LocalDate start_date;
