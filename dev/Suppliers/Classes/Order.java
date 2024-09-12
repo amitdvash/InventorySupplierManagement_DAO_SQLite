@@ -31,13 +31,43 @@ public class Order {
         return productList;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                ", orderDate=" + orderDate +
-                "orderID='" + orderID + '\'' +
-                ", supplierID='" + supplierID + '\'' +
-                '}';
+    // Method to add a product to the order
+    public void addProduct(Product product) {
+        if (!productList.contains(product)) {
+            productList.add(product);
+            System.out.println("Product added to the order.");
+        } else {
+            System.out.println("Product is already in the order.");
+        }
     }
+
+    // Method to remove a product from the order
+    public void removeProduct(Product product) {
+        if (productList.contains(product)) {
+            productList.remove(product);
+            System.out.println("Product removed from the order.");
+        } else {
+            System.out.println("Product not found in the order.");
+        }
+    }
+
+    // Method to print the order details, including catalog numbers of products and supplier ID
+    public void printOrderDetails() {
+        System.out.println("Order ID: " + orderID);
+        System.out.println("Supplier ID: " + supplierID);
+        System.out.println("Order Date: " + orderDate);
+        if (productList != null) {
+            for (Product product : productList) {
+                System.out.println("    Product Name: " + product.getName());
+                System.out.println("    Catalog ID: " + product.getCatalogID());
+                System.out.println("    Price: " + product.getPrice());
+                System.out.println("    Discount: " + product.getDiscountDetails());
+            }
+        } else {
+            System.out.println("    No products in this order.");
+        }
+        System.out.println("---------------------------");
+    }
+
 
 }
