@@ -1,6 +1,7 @@
 package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;
+import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
 import dev.Inventory.Interfaces.I_Discount;
 import dev.Inventory.Interfaces.I_Inventory;
@@ -14,6 +15,7 @@ import java.util.List;
 //Facade Design Pattern - Inventory
 //All the complexity of the Inventory is hidden from the user
 //The user only needs to interact with the Inventory class
+
 public class Inventory implements I_Inventory
 {
     //A Singleton Inventory
@@ -36,19 +38,35 @@ public class Inventory implements I_Inventory
     }
 
 
-//    public void removeProduct (I_Product product)
-//    {
-//        //Remove the product from the inventory
-//        //If the product does not exist throw an exception
-//        if (products.containsKey(product.getName()))
-//        {
-//            products.remove(product.getName());
-//        }
-//        else
-//        {
-//            throw new IllegalArgumentException("Product does not exist");
-//        }
-//    }
+    public void addProduct(Product product)
+    {
+        //Add a product to the inventory
+        for (Product prod : products.values())
+        {
+            if (prod.equals(product))
+            {
+                //If the product already exists throw an exception
+                errorMsg("Product : "+ product.getName() + " already exists in the inventory ");
+                return;
+            }
+        }
+        products.put(product.getName() , product);
+        SystemMsg("Product Creation: " +product.getName() + " added successfully to the inventory");
+    }
+
+    public void removeProduct (Product product)
+    {
+        //Remove the product from the inventory
+        //If the product does not exist throw an exception
+        if (products.containsKey(product.getName()))
+        {
+            products.remove(product.getName());
+        }
+        else
+        {
+            errorMsg("Product does not exist in the inventory");
+        }
+    }
 
     public void addItem(Item item)
     {
@@ -61,7 +79,8 @@ public class Inventory implements I_Inventory
                 try
                 {
                     product.addItem(item);
-                    System.out.println(item.getName() + " ,id : " + item.getId() +" added successfully to " + product.getName());
+                    item.updateStatus();
+                    SystemMsg(item.getName() + " ,id : " + item.getId() +" added successfully to " + product.getName());
                     return;
                 }
                 catch (IllegalArgumentException e) {
@@ -72,11 +91,11 @@ public class Inventory implements I_Inventory
             }
         }
         //If the product matches to this item does not exist, create a new product and add the item to it
-        System.out.println("Product named " + item.getName() + " does not exist, creating a new product according to the item with default values for discount(null) and minimum quantity(5)-for set those values use the Setters");
-        Product product = new Product(item.getName() , item.getCategory() , item.getSub_category() , item.getSize() ,5 , null );
-        this.addProduct(product);
-        System.out.println(item.getName() + " ,id : " + item.getId() +" added successfully to " + product.getName());
-        this.products.get(item.getName()).addItem(item);
+        errorMsg("Product named: " + item.getName() + " from Category: " + item.getCategory() + " and SubCategory: " + item.getSub_category() + " does not exist , so this item cannot be added\n please add a matching product first");
+//        Product product = new Product(item.getName() , item.getCategory() , item.getSub_category() , item.getSize() ,5 , null );
+//        this.addProduct(product);
+//        System.out.println(item.getName() + " ,id : " + item.getId() +" added successfully to " + product.getName());
+//        this.products.get(item.getName()).addItem(item);
     }
     public void removeItem(Item item)
     {
@@ -91,7 +110,7 @@ public class Inventory implements I_Inventory
                 try
                 {
                     product.removeItem(item);
-                    System.out.println(item.getName() + " ,id : " + item.getId() +" removed successfully from " + product.getName());
+                    SystemMsg(item.getName() + " ,id : " + item.getId() +" removed successfully from " + product.getName());
 
                     return;
                 }
@@ -103,30 +122,15 @@ public class Inventory implements I_Inventory
                 }
             }
         }
-        //If the product matches to this item does not exist, throw an exception
-        System.out.println(item.getName() + " ,id : " + item.getId() +" does not exist in the inventory");
+        //If the product matches to this item does not exist, send a message
+        errorMsg(item.getName() + " ,id : " + item.getId() +" does not exist in the inventory");
 //        throw new IllegalArgumentException("Item does not exist in the inventory");
     }
 
 
 
 
-    public void addProduct(Product product)
-    {
-        //Add a product to the inventory
-        for (Product prod : products.values())
-        {
-            if (prod.equals(product))
-            {
-                //If the product already exists throw an exception
-                System.out.println("Product : "+ product.getName() + " already exists in the inventory ");
-                return;
-            }
-        }
 
-        products.put(product.getName() , product);
-        System.out.println("Product Creation: " +product.getName() + " added successfully to the inventory");
-    }
     public Product getProductByName(String name)
     {
         //Return the product with the given name
@@ -136,61 +140,52 @@ public class Inventory implements I_Inventory
     public List<Product> getProductsByStatus(E_Product_Status status)
     {
         /*Return a list of products with the given status
-        If the status is null, return all the products in the inventory
+        if the status is null , return empty list
         */
-        if (status == null)
-        {
-            return new ArrayList<Product>(products.values());
-        }
-       List<Product> result = new ArrayList<>();
-       for(Product prod : products.values())
-       {
-           if(prod.getStatus() == status)
-           {
-               result.add(prod);
-           }
-       }
-       return result;
+        return products.values().stream().filter(product -> product.getStatus() == status).toList();
     }
 
 
     public List<Product> getProductsByCategory(String category)
     {
         //Return a list of products with the given category
-        //If the category is null, return all the products in the inventory
-        if (category == null)
-        {
-            return new ArrayList<Product>(products.values());
-        }
-        List<Product> result = new ArrayList<>();
-        for(Product prod :products.values())
-        {
-            if(prod.getCategory().equals(category))
-            {
-                result.add(prod);
-            }
-        }
-        return result;
+        //If the category is null, return empty list
+        return products.values().stream().filter(product -> product.getCategory().equals(category)).toList();
     }
     public List<Product> getProductsBySubCategory(String Subcategory)
     {
         //Return a list of products with the given category
-        //If the category is null, return all the products in the inventory
-        if (Subcategory == null)
-        {
-            return new ArrayList<Product>(products.values());
-        }
-        List<Product> result = new ArrayList<>();
-        for(Product prod : products.values())
-        {
-            if(prod.getSub_category().equals(Subcategory))
-            {
-                result.add(prod);
-            }
-        }
-        return result;
+        //If the category is null, return empty list
+        return products.values().stream().filter(product -> product.getSub_category().equals(Subcategory)).toList();
     }
-
+    public List<Product> getProductsBySize(int size)
+    {
+        //Return a list of products with the given size
+        //If the size is null, return empty list
+        return products.values().stream().filter(product -> product.getSize() == size).toList();
+    }
+    public List<Item> getItemsByStatus(E_Item_Status Status)
+    {
+        //Return a list of items with the given place
+        //If the place is null, return empty list
+        List<Item> items = new ArrayList<Item>();
+        for (Product product : products.values())
+        {
+            items.addAll(product.getItemsByStatus(Status));
+        }
+        return items;
+    }
+    public List<Item> getItemsByPlace(E_Item_Place place)
+    {
+        //Return a list of items with the given place
+        //If the place is null, return empty list
+        List<Item> items = new ArrayList<Item>();
+        for (Product product : products.values())
+        {
+            items.addAll(product.getItemsByPlace(place));
+        }
+        return items;
+    }
     @Override
     public String toString() {
         String prod_S = "";
@@ -214,6 +209,29 @@ public class Inventory implements I_Inventory
                 return;
             }
         }
-        System.out.println("Item does not exist in the inventory");
+        errorMsg("Item does not exist in the inventory");
+    }
+    public void SetMinQuantity(Product product , int min_quantity)
+    {
+        //Set the minimum quantity for the product
+        //If the product does not exist, throw an exception
+        if (products.containsKey(product.getName()))
+        {
+            products.get(product.getName()).setMin_quantity(min_quantity);
+        }
+        else
+        {
+            errorMsg("Product does not exist");
+        }
+    }
+    public void errorMsg(String msg)
+    {
+        //Print an error message
+        System.out.println(msg);
+    }
+    public void SystemMsg(String msg)
+    {
+        //Print a system message
+        System.out.println(msg);
     }
 }

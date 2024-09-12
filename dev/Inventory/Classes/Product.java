@@ -1,6 +1,7 @@
 package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;
+import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
 import dev.Inventory.Interfaces.I_Product;
 
@@ -204,7 +205,6 @@ public class Product implements I_Product
         send a notification that the product is about to finish
          */
         System.out.println("Product Status: " + this.getName() + " is about to finish\n    items left : "+ (quantity_in_store +" in store and " +quantity_in_warehouse + " in warehouse"));
-
     }
     private void SendNotification_OutOfStock()
     {
@@ -291,6 +291,31 @@ public class Product implements I_Product
                 ", status=" + status +
                 "\n items:\n     { \n " + items_S +"     }\n" +
                 '}';
+    }
+
+    public List<Item> getItemsByStatus(E_Item_Status Status)
+    {
+        List<Item> items = new ArrayList<Item>();
+        for (Item item : this.items.values())
+        {
+            if (item.getPlace().equals(Status))
+            {
+                items.add(item);
+            }
+        }
+        return items;
+    }
+    public List <Item> getItemsByPlace(E_Item_Place place)
+    {
+        List<Item> items = new ArrayList<Item>();
+        for (Item item : this.items.values())
+        {
+            if (item.getPlace() == place)
+            {
+                items.add(item);
+            }
+        }
+        return items;
     }
 
 //

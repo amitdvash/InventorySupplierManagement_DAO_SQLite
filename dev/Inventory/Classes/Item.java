@@ -125,6 +125,30 @@ public class Item implements I_Item
         this.place = place;
     }
 
+    public void updateStatus()
+    {
+        if (expiry_date ==null)
+            return;
+        if (expiry_date.isBefore(LocalDate.now()))
+        {
+            status = E_Item_Status.EXPIRED;
+            sendNotification_Expired();
+        }
+        else if(expiry_date.isBefore(LocalDate.now().plusDays(7)))
+        {
+            status = E_Item_Status.about_to_expire;
+            sendNotification_AboutToExpire();
+        }
+    }
+
+    private void sendNotification_AboutToExpire() {
+        System.out.println("Item "+ Name + " is about to expire - last time to use is in : "+ expiry_date);
+    }
+
+    private void sendNotification_Expired() {
+        System.out.println("Item "+ Name + " is expired");
+    }
+
     @Override
     public String toString() {
         return Name +" {" +
