@@ -40,24 +40,8 @@ public class main
 //        System.out.println(P1);
         P1.moveItemTo(item1, E_Item_Place.Store);
         P1.removeItem(item1_1);
-
         P1.setDiscount(discount);
-
-        P1.Change_Status_Discount();
-
-
-
         System.out.println(P1);
-
-
-
-
-
-
-
-
-
-
 //         System.out.println(P1.toString());
 //        P1.addItem(item1);
 //        P1.addItem(item2);
