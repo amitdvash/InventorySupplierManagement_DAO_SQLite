@@ -51,4 +51,10 @@ public class Discount implements I_Discount
     {
         return date.isAfter(start_date) && date.isBefore(end_date);
     }
+    //---------------------------------------------------------------------------------------------
+    @Override
+    public String toString() {
+        return String.valueOf(hashCode())+" "+this.discountRate+"%";
+    }
+    //-------------------------------------------------------------------------------------------
 }

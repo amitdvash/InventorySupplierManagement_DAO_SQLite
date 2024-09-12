@@ -5,10 +5,8 @@ import dev.Inventory.Enums.E_Product_Status;
 import dev.Inventory.Interfaces.I_Product;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Product implements I_Product
 {
@@ -22,6 +20,7 @@ public class Product implements I_Product
     private double size;
     private Discount discount;
     private E_Product_Status status;
+    private boolean Discount_Status;
     public Product(String name, String category, String sub_category, double size,int min_quantity , Discount discount)
     {
         this.name = name;
@@ -34,6 +33,7 @@ public class Product implements I_Product
         quantity_in_store = 0;
         quantity_in_warehouse = 0;
         this.min_quantity = min_quantity;
+
     }
 
     public HashMap<Integer, Item> getItems() {
@@ -116,12 +116,12 @@ public class Product implements I_Product
         this.status = status;
     }
 
-    public boolean equals(Product product)
+    public boolean equals(Product product)//check
     {
         return this.name.equals(product.getName()) && this.category.equals(product.getCategory()) && this.sub_category.equals(product.getSub_category()) && this.size == product.getSize();
     }
 
-    public boolean Matched_item_product(Item item)
+    public boolean Matched_item_product(Item item)//check
     {
         return item.getCategory().equals(this.getCategory()) && item.getSub_category().equals(this.getSub_category()) && item.getSize() == this.getSize() && item.getName().equals(this.getName());
     }
@@ -244,7 +244,18 @@ public class Product implements I_Product
 
 
     public void moveItemTo(Item item , E_Item_Place place)
-    {
+       {
+// /____________________________________________________________________________________________________________________________
+//        try {
+//            if(!this.items.get(item.getId()).equals(item)){
+//                return;
+//            }
+//        }catch (Exception e){
+//            return;
+//        }
+//        //___________________________________________________________________________________________________________________
+
+
         if(item.getPlace() == place)
         {
             System.out.println("Item is already in the " + place.toString() );
@@ -281,4 +292,22 @@ public class Product implements I_Product
                 "\n items:\n     { \n " + items_S +"     }\n" +
                 '}';
     }
+
+//
+//    public void activateDiscount() {
+//        // Check if discount is available and valid for the current date
+//        if (this.discount != null && discount.isAvailable(LocalDate.now())) {
+//            for (Item item : items.values()) {
+//                double originalPrice = item.getSelling_price();
+//                double discountRate = discount.getDiscountRate() / 100;
+//                double newPrice = originalPrice - (originalPrice * discountRate);
+//                item.setSelling_price(newPrice);
+//            }
+//            System.out.println("Discount activated for product: " + this.name);
+//        } else {
+//            System.out.println("No valid discount available for product: " + this.name);
+//        }
+//
+
+
 }
