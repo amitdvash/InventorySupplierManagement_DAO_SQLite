@@ -1,20 +1,20 @@
-package dev.Suppliers.Classes;
+package dev.Suppliers.Domain;
 
 import java.util.HashMap;
 
 public class Product {
-    private String productID;
+    private static int runningIndex = 1;  // Static running index
     private String catalogID;
     private String name;
     private HashMap<Integer, Double> discountDetails;
     private double price;
     private int expirationDays;
     private double weight;
-    private Agreement agreement;  // Add reference to Agreement
+    private Agreement agreement;
 
-    public Product(String productID, String catalogID, String name, HashMap<Integer, Double> discountDetails, double price, int expirationDays, double weight, Agreement agreement) {
-        this.productID = productID;
-        this.catalogID = catalogID;
+    // Constructor - ID is auto-assigned
+    public Product(String name, HashMap<Integer, Double> discountDetails, double price, int expirationDays, double weight, Agreement agreement) {
+        this.catalogID =  "P" + runningIndex++;
         this.name = name;
         this.discountDetails = discountDetails;
         this.price = price;
@@ -27,13 +27,10 @@ public class Product {
     public String getProductID() { return productID; }
     public String getCatalogID() { return catalogID; }
     public String getName() { return name; }
+
     public HashMap<Integer, Double> getDiscountDetails() { return discountDetails; }
     public void setDiscountDetails(HashMap<Integer, Double> discountDetails) {
         this.discountDetails = discountDetails;
-        // Reflect the change in the Agreement
-        if (agreement != null) {
-            agreement.updateDiscountDetails(catalogID, discountDetails);  // Synchronize discount in Agreement
-        }
     }
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
@@ -44,7 +41,6 @@ public class Product {
     public double getWeight() { return weight; }
     public void setWeight(double weight) { this.weight = weight; }
 
-    // Link to Agreement
     public Agreement getAgreement() { return agreement; }
     public void setAgreement(Agreement agreement) { this.agreement = agreement; }
 }

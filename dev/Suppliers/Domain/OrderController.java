@@ -1,11 +1,11 @@
-package dev.Suppliers.Classes;
+package dev.Suppliers.Domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderController {
     private List<Order> orders = new ArrayList<>();
-    private List<Supplier> suppliers = new ArrayList<>();  // Assuming we keep suppliers for reference
+    private List<Supplier> suppliers = new ArrayList<>();
 
     // Add a new order
     public void addOrder(Order order) {
