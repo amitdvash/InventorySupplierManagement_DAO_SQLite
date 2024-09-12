@@ -3,6 +3,7 @@ package dev.Inventory.Classes;
 import dev.Inventory.Interfaces.I_Discount;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Discount implements I_Discount
 {
@@ -47,14 +48,18 @@ public class Discount implements I_Discount
     public void setEnd_date(LocalDate end_date) {
         this.end_date = end_date;
     }
-    public boolean isAvailable(LocalDate date)
+    public boolean isAvailable()
     {
-        return date.isAfter(start_date) && date.isBefore(end_date);
+        return LocalDate.now().isAfter(start_date) && LocalDate.now().isBefore(end_date);
     }
     //---------------------------------------------------------------------------------------------
     @Override
     public String toString() {
-        return String.valueOf(hashCode())+" "+this.discountRate+"%";
+        return "Discount{" +
+                "discountRate=" + discountRate +
+                "% , start_date=" + start_date +
+                ", end_date=" + end_date +
+                '}';
     }
     //-------------------------------------------------------------------------------------------
 }

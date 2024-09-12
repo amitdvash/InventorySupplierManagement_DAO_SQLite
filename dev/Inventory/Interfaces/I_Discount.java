@@ -23,6 +23,6 @@ public interface I_Discount {
     void setEnd_date(LocalDate end_date);
 
     // Checks if the discount is available on a given date
-    boolean isAvailable(LocalDate date);
+    boolean isAvailable();
 
 }

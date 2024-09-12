@@ -107,6 +107,11 @@ public class Product implements I_Product
 
     public void setDiscount(Discount discount) {
         this.discount = discount;
+        for (Item item : items.values())
+        {
+            updateDiscountToItem(item );
+        }
+
     }
 
     public E_Product_Status getStatus() {
@@ -137,6 +142,7 @@ public class Product implements I_Product
             throw new IllegalArgumentException(item.getName() + " ,id : " + item.getId() +" already exists in " + this.name );
         }
         items.put(item.getId() , item);
+        updateDiscountToItem(item);
         switch (item.getPlace())
         {
             case Store:
@@ -149,6 +155,19 @@ public class Product implements I_Product
         //Update the status of the product
        updateStatus();
     }
+
+    private void updateDiscountToItem(Item item)
+    {
+        if ((isDiscountAvailable()))
+        {
+            item.applyDiscount(getDiscount().getDiscountRate());
+        }
+        else
+        {
+            item.cancelDiscount();
+        }
+    }
+
     public void removeItem(Item item)
     {
         if (items.containsKey(item.getId()))
@@ -287,7 +306,7 @@ public class Product implements I_Product
                 ", category='" + category + '\'' +
                 ", sub_category='" + sub_category + '\'' +
                 ", size=" + size +
-                ", discount=" + discount +
+                ", discount=" + (discount==null ? "none": discount.toString() )+
                 ", status=" + status +
                 "\n items:\n     { \n " + items_S +"     }\n" +
                 '}';
@@ -317,7 +336,26 @@ public class Product implements I_Product
         }
         return items;
     }
+public boolean isDiscountAvailable()
+{
+    return this.discount!=null ? this.discount.isAvailable() : false;
+}
 
+
+//    public void activateDiscount() {
+//        // Check if discount is available and valid for the current date
+//        if (this.discount != null && discount.isAvailable(LocalDate.now())) {
+//            for (Item item : items.values()) {
+//                double originalPrice = item.getSelling_price();
+//                double discountRate = discount.getDiscountRate() / 100;
+//                double newPrice = originalPrice - (originalPrice * discountRate);
+//                item.setSelling_price(newPrice);
+//            }
+//            System.out.println("Discount activated for product: " + this.name);
+//        } else {
+//            System.out.println("No valid discount available for product: " + this.name);
+//        }
+//    }
 //
 //    public void activateDiscount() {
 //        // Check if discount is available and valid for the current date

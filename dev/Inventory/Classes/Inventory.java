@@ -90,6 +90,7 @@ public class Inventory implements I_Inventory
                 }
             }
         }
+
         //If the product matches to this item does not exist, create a new product and add the item to it
         errorMsg("Product named: " + item.getName() + " from Category: " + item.getCategory() + " and SubCategory: " + item.getSub_category() + " does not exist , so this item cannot be added\n please add a matching product first");
 //        Product product = new Product(item.getName() , item.getCategory() , item.getSub_category() , item.getSize() ,5 , null );
@@ -182,7 +183,13 @@ public class Inventory implements I_Inventory
         List<Item> items = new ArrayList<Item>();
         for (Product product : products.values())
         {
-            items.addAll(product.getItemsByPlace(place));
+            for (Item item : product.getItems().values())
+            {
+                if (item.getPlace() == place)
+                {
+                    items.add(item);
+                }
+            }
         }
         return items;
     }
@@ -233,5 +240,57 @@ public class Inventory implements I_Inventory
     {
         //Print a system message
         System.out.println(msg);
+    }
+
+    public void applyDiscountToProduct(Product p1, Discount discount) {
+        //Apply a discount to the product
+        //If the product does not exist, throw an exception
+        if (products.containsKey(p1.getName()))
+        {
+            products.get(p1.getName()).setDiscount(discount);
+        }
+        else
+        {
+            errorMsg("Product does not exist");
+        }
+    }
+    public void applyDiscountToCategory(String category, Discount discount)
+    {
+        //Apply a discount to the category
+        //If the category does not exist, throw an exception
+        int count =0 ;
+        for (Product product : products.values())
+        {
+            if (product.getCategory().equals(category))
+            {
+                product.setDiscount(discount);
+                count++;
+            }
+        }
+        if (count == 0) {
+            errorMsg("Category : " + category +" does not exist");
+        } else {
+            SystemMsg(discount.toString() +" applied to all items in the category : " + category);
+        }
+
+    }
+    public void applyDiscountToSubCategory(String subcategory, Discount discount)
+    {
+        //Apply a discount to the sub-category
+        //If the sub-category does not exist, throw an exception
+        int count =0 ;
+        for (Product product : products.values())
+        {
+            if (product.getSub_category().equals(subcategory))
+            {
+                product.setDiscount(discount);
+                count++;
+            }
+        }
+        if (count == 0) {
+            errorMsg("SubCategory : " + subcategory +" does not exist");
+        } else {
+            SystemMsg(discount.toString() +" applied to all items in the Subcategory : " + subcategory);
+        }
     }
 }

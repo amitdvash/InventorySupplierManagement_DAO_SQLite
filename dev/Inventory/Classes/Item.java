@@ -5,12 +5,14 @@ import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Interfaces.I_Item;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Item implements I_Item
 {
     private String Name;
     private double cost_price;
     private double selling_price;
+    private double price_after_discount;
     private String manufacturer;
     private int id;
     private String category;
@@ -24,6 +26,7 @@ public class Item implements I_Item
         this.Name = Name;
         this.cost_price = cost_price;
         this.selling_price = selling_price;
+        this.price_after_discount = selling_price;
         this.manufacturer = manufacturer;
         this.id = this.hashCode();
         this.category = category;
@@ -56,6 +59,10 @@ public class Item implements I_Item
 
     public void setSelling_price(double selling_price) {
         this.selling_price = selling_price;
+    }
+
+    public double getPrice_after_discount() {
+        return price_after_discount;
     }
 
     public String getManufacturer() {
@@ -125,6 +132,14 @@ public class Item implements I_Item
         this.place = place;
     }
 
+    public void applyDiscount(double discount)
+    {
+        price_after_discount = selling_price - (selling_price * discount / 100);
+    }
+    public void cancelDiscount()
+    {
+        price_after_discount = selling_price;
+    }
     public void updateStatus()
     {
         if (expiry_date ==null)
@@ -149,12 +164,12 @@ public class Item implements I_Item
         System.out.println("Item "+ Name + " is expired");
     }
 
-    @Override
     public String toString() {
         return Name +" {" +
                 " id=" + id +
                 ", cost_price=" + cost_price +
                 ", selling_price=" + selling_price +
+                ", price after discount = " + price_after_discount + '\'' +
                 ", manufacturer='" + manufacturer + '\'' +
                 ", category='" + category + '\'' +
                 ", sub_category='" + sub_category + '\'' +

@@ -1,5 +1,6 @@
 package dev;
 
+import dev.Inventory.Classes.Discount;
 import dev.Inventory.Classes.Inventory;
 import dev.Inventory.Classes.Item;
 import dev.Inventory.Classes.Product;
@@ -18,7 +19,7 @@ public class main
     {
         System.out.println("Hello World");
         Item item1 = new Item("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
-        Item item2 = new Item("P1", 20, 30, "Manufacturer2", "Category1", "SubCategory1", 10, LocalDate.now(), E_Item_Status.Available, E_Item_Place.Warehouse);
+        Item item2 = new Item("P2", 20, 30, "Manufacturer2", "Category2", "SubCategory2", 10, LocalDate.now(), E_Item_Status.Available, E_Item_Place.Warehouse);
 //        System.out.println(item1.toString());
 //        System.out.println(item2.toString());
          Product P1 = new Product ( "P1" , "Category1" , "SubCategory1" , 10 ,2 , null);
@@ -53,13 +54,24 @@ public class main
 //        inventory.moveItemTo(item1.getId(), E_Item_Place.Warehouse);
 //        System.out.println(inventory.toString());
 //       System.out.println(inventory.getProductByName("Item1").toString());
+Discount discount = new Discount(10, LocalDate.now().minusDays(2), LocalDate.now().plusDays(10));inventory.addItem(item1);
 inventory.addProduct(P1);
 inventory.addProduct(P2);
 inventory.addItem(item1);
 inventory.addItem(item2);
+//System.out.println(inventory.toString());
+inventory.applyDiscountToCategory("Category1", discount);
+System.out.println(inventory.toString());
+discount.setDiscountRate(20);
+inventory.applyDiscountToProduct(P2, discount);
+System.out.println(inventory.toString());
+//for(Item item : inventory.getItemsByPlace(E_Item_Place.Warehouse))
+//{
+//    System.out.println(item.toString());
+//}
+//inventory.moveItemTo(item1, E_Item_Place.Warehouse);
 //System.out.println(inventory.getItemsByPlace(E_Item_Place.Warehouse));
-inventory.moveItemTo(item1, E_Item_Place.Warehouse);
-System.out.println(inventory.getItemsByPlace(E_Item_Place.Warehouse));
+//System.out.println(inventory.toString());
 
     }
 }
