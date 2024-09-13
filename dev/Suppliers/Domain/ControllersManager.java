@@ -408,4 +408,140 @@ public class ControllersManager {
     private interface InputValidator<T> {
         boolean isValid(T input);
     }
+
+
+
+    public void updateSupplierFields() {
+        Scanner scanner = new Scanner(System.in);
+
+        // Step 1: Get valid supplier ID
+        String supplierID = getValidatedSupplierID(scanner, "Enter Supplier ID (starting with 'S'):", "Invalid Supplier ID. Please enter again.");
+
+        Supplier supplier = supplierController.getSupplierById(supplierID);
+        if (supplier == null) {
+            System.out.println("Supplier not found.");
+            return;
+        }
+
+        boolean keepUpdating = true;
+        while (keepUpdating) {
+            // Step 2: Display field options to the user
+            System.out.println("Which field would you like to update?");
+            System.out.println("1. Company ID");
+            System.out.println("2. Bank Account");
+            System.out.println("3. Payment Method");
+            System.out.println("4. Contact Information");
+            System.out.println("5. Supplier Agreement");
+            System.out.println("6. Exit");
+
+            // Step 3: Get user selection with validation
+            int option = getValidatedInt(scanner, "Choose option:", 1, 6, "Please enter a number between 1 and 6");
+
+            switch (option) {
+                case 1: // Update Company ID
+                    String companyID = getValidatedInput(scanner, "Enter new Company ID:", this::isPositiveNumber, "Invalid Company ID.");
+                    supplier.setCompanyID(companyID);
+                    break;
+
+                case 2: // Update Bank Account
+                    String bankAccount = getValidatedInput(scanner, "Enter new Bank Account:", this::isPositiveNumber, "Invalid Bank Account.");
+                    supplier.setBankAccount(bankAccount);
+                    break;
+
+                case 3: // Update Payment Method
+                    PaymentMethod paymentMethod = getValidatedPaymentMethod(scanner);
+                    supplier.setPaymentMethod(paymentMethod);
+                    break;
+
+                case 4: // Update Contact Information
+                    System.out.println("Updating Contact Information:");
+                    String name = getValidatedInput(scanner, "Enter new Name:", input -> !input.isEmpty(), "Name cannot be empty.");
+                    String phone = getValidatedInput(scanner, "Enter new Phone Number:", this::isValidPhoneNumber, "Invalid Phone Number.");
+                    String email = getValidatedInput(scanner, "Enter new Email:", this::isValidEmail, "Invalid Email.");
+                    SupplierContact contact = new SupplierContact(name, phone, email);
+                    supplier.setContact(contact);
+                    break;
+
+                case 5: // Update Supplier Agreement
+                    Agreement supplierAgreement = supplier.getSupplierAgreement();
+                    if (supplierAgreement == null) {
+                        System.out.println("No agreement found for this supplier.");
+                    } else {
+                        // Use the internal method for modifying the Supplier Agreement
+                        modifySupplierAgreement(supplierAgreement, scanner);
+                    }
+                    break;
+
+                case 6: // Exit
+                    keepUpdating = false;
+                    break;
+            }
+
+            if (keepUpdating) {
+                String continueUpdating;
+                do {
+                    System.out.println("Would you like to update another field? (yes/no)");
+                    continueUpdating = scanner.next().trim().toLowerCase();
+                    if (!continueUpdating.equals("yes") && !continueUpdating.equals("no")) {
+                        System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+                    }
+                } while (!continueUpdating.equals("yes") && !continueUpdating.equals("no"));
+
+                if (continueUpdating.equals("no")) {
+                    keepUpdating = false;
+                }
+            }
+
+        }
+
+        System.out.println("Supplier details updated successfully.");
+    }
+
+
+    // Internal method to modify the Supplier Agreement
+    private void modifySupplierAgreement(Agreement agreement, Scanner scanner) {
+        boolean continueEditingAgreement = true;
+        while (continueEditingAgreement) {
+            System.out.println("Which field in the Supplier Agreement do you want to update?");
+            System.out.println("1. Supply Days");
+            System.out.println("2. Self Supply");
+            System.out.println("3. Exit");
+            String choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1":
+                    System.out.println("Current Supply Days: " + agreement.getSupplyDays());
+                    List<String> newSupplyDays = selectSupplyDays(scanner);
+                    agreement.setSupplyDays(newSupplyDays);
+                    break;
+                case "2":
+                    while (true) {
+                        System.out.println("Current Self Supply status: " + (agreement.isSelfSupply() ? "Yes" : "No"));
+                        System.out.println("Enter new Self Supply status (true/false):");
+                        String selfSupplyInput = scanner.nextLine().toLowerCase();
+                        if (selfSupplyInput.equals("true") || selfSupplyInput.equals("false")) {
+                            agreement.setSelfSupply(Boolean.parseBoolean(selfSupplyInput));
+                            break;
+                        } else {
+                            System.out.println("Invalid input. Please enter 'true' or 'false'.");
+                        }
+                    }
+                    break;
+                case "3":
+                    continueEditingAgreement = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please select a valid option.");
+                    break;
+            }
+
+            if (continueEditingAgreement) {
+                System.out.println("Do you want to update another field in the agreement? (yes/no)");
+                continueEditingAgreement = scanner.nextLine().equalsIgnoreCase("yes");
+            }
+        }
+    }
+
+
+
 }

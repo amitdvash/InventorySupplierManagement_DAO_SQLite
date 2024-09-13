@@ -24,6 +24,7 @@ public class UI {
             System.out.println("3. Add Product to Supplier");
             System.out.println("4. Delete Product from Supplier");
             System.out.println("5. Print All Suppliers");
+            System.out.println("6. Update Supplier Field");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
@@ -44,6 +45,9 @@ public class UI {
                     break;
                 case 5:
                     controllersManager.printAllSuppliers();
+                    break;
+                case 6:
+                    controllersManager.updateSupplierFields();
                     break;
                 case 0:
                     System.out.println("Exiting the system...");

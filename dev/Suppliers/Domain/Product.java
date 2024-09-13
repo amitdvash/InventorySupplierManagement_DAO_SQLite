@@ -24,7 +24,6 @@ public class Product {
     }
 
     // Getters and Setters
-    public String getProductID() { return productID; }
     public String getCatalogID() { return catalogID; }
     public String getName() { return name; }
 
