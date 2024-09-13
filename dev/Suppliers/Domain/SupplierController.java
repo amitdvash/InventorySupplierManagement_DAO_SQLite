@@ -13,12 +13,14 @@ public class SupplierController {
     }
 
     // Add a supplier
-    public Supplier addSupplier(String companyID, String bankAccount, PaymentMethod paymentMethod,
-                            List<Product> productList, Agreement supplierAgreement, String name, String phoneNumber, String email) {
+    public Supplier createSupplier(String companyID, String bankAccount, PaymentMethod paymentMethod, Agreement supplierAgreement, String name, String phoneNumber, String email) {
         SupplierContact contact = new SupplierContact(name, phoneNumber, email);
-        Supplier supplier = new Supplier(companyID, bankAccount, paymentMethod, productList, supplierAgreement, contact);
+        Supplier supplier = new Supplier(companyID, bankAccount, paymentMethod, supplierAgreement, contact);
+        if (supplier.getSupplierAgreement() != null ){
+            supplier.getSupplierAgreement().setSupplier(supplier);
+        }
         suppliers.add(supplier);
-        System.out.println("Supplier added: " + supplier.getSupplierID());
+        System.out.println("Supplier created: " + supplier.getSupplierID());
         return supplier;
     }
 
@@ -45,5 +47,15 @@ public class SupplierController {
 
     public List<Supplier> getSuppliers() {
         return suppliers;
+    }
+
+    public void deleteSupplier(String supplierID) {
+        Supplier supplierToDelete = getSupplierById(supplierID);
+        if (supplierToDelete != null) {
+            suppliers.remove(supplierToDelete);
+            System.out.println("Supplier deleted: " + supplierID);
+        } else {
+            System.out.println("Supplier not found: " + supplierID);
+        }
     }
 }

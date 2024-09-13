@@ -1,7 +1,5 @@
 package dev.Suppliers.Domain;
 
-import dev.Suppliers.Enums.PaymentMethod;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,8 +9,8 @@ public class AgreementController {
     private List<Agreement> agreements = new ArrayList<>();
 
     // Create a new agreement
-    public Agreement addAgreement(List<Product> productList, HashMap<String, HashMap<Integer, Double>> discountDetails,
-                             List<String> supplyDays, boolean selfSupply) {
+    public Agreement createAgreement(List<Product> productList, HashMap<String, HashMap<Integer, Double>> discountDetails,
+                                     List<String> supplyDays, boolean selfSupply) {
         Agreement agreement = new Agreement(productList, discountDetails, supplyDays, selfSupply);
         agreements.add(agreement);
         System.out.println("Agreement added: " + agreement.getAgreementID());
@@ -47,4 +45,17 @@ public class AgreementController {
     public List<Agreement> getAllAgreements() {
         return agreements;
     }
+
+
+    public void deleteAgreement(int agreementID) {
+        Agreement agreementToDelete = getAgreement(agreementID);
+        if (agreementToDelete != null) {
+            agreements.remove(agreementToDelete);
+            System.out.println("Agreement deleted: " + agreementID);
+        } else {
+            System.out.println("Agreement not found: " + agreementID);
+        }
+    }
 }
+
+

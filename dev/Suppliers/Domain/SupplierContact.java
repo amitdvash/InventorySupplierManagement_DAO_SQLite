@@ -34,7 +34,7 @@ public class SupplierContact {
 
 
     public void printContactDetails() {
-        System.out.println("----- Contact Details -----");
+        //System.out.println("----- Contact Details -----");
         System.out.println("Contact Name: " + this.getName());
         System.out.println("Contact Email: " + this.getEmail());
         System.out.println("Contact Phone: " + this.getPhoneNumber());
