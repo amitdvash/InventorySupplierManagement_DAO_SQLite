@@ -264,17 +264,6 @@ public class Product implements I_Product
 
     public void moveItemTo(Item item , E_Item_Place place)
        {
-// /____________________________________________________________________________________________________________________________
-//        try {
-//            if(!this.items.get(item.getId()).equals(item)){
-//                return;
-//            }
-//        }catch (Exception e){
-//            return;
-//        }
-//        //___________________________________________________________________________________________________________________
-
-
         if(item.getPlace() == place)
         {
             System.out.println("Item is already in the " + place.toString() );

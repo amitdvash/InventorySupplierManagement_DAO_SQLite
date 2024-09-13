@@ -160,6 +160,9 @@ public class Item implements I_Item
         System.out.println("Item "+ Name + " is about to expire - last time to use is in : "+ expiry_date);
     }
 
+
+
+
     private void sendNotification_Expired() {
         System.out.println("Item "+ Name + " is expired");
     }

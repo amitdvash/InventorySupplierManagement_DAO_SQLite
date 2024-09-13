@@ -293,4 +293,22 @@ public class Inventory implements I_Inventory
             SystemMsg(discount.toString() +" applied to all items in the Subcategory : " + subcategory);
         }
     }
+    public Item findItem(String name, String category, String subCategory, double size, E_Item_Place place) {
+        // Iterate through all products in the inventory
+        for (Product product : products.values()) {
+            // Check if the product matches the category and sub-category
+            if (product.getCategory().equals(category) && product.getSub_category().equals(subCategory)) {
+                // If the product matches, check its items for a match
+                for (Item item : product.getItems().values()) {
+                    // Check if the item matches the name, size, and place (store or warehouse)
+                    if (item.getName().equals(name) && item.getSize() == size && item.getPlace() == place) {
+                        return item; // Item found
+                    }
+                }
+            }
+        }
+        // If no item is found, return null
+        return null;
+    }
+
 }

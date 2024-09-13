@@ -36,9 +36,32 @@ class ProductTest
 
         // Initializing the product and discount
         sampleProduct = new Product("Item1", "Category1", "SubCategory1", 10, 2, null);
-        productDiscount = new Discount(50, LocalDate.ofYearDay(2024, 20), LocalDate.ofYearDay(2024, 40));
-        newDiscount = new Discount(30, LocalDate.ofYearDay(2024, 50), LocalDate.ofYearDay(2024, 60));
+        productDiscount = new Discount(50, LocalDate.ofYearDay(2024, 20), LocalDate.ofYearDay(2024, 300));
+        newDiscount = new Discount(30, LocalDate.ofYearDay(2024, 50), LocalDate.ofYearDay(2024, 300));
 
+    }
+
+
+
+
+
+
+
+
+
+    @Test
+    void testApplyDiscount() {
+        // Add items to the product
+        sampleProduct.addItem(availableWarehouseItem1);
+        sampleProduct.addItem(availableWarehouseItem2);
+
+        // Apply discount to the product
+        sampleProduct.setDiscount(productDiscount);
+
+        // Verify that the discount was applied to each item
+        double expectedPrice = availableWarehouseItem1.getSelling_price() * (1 - productDiscount.getDiscountRate() / 100);
+        assertEquals(expectedPrice, availableWarehouseItem1.getPrice_after_discount(), 0.01, "Discount should be applied to the item's selling price.");
+        assertEquals(expectedPrice, availableWarehouseItem2.getPrice_after_discount(), 0.01, "Discount should be applied to the item's selling price.");
     }
 
 
@@ -119,6 +142,18 @@ class ProductTest
 
         // Now the product should be out of stock
         assertEquals(E_Product_Status.Out_of_stock, sampleProduct.getStatus(), "Product should be out of stock after removing all items");
+    }
+    @Test
+    void testExpiryDateHandling() {
+        // Add expiring item
+        sampleProduct.addItem(expiringWarehouseItem);
+
+        // Check the status of the expiring item
+        assertEquals(E_Item_Status.about_to_expire, expiringWarehouseItem.getStatus(), "Item should be marked as about to expire.");
+
+        // Check if the product still matches available status
+        sampleProduct.updateStatus();
+        assertEquals(E_Product_Status.about_to_finish, sampleProduct.getStatus(), "Product status should update to 'about to finish' when items are about to expire.");
     }
 
 

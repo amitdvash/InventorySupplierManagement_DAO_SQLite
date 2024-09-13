@@ -10,8 +10,7 @@ import dev.Inventory.Enums.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InventoryTest {
     private Inventory inventory;
@@ -60,7 +59,18 @@ public class InventoryTest {
     public void testGetProductByName() {
         // Test retrieving a product by name
         inventory.addItem(item1); // Assuming this method adds the product as well
-        Product foundProduct = inventory.getProductByName("Item1");
+        Product foundProduct = inventory.getProductByName(item1.getCategory());
         assertNotNull(foundProduct);
     }
+    @Test
+    public void testAddItem() {
+        // Test adding an item to the inventory
+        inventory.addItem(item1);
+
+        assertNotNull(inventory.getProductByName("Item1"));
+        assertEquals(inventory.getProductByName(item1.getName()).getItems().get(item1.getId()), item1);
+    }
+
+
+
 }
