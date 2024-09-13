@@ -56,6 +56,12 @@ public class AgreementController {
             System.out.println("Agreement not found: " + agreementID);
         }
     }
+    public void updateProductDiscountDetails(Agreement agreement, String productID, HashMap<Integer, Double> newDiscountDetails) {
+        HashMap<String, HashMap<Integer, Double>> currentDiscountDetails = agreement.getDiscountDetails();
+        currentDiscountDetails.put(productID, newDiscountDetails);
+        agreement.setDiscountDetails(currentDiscountDetails);
+    }
+
 }
 
 

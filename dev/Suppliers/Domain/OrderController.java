@@ -26,11 +26,16 @@ public class OrderController {
 
     // Generate report for all orders
     public void generateOrdersReport() {
-        System.out.println("----- Orders Report -----");
-        for (Order order : orders) {
-            order.printOrderDetails();
+        if (orders.isEmpty()) {
+            System.out.println("No existing orders in the system.");
+        } else {
+            System.out.println("----- Orders Report -----");
+            for (Order order : orders) {
+                order.printOrderDetails();
+            }
         }
     }
+
 
     // Assuming the suppliers list is maintained here for report purposes
     public void addSupplier(Supplier supplier) {

@@ -22,11 +22,13 @@ public class UI {
             System.out.println("1. Open New Supplier Card");
             System.out.println("2. Delete Supplier Card");
             System.out.println("3. Add Product to Supplier");
-            System.out.println("4. Delete Product from Supplier");
-            System.out.println("5. Print All Suppliers");
-            System.out.println("6. Update Supplier Field");
+            System.out.println("4. Remove Product from Supplier");
+            System.out.println("5. Update Supplier Details");
+            System.out.println("6. Update Products Discount Details");
+            System.out.println("7. Print All Suppliers Cards");
+            System.out.println("8. Print All Orders Reports");
             System.out.println("0. Exit");
-            System.out.print("Enter your choice: ");
+            System.out.print("Please enter your choice: ");
             choice = scanner.nextInt();
             scanner.nextLine();  // Clear the buffer after reading the int
 
@@ -44,11 +46,15 @@ public class UI {
                     controllersManager.deleteProductFromSupplier();
                     break;
                 case 5:
-                    controllersManager.printAllSuppliers();
-                    break;
-                case 6:
                     controllersManager.updateSupplierFields();
                     break;
+                case 6:
+                    controllersManager.updateDiscountDetails();
+                    break;
+                case 7:
+                    controllersManager.printAllSuppliers();
+                case 8:
+                    controllersManager.printAllOrders();
                 case 0:
                     System.out.println("Exiting the system...");
                     break;

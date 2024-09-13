@@ -12,11 +12,13 @@ public class ControllersManager {
     private final SupplierController supplierController;
     private final ProductController productController;
     private final AgreementController agreementController;
+    private final OrderController orderController;
 
-    public ControllersManager(SupplierController supplierController, ProductController productController, AgreementController agreementController) {
+    public ControllersManager(SupplierController supplierController, ProductController productController, AgreementController agreementController,OrderController orderController) {
         this.supplierController = supplierController;
         this.productController = productController;
         this.agreementController = agreementController;
+        this.orderController=orderController;
     }
 
     public void openNewSupplierCard() {
@@ -58,7 +60,7 @@ public class ControllersManager {
             if (hasDiscountDetails.equalsIgnoreCase("yes")) {
                 while (true) {
                     int quantity = getValidatedInt(scanner, "Enter the minimum quantity for the discount:", 1, Integer.MAX_VALUE, "Quantity must be a positive number.");
-                    double discountPercent = getValidatedDouble(scanner, "Enter the discount percent (e.g., 10 for 10%):", input -> input > 0, "Discount percent must be positive.");
+                    double discountPercent = getValidatedDouble(scanner, "Enter the discount percent (e.g., 10 for 10%):", this::isValidDiscountPercent, "Discount percent must be between 1 and 100.");
 
                     discountDetails.put(quantity, discountPercent);
 
@@ -69,6 +71,7 @@ public class ControllersManager {
                     }
                 }
             }
+
 
             // Create Product (Agreement is null for now, to be set later)
             Product product = productController.createProduct(productName, discountDetails, price, expirationDays, weight, null);
@@ -267,6 +270,7 @@ public class ControllersManager {
         for (Supplier supplier : supplierController.getSuppliers()){
             supplier.printSupplierDetails();
         }
+
 
     }
     // New validation method for supplier ID
@@ -539,9 +543,95 @@ public class ControllersManager {
                 System.out.println("Do you want to update another field in the agreement? (yes/no)");
                 continueEditingAgreement = scanner.nextLine().equalsIgnoreCase("yes");
             }
+
+
+        }}
+
+    // Method to validate discount percentages
+    private boolean isValidDiscountPercent(double discountPercent) {
+        return discountPercent >= 1 && discountPercent <= 100;
+    }
+
+    public void updateDiscountDetails() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            // Step 1: Get valid supplier ID
+            String supplierID = getValidatedSupplierID(scanner, "Enter Supplier ID (starting with 'S'):", "Invalid Supplier ID. Please enter again.");
+            Supplier supplier = supplierController.getSupplierById(supplierID);
+            if (supplier == null) {
+                System.out.println("Supplier not found.");
+                return;
+            }
+
+            // Get the supplier's agreement
+            Agreement agreement = supplier.getSupplierAgreement();
+
+            // Step 2: Get Product ID
+            System.out.println("Enter Product ID for which you want to update discount details:");
+            String productID = scanner.nextLine().trim();
+
+            // Check if the agreement contains the product ID
+            if (!agreement.getDiscountDetails().containsKey(productID)) {
+                System.out.println("Product ID not found in the agreement.");
+                return;
+            }
+
+            // Step 3: Update discount details
+            HashMap<Integer, Double> discountDetails = new HashMap<>();
+            System.out.println("Update discount details for Product ID: " + productID);
+
+            String hasDiscountDetails = getValidatedInput(scanner, "Do you want to add discount details? (yes/no)",
+                    input -> input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("no"),
+                    "Please enter 'yes' or 'no'.");
+
+            if (hasDiscountDetails.equalsIgnoreCase("yes")) {
+                while (true) {
+                    int quantity = getValidatedInt(scanner, "Enter the minimum quantity for the discount:", 1, Integer.MAX_VALUE, "Quantity must be a positive number.");
+                    double discountPercent = getValidatedDouble(scanner, "Enter the discount percent (e.g., 10 for 10%):", input -> isValidDiscountPercent(input), "Discount percent must be between 1 and 100.");
+
+                    discountDetails.put(quantity, discountPercent);
+
+                    String addMoreDiscounts = getValidatedInput(scanner, "Do you want to add another discount detail? (yes/no)",
+                            input -> input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("no"),
+                            "Please enter 'yes' or 'no'.");
+
+                    if (addMoreDiscounts.equalsIgnoreCase("no")) {
+                        break;
+                    }
+                }
+            }
+
+            // Update the agreement with the new discount details
+            agreementController.updateProductDiscountDetails(agreement, productID, discountDetails);
+
+            // Print the updated agreement details
+            agreement.printDiscountDetails();
+
+            // Ask if they want to change more discount details
+            String changeMore = getValidatedInput(scanner, "Do you want to change more discount details? (yes/no)",
+                    input -> input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("no"),
+                    "Please enter 'yes' or 'no'.");
+
+            if (changeMore.equalsIgnoreCase("no")) {
+                break;  // Exit the loop if the user does not want to make more changes
+            }
         }
     }
 
 
+    // Method to print details of all orders
+    public void printAllOrders() {
+        orderController.generateOrdersReport();
+    }
+
+
+
+
+
+
+
+
 
 }
+

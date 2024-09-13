@@ -58,4 +58,50 @@ public class SupplierController {
             System.out.println("Supplier not found: " + supplierID);
         }
     }
+
+    /*
+
+    // Validate Company ID
+    public boolean isValidCompanyID(String companyID) {
+        return companyID.matches("\\d+");
+    }
+
+    // Validate Bank Account
+    public boolean isValidBankAccount(String bankAccount) {
+        return bankAccount.matches("\\d+");
+    }
+
+    // Validate Phone Number
+    public boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.matches("\\d+"); // Adjust regex as needed
+    }
+
+    // Validate Email
+    public boolean isValidEmail(String email) {
+        // Simplified regex for email validation
+        return email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // Update Supplier Details
+    public void updateCompanyID(Supplier supplier, String companyID) {
+        if (isValidCompanyID(companyID)) {
+            supplier.setCompanyID(companyID);
+        }
+    }
+
+    public void updateBankAccount(Supplier supplier, String bankAccount) {
+        if (isValidBankAccount(bankAccount)) {
+            supplier.setBankAccount(bankAccount);
+        }
+    }
+
+    public void updatePaymentMethod(Supplier supplier, PaymentMethod paymentMethod) {
+        supplier.setPaymentMethod(paymentMethod);
+    }
+
+    public void updateContactInfo(Supplier supplier, SupplierContact contact) {
+        supplier.setContact(contact);
+    }
+
+     */
 }

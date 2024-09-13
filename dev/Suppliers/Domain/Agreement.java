@@ -110,4 +110,26 @@ public class Agreement {
         System.out.println("Supplier Responsible for Supply: " + (selfSupply ? "Yes" : "No"));
         System.out.println("-------------------------------");
     }
+
+    // Print only discount details
+    public void printDiscountDetails() {
+        System.out.println("----- Discount Details -----");
+        if (discountDetails != null && !discountDetails.isEmpty()) {
+            for (String productID : discountDetails.keySet()) {
+                HashMap<Integer, Double> discounts = discountDetails.get(productID);
+                System.out.println("Product ID: " + productID);
+                if (discounts != null && !discounts.isEmpty()) {
+                    for (Integer quantity : discounts.keySet()) {
+                        Double discountPercent = discounts.get(quantity);
+                        System.out.println("  - Buy " + quantity + " units or more: " + discountPercent + "% discount");
+                    }
+                } else {
+                    System.out.println("  No discounts available.");
+                }
+            }
+        } else {
+            System.out.println("No discount details available.");
+        }
+        System.out.println("------------------------------");
+    }
 }

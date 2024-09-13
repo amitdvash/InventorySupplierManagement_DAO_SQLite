@@ -17,7 +17,7 @@ public class Main
         OrderController orderController = new OrderController();
 
         // Initialize the ControllersManager
-        ControllersManager controllersManager = new ControllersManager(supplierController, productController, agreementController);
+        ControllersManager controllersManager = new ControllersManager(supplierController, productController, agreementController,orderController);
 
         // Initialize the UI
         UI ui = new UI(controllersManager);
