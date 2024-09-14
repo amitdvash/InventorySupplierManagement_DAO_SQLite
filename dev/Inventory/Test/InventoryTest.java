@@ -36,18 +36,6 @@ public class InventoryTest {
          item4 = new Item("cola", 10, 100, "Manufacturer1", "drink", "sparkling", 500, null, E_Item_Status.Available, E_Item_Place.Store);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     @Test
     public void testRemoveProduct() {
         // Add a product and an item
@@ -65,9 +53,12 @@ public class InventoryTest {
         assertNull(inventory.getProductByName("cola"), "Product should be removed from inventory");
     }
 
+//need to fix the bug____________________________________________________________________________________
 
 
-    //need to fix the bug____________________________________________________________________________________
+    //that you add a new product and there is already the same product with the same name but you want to add
+    // a product with a different category or a different subcategory so it overrides the previous product
+    //in the map that we save the all product
     @Test
     public void testAddMultipleItemsWithSameNameDifferentSize() {
     // Add the items to the inventory

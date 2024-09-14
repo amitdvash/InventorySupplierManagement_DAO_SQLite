@@ -35,6 +35,10 @@ public class Controller_Manager extends Controller_Worker
         inventory.applyDiscountToSubCategory(subcategory, discount);
     }
 
+    public Product findOrProduct(String name, String category, String subCategory, double size) {
+        return inventory.findOrProduct(name, category, subCategory, size);
+
+    }
 
 
 

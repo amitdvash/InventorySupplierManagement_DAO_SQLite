@@ -16,9 +16,6 @@ public class Controller_Menu {
     private static Controller_Manager managerController = new Controller_Manager();
     private static Scanner scanner = new Scanner(System.in);
 
-    Controller_Menu(){
-
-    }
 
 
 
@@ -32,7 +29,6 @@ public class Controller_Menu {
             System.out.println("5. Generate Inventory Report (Worker)");
             System.out.println("6. Add Product (Manager)");
             System.out.println("7. Set a discount (Manager)");
-            System.out.println("8. Update Product Status (Manager)");
             System.out.println("9. Exit");
             System.out.println("============================================");
             System.out.print("Select an option: ");
@@ -61,8 +57,7 @@ public class Controller_Menu {
                     setDiscount();
                     break;
                 case 8:
-//                    updateProductStatus();
-//                    break;
+
                 case 9:
                     System.out.println("Exiting...");
                     return;
@@ -71,6 +66,7 @@ public class Controller_Menu {
             }
         }
     }
+
 
     private static void setDiscount() {
         // Get discount details from the user
@@ -131,6 +127,7 @@ public class Controller_Menu {
         Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, null, E_Item_Status.Available, place);
         managerController.addItem(newItem);
     }
+
     // Method to add a product (Manager)
     private static void addProduct() {
         System.out.print("Enter product name: ");
@@ -147,6 +144,7 @@ public class Controller_Menu {
         Product newProduct = new Product(name, category, subCategory, size, minQuantity, null);
         managerController.add_product(newProduct);
     }
+
     private static void removeItem() {
         // Get input from the user for category, sub-category, size, and place
         System.out.print("Enter product name: ");
@@ -162,15 +160,15 @@ public class Controller_Menu {
         scanner.nextLine();  // Consume newline after nextInt
         // Convert the user's choice into the appropriate enum value for place
         E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
-        Item item_to_remove=managerController.findItem(name,category,subCategory,size,place);
-        if(item_to_remove==null){
+        Item item_to_remove = managerController.findItem(name, category, subCategory, size, place);
+        if (item_to_remove == null) {
             System.out.println("the item dont exists");
             return;
         }
         managerController.removeItem(item_to_remove);
     }
 
-    private static void moveItem(){
+    private static void moveItem() {
         System.out.print("Enter product name: ");
         String name = scanner.nextLine();
         System.out.print("Enter the Category: ");
@@ -179,36 +177,43 @@ public class Controller_Menu {
         String subCategory = scanner.nextLine();
         System.out.print("Enter the size: ");
         double size = Double.parseDouble(scanner.nextLine());
-        System.out.print("Enter item place (1: Store, 2: Warehouse): ");
+        System.out.print("Enter where you want to move the item (2: Store, 1: Warehouse): ");
         int placeChoice = scanner.nextInt();
-        E_Item_Place place_item,place_to_move;
-        if(placeChoice==1){
-            place_item=E_Item_Place.Store;
-            place_to_move=E_Item_Place.Warehouse;
-        }else {
-            place_item=E_Item_Place.Warehouse;
-            place_to_move=E_Item_Place.Store;
+        E_Item_Place place_item, place_to_move;
+        if (placeChoice == 1) {
+            place_item = E_Item_Place.Store;
+            place_to_move = E_Item_Place.Warehouse;
+        } else {
+            place_item = E_Item_Place.Warehouse;
+            place_to_move = E_Item_Place.Store;
         }
-        Item item_to_move=managerController.findItem(name, category, subCategory, size, place_item);
-        if(item_to_move==null){
+        Item item_to_move = managerController.findItem(name, category, subCategory, size, place_item);
+        if (item_to_move == null) {
             System.out.println("the item dont exists");
             return;
         }
         managerController.moveItem(item_to_move, place_to_move);
     }
 
-    private static void viewProductDetails(){
+    private static void viewProductDetails() {
         System.out.print("Enter product name: ");
         String name = scanner.nextLine();
-        Product product=managerController.find_product_string(name);
+        System.out.print("Enter the Category: ");
+        String category = scanner.nextLine();
+        System.out.print("Enter the Sub-Category: ");
+        String subCategory = scanner.nextLine();
+        System.out.print("Enter the size: ");
+        double size = Double.parseDouble(scanner.nextLine());
+        Product product = managerController.findOrProduct(name, category, subCategory, size);
+        if (product == null) {
+            System.out.println("the product dont exists");
+            return;
+        }
         System.out.println(product);
+
+    }
+        private static void generateInventoryReport() {
+            System.out.println(managerController.inventory);
+        }
     }
 
-    private static void generateInventoryReport(){
-        System.out.println(managerController.inventory);
-    }
-
-
-
-
-}
