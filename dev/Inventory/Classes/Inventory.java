@@ -7,6 +7,7 @@ import dev.Inventory.Interfaces.I_Discount;
 import dev.Inventory.Interfaces.I_Inventory;
 
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,8 @@ public class Inventory
     //There is only one instance of the Inventory
     private HashMap<String , Product> products;
     private static Inventory instance = null;
+    private String  ManagerFilePath = "dev/Inventory/Files/Managers.txt";
+    private String  WorkerFilePath = "dev/Inventory/Files/Workers.txt";
 
     private Inventory()
     {
@@ -359,4 +362,42 @@ public class Inventory
         return null;
     }
 
+    public boolean registerManager(String name1, String password)
+    {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(ManagerFilePath)))
+        {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.equals(name1 + " " + password))
+                {
+                    return true;
+                }
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+    public boolean registerWorker(String name1, String password)
+    {
+
+        try (BufferedReader br = new BufferedReader(new FileReader(WorkerFilePath)))
+        {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.equals(name1 + " " + password))
+                {
+                    return true;
+                }
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
 }

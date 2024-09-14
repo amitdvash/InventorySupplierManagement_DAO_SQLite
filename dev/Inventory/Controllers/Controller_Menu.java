@@ -23,19 +23,150 @@ import dev.Inventory.Controllers.Controller_Manager;
 
 public class Controller_Menu {
     private static Controller_Manager managerController = new Controller_Manager();
+    private static Controller_Worker workerController = new Controller_Worker();
     private static Scanner scanner = new Scanner(System.in);
 
 
     public static void main(String[] args) {
-        while (true) {
-            System.out.println("===== Inventory Management System Menu =====");
+        registerMenu();
+//        while (true) {
+//            System.out.println("===== Inventory Management System Menu - worker menu =====");
+//            System.out.println("1. Add Item (Worker)");
+//            System.out.println("2. Remove Item (Worker)");
+//            System.out.println("3. Move Item (Worker)");
+//            System.out.println("4. View Product Details (Worker)");
+//            System.out.println("5. Generate Inventory Report (Worker)");
+//            System.out.println("6. Add Product (Manager)");
+//            System.out.println("7. Set a discount (Manager)");
+//            System.out.println("9. Exit");
+//            System.out.println("============================================");
+//            System.out.print("Select an option: ");
+//            int choice = scanner.nextInt();
+//            scanner.nextLine();  // Consume newline
+//            switch (choice) {
+//                case 1:
+//                    addItem();
+//                    break;
+//                case 2:
+//                    removeItem();
+//                    break;
+//                case 3:
+//                    moveItem();
+//                    break;
+//                case 4:
+//                    viewProductDetails();
+//                    break;
+//                case 5:
+//                    generateInventoryReport();
+//                    break;
+//                case 6:
+//                    addProduct();
+//                    break;
+//                case 7:
+//                    setDiscount();
+//                    break;
+//                case 9:
+//                    System.out.println("Exiting...");
+//                    return;
+//                default:
+//                    System.out.println("Invalid option. Please try again.");
+//            }
+//        }
+    }
+
+    private static void registerMenu()
+    {
+        while(true)
+        {
+            System.out.println("===== Register Menu =====");
+            System.out.println("1. Register as Manager");
+            System.out.println("2. Register as Worker");
+            System.out.println("3. Exit");
+            System.out.println("=========================");
+            System.out.print("Select an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter your name: ");
+                    String name1 = scanner.nextLine();
+                    System.out.print("Enter your password: ");
+                    String password = scanner.nextLine();
+                    if (managerController.registerManager(name1 , password)) {
+                        ManagerMenu();
+                    }
+                    else
+                    {
+                        System.out.println("Registration failed. Please try again.");
+                    }
+                    break;
+                case 2:
+                    System.out.print("Enter your name: ");
+                    String name2 = scanner.nextLine();
+                    System.out.print("Enter your password: ");
+                    String password2 = scanner.nextLine();
+                    if (managerController.registerWorker(name2,password2)) {
+                        WorkerMenu();
+                    } else {
+                        System.out.println("Registration failed. Please try again.");
+                    }
+                    break;
+                case 3:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private static void ManagerMenu()
+    {
+        System.out.println("Registered as Worker successfully.");
+        while(true)
+        {
+            System.out.println("===== Inventory Management System Menu - Manager menu =====");
+            System.out.println("5. Generate Inventory Report (Manager)");
+            System.out.println("6. Add Product (Manager)");
+            System.out.println("7. Set a discount (Manager)");
+            System.out.println("8. to the worker menu (Manager)");
+            System.out.println("9. Exit");
+            System.out.println("============================================");
+            System.out.print("Select an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+            switch (choice) {
+                case 5:
+                    generateInventoryReport();
+                    break;
+                case 6:
+                    addProduct();
+                    break;
+                case 7:
+                    setDiscount();
+                    break;
+                case 8:
+                    WorkerMenu();
+                    break;
+                case 9:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private static void WorkerMenu()
+    {
+        System.out.println("Registered as Manager successfully.");
+        while(true)
+        {
+            System.out.println("===== Inventory Management System Menu - Worker menu =====");
             System.out.println("1. Add Item (Worker)");
             System.out.println("2. Remove Item (Worker)");
             System.out.println("3. Move Item (Worker)");
             System.out.println("4. View Product Details (Worker)");
-            System.out.println("5. Generate Inventory Report (Worker)");
-            System.out.println("6. Add Product (Manager)");
-            System.out.println("7. Set a discount (Manager)");
             System.out.println("9. Exit");
             System.out.println("============================================");
             System.out.print("Select an option: ");
@@ -54,22 +185,14 @@ public class Controller_Menu {
                 case 4:
                     viewProductDetails();
                     break;
-                case 5:
-                    generateInventoryReport();
-                    break;
-                case 6:
-                    addProduct();
-                    break;
-                case 7:
-                    setDiscount();
-                    break;
                 case 9:
-                    System.out.println("Exiting...");
+                    System.out.println("Exiting...");;
                     return;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
         }
+
     }
 
 
