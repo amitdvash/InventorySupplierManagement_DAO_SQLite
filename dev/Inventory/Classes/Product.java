@@ -306,7 +306,7 @@ public class Product implements I_Product
         List<Item> items = new ArrayList<Item>();
         for (Item item : this.items.values())
         {
-            if (item.getPlace().equals(Status))
+            if (item.getStatus().equals(Status))
             {
                 items.add(item);
             }
@@ -325,9 +325,28 @@ public class Product implements I_Product
         }
         return items;
     }
+
+    public String HashCode()
+    {
+        return this.name +"_"+ this.category +"_"+ this.sub_category +"_"+ this.size;
+    }
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        return (anObject instanceof Product product)
+                && this.name.equals(product.getName()) &&
+                this.category.equals(product.getCategory()) &&
+                this.sub_category.equals(product.getSub_category()) &&
+                this.size == product.getSize();
+    }
 public boolean isDiscountAvailable()
 {
-    return this.discount!=null ? this.discount.isAvailable() : false;
+    if(this.discount == null)
+    {
+        return false;
+    }
+    return this.discount.isAvailable();
 }
 
 

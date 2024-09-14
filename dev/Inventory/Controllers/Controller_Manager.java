@@ -14,7 +14,7 @@ public class Controller_Manager extends Controller_Worker
 
     // Generate weekly reports for selected categories
     public void generateInventoryReport(String category) {
-        var report = inventory.getProductByName(category);
+        var report = inventory.getProductsByName(category);
         System.out.println(report);
     }
 

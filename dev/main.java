@@ -11,6 +11,9 @@ import dev.Inventory.Enums.E_Product_Status;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Scanner;
+
+//import  dev.Inventory.Controllers.Controller_Menu.scanner;
 
 public class main
 {
@@ -22,7 +25,7 @@ public class main
 //        Item item2 = new Item("P2", 20, 30, "Manufacturer2", "Category2", "SubCategory2", 10, LocalDate.now(), E_Item_Status.Available, E_Item_Place.Warehouse);
 ////        System.out.println(item1.toString());
 ////        System.out.println(item2.toString());
-         Product P1 = new Product ( "cola" , "drink" , "sparkling" , 300 ,4 , null);
+      /*   Product P1 = new Product ( "cola" , "drink" , "sparkling" , 300 ,4 , null);
         Product P2= new Product ( "cola" , "drink" , "sparkling" , 500 ,4 , null);
         Inventory inventory = Inventory.getInstance();
 //        P1.addItem(item1);
@@ -36,8 +39,17 @@ public class main
                inventory.addItem(item1);
                 Item item2 = new Item("cola", 10, 20, "Manufacturer1", "drink", "sparkling", 500, null, E_Item_Status.Available, E_Item_Place.Store);
                 inventory.addItem(item2);
-                System.out.println(inventory);
-
+                System.out.println(inventory);*/
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the start date (yyyy-mm-dd): ");
+        String startDate = scanner.next();
+        LocalDate Sdate = LocalDate.parse(startDate);
+        System.out.println("Enter the end date (yyyy-mm-dd): ");
+        String endDate = scanner.next();
+        LocalDate Edate = LocalDate.parse(endDate);
+//        System.out.println(date.isBefore(LocalDate.now()));
+        Discount D = new Discount(10, Sdate, Edate);
+        System.out.println(D.isAvailable());
 //
 //
 //

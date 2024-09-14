@@ -50,7 +50,7 @@ public class Inventory implements I_Inventory
                 return;
             }
         }
-        products.put(product.getName() , product);
+        products.put(product.HashCode() , product);
         SystemMsg("Product Creation: " +product.getName() + " added successfully to the inventory");
     }
 
@@ -58,9 +58,9 @@ public class Inventory implements I_Inventory
     {
         //Remove the product from the inventory
         //If the product does not exist throw an exception
-        if (products.containsKey(product.getName()))
+        if (products.containsKey(product.HashCode()))
         {
-            products.remove(product.getName());
+            products.remove(product.HashCode());
         }
         else
         {
@@ -132,11 +132,11 @@ public class Inventory implements I_Inventory
 
 
 
-    public Product getProductByName(String name)
+    public List<Product> getProductsByName(String name)
     {
         //Return the product with the given name
         //If the product does not exist, return null
-        return products.get(name);
+        return products.values().stream().filter(product -> product.getName().equals(name)).toList();
     }
     public List<Product> getProductsByStatus(E_Product_Status status)
     {
@@ -172,7 +172,11 @@ public class Inventory implements I_Inventory
         List<Item> items = new ArrayList<Item>();
         for (Product product : products.values())
         {
-            items.addAll(product.getItemsByStatus(Status));
+            for (Item item : product.getItemsByStatus(Status))
+            {
+                items.add(item);
+            }
+//            items.addAll(product.getItemsByStatus(Status));
         }
         return items;
     }
@@ -183,13 +187,11 @@ public class Inventory implements I_Inventory
         List<Item> items = new ArrayList<Item>();
         for (Product product : products.values())
         {
-            for (Item item : product.getItems().values())
+            for (Item item : product.getItemsByPlace(place))
             {
-                if (item.getPlace() == place)
-                {
-                    items.add(item);
-                }
+                items.add(item);
             }
+//            items.addAll(product.getItemsByStatus(Status));
         }
         return items;
     }
@@ -245,13 +247,21 @@ public class Inventory implements I_Inventory
     public void applyDiscountToProduct(Product p1, Discount discount) {
         //Apply a discount to the product
         //If the product does not exist, throw an exception
-        if (products.containsKey(p1.getName()))
-        {
-            products.get(p1.getName()).setDiscount(discount);
-        }
-        else
+        int count=0;
+        if (p1 == null)
         {
             errorMsg("Product does not exist");
+            return;
+        }
+        if (products.containsKey(p1.HashCode()))
+        {
+            products.get(p1.HashCode()).setDiscount(discount);
+            count++;
+        }
+        if (count == 0) {
+            errorMsg("Product : " + p1.getName() +" does not exist");
+        } else {
+            SystemMsg(discount.toString() +" applied to all items in the Product : " + p1.HashCode());
         }
     }
     public void applyDiscountToCategory(String category, Discount discount)
@@ -321,5 +331,26 @@ public class Inventory implements I_Inventory
     // If neither an item nor a product is found, return null
     return null;
 }
+
+    public Product getProduct(String name , String Category , String SubCategory , double size)
+    {
+        //Return the product with the given name
+        //If the product does not exist, return null
+        if(products.containsKey(name+"_"+Category+"_"+SubCategory+"_"+size))
+        {
+            return products.get(name+"_"+Category+"_"+SubCategory+"_"+size);
+        }
+        return null;
+    }
+    public Product getProduct(Product product)
+    {
+        //Return the product with the given name
+        //If the product does not exist, return null
+        if(products.containsKey(product.HashCode()))
+        {
+            return products.get(product.HashCode());
+        }
+        return null;
+    }
 
 }

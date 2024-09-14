@@ -20,7 +20,7 @@ public interface I_Inventory {
      void addProduct(Product product);
 
     // Retrieving a product by name
-     Product getProductByName(String name);
+//     Product getProductByName(String name);
 
     // Retrieving a list of products by status
      List<Product> getProductsByStatus(E_Product_Status status);

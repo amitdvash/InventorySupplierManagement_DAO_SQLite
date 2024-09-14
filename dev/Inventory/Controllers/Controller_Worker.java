@@ -30,21 +30,21 @@ public class Controller_Worker {
     }
 
     public void viewProductDetails(Product product){
-        System.out.println(inventory.getProductByName(product.getName()).toString());
+        System.out.println(inventory.getProduct(product).toString());
     }
 
     // Generate weekly reports for selected categories
-    public void generateInventoryReport(String category) {
-        var report = inventory.getProductByName(category);
-        System.out.println(report);
-    }
+//    public void generateInventoryReport(String category) {
+//        var report = inventory.getProductByName(category);
+//        System.out.println(report);
+//    }
 
     public Item findItem(String name, String category, String subCategory, double size, E_Item_Place place) {
         return inventory.findItem(name, category, subCategory , size, place);
     }
 
-    public Product find_product_string(String name){
-        return inventory.getProductByName(name);
-    }
+//    public Product find_product_string(String name){
+//        return inventory.getProductByName(name);
+//    }
 
 }
