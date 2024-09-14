@@ -24,6 +24,40 @@ public class SupplierController {
         return supplier;
     }
 
+    // Add a product to a supplier's agreement
+    public void addProductToSupplier(Supplier supplier, Product product) {
+        Agreement agreement = supplier.getSupplierAgreement();
+        if (agreement != null) {
+            agreement.addProduct(product);
+            System.out.println("Product " + product.getName() + " added to supplier " + supplier.getContact().getName());
+        } else {
+            System.out.println("Supplier has no agreement.");
+        }
+    }
+
+    // Delete a product from a supplier's agreement
+    public void deleteProductFromSupplier(Supplier supplier, String productID) {
+        Agreement agreement = supplier.getSupplierAgreement();
+        if (agreement != null) {
+            Product productToDelete = null;
+            for (Product product : agreement.getProductList()) {
+                if (product.getCatalogID().equals(productID)) {
+                    productToDelete = product;
+                    break;
+                }
+            }
+            if (productToDelete != null) {
+                agreement.getProductList().remove(productToDelete);
+                agreement.getDiscountDetails().remove(productID);
+                System.out.println("Product " + productToDelete.getName() + " deleted from supplier " + supplier.getContact().getName());
+            } else {
+                System.out.println("Product not found.");
+            }
+        } else {
+            System.out.println("Supplier has no agreement.");
+        }
+    }
+
     // Update supplier's payment method
     public void updatePaymentMethod(String supplierID, PaymentMethod paymentMethod) {
         Supplier supplier = getSupplierById(supplierID);

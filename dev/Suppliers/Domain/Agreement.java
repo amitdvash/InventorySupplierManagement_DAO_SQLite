@@ -39,6 +39,15 @@ public class Agreement {
         productList.add(product);
     }
 
+    public void removeProduct(Product product) {
+        if (productList.contains(product)) {
+            productList.remove(product);
+        } else {
+            System.out.println("Product not found in the list.");
+        }
+    }
+
+
     public HashMap<String, HashMap<Integer, Double>> getDiscountDetails() {
         return discountDetails;
     }
@@ -132,4 +141,5 @@ public class Agreement {
         }
         System.out.println("------------------------------");
     }
+
 }

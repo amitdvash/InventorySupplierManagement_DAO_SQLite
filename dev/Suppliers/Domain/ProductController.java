@@ -11,18 +11,4 @@ public class ProductController {
         return product;
     }
 
-//    public Product getProduct(String productID) {
-//        for (Product product : products) {
-//            if (product.getProductID().equals(productID)) {
-//                return product;
-//            }
-//        }
-//        System.out.println("Product not found: " + productID);
-//        return null;
-//    }
-//
-//    // Get all products
-//    public List<Product> getAllProducts() {
-//        return products;
-//    }
 }

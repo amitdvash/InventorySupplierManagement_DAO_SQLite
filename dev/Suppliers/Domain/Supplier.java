@@ -8,17 +8,15 @@ public class Supplier {
     private String companyID;
     private String bankAccount;
     private PaymentMethod paymentMethod;
-    //private List<Product> productList;
     private Agreement supplierAgreement;
     private SupplierContact contact;
 
     // Constructor - ID is auto-assigned
-    public Supplier(String companyID, String bankAccount, PaymentMethod paymentMethod    /* , List<Product> productList */, Agreement supplierAgreement, SupplierContact contact) {
+    public Supplier(String companyID, String bankAccount, PaymentMethod paymentMethod, Agreement supplierAgreement, SupplierContact contact) {
         this.supplierID = "S" + runningIndex++;  // Auto-generate supplierID
         this.companyID = companyID;
         this.bankAccount = bankAccount;
         this.paymentMethod = paymentMethod;
-        //this.productList = productList;
         this.supplierAgreement = supplierAgreement;
         this.contact = contact;
 

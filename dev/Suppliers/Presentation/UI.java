@@ -28,10 +28,11 @@ public class UI {
             System.out.println("7. Print All Suppliers Cards");
             System.out.println("8. Print All Orders Reports");
             System.out.println("0. Exit");
-            System.out.print("Please enter your choice: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();  // Clear the buffer after reading the int
 
+            // Get a valid integer choice from the user
+            choice = getValidatedMenuChoice(scanner);
+
+            // Perform the selected action
             switch (choice) {
                 case 1:
                     controllersManager.openNewSupplierCard();
@@ -53,8 +54,10 @@ public class UI {
                     break;
                 case 7:
                     controllersManager.printAllSuppliers();
+                    break;
                 case 8:
                     controllersManager.printAllOrders();
+                    break;
                 case 0:
                     System.out.println("Exiting the system...");
                     break;
@@ -62,5 +65,21 @@ public class UI {
                     System.out.println("Invalid choice. Please enter a valid option.");
             }
         } while (choice != 0);
+    }
+
+    // Method to get and validate the user's menu choice (integer input)
+    private int getValidatedMenuChoice(Scanner scanner) {
+        int choice = -1;
+        while (true) {
+            System.out.print("Please enter your choice: ");
+            String input = scanner.nextLine().trim();
+
+            try {
+                choice = Integer.parseInt(input);
+                return choice;  // Return valid integer choice
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
     }
 }
