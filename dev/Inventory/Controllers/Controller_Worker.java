@@ -4,6 +4,9 @@ import dev.Inventory.Classes.Inventory;
 import dev.Inventory.Classes.Item;
 import dev.Inventory.Classes.Product;
 import dev.Inventory.Enums.E_Item_Place;
+import dev.Inventory.Enums.E_Item_Status;
+
+import java.time.LocalDate;
 
 //to be implemented
 //for limit access to the Worker only
@@ -17,8 +20,8 @@ public class Controller_Worker {
         this.inventory = Inventory.getInstance();
     }
 
-    public void addItem(Item item) {
-     inventory.addItem(item);
+    public void addItem(String name, double costPrice, double sellingPrice, String manufacturer, String category, String subCategory, double size, LocalDate expiry, E_Item_Status Status, E_Item_Place place) {
+     inventory.addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, Status, place);
     }
 
     public void removeItem(Item item){

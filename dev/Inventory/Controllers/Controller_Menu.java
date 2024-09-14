@@ -6,9 +6,6 @@ import dev.Inventory.Classes.Inventory;
 
 //---------------------------------------------------------------------
 //To Take the following classes from the Inventory package
-import dev.Inventory.Classes.Item;
-import dev.Inventory.Classes.Product;
-import dev.Inventory.Classes.Discount;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
@@ -86,7 +83,7 @@ public class Controller_Menu {
         System.out.println("Enter the End date (yyyy-mm-dd): ");
         String endString = scanner.next();
         LocalDate endDay = LocalDate.parse(endString);
-        Discount discount = new Discount(discountPercentage, startDay, endDay);
+//        Discount discount = new Discount(discountPercentage, startDay, endDay);
         // Get the target for the discount (Product, Category, or Subcategory)
         System.out.println("Apply discount to: 1. Product  2. Category  3. Subcategory");
         int choice = scanner.nextInt();
@@ -101,15 +98,15 @@ public class Controller_Menu {
                 String SubCategory = scanner.nextLine();
                 System.out.print("Enter the Size: ");
                 double Size = Double.parseDouble(scanner.nextLine());
-                Product product = managerController.inventory.getProduct(name, Category, SubCategory, Size);
-                managerController.applyDiscountToProduct(product, discount);
+//                Product product = managerController.inventory.getProduct(name, Category, SubCategory, Size);
+                managerController.applyDiscountToProduct(name, Category, SubCategory, Size, discountPercentage, startDay, endDay);
                 break;
             case 2:
-                managerController.applyDiscountToCategory(name, discount);
+                managerController.applyDiscountToCategory(name, discountPercentage, startDay, endDay);
                 break;
 
             case 3:
-                managerController.applyDiscountToSubCategory(name, discount);
+                managerController.applyDiscountToSubCategory(name, discountPercentage, startDay, endDay);
                 break;
 
 
@@ -142,8 +139,8 @@ public class Controller_Menu {
         String expiryDate = scanner.next();
         LocalDate expiry = LocalDate.parse(expiryDate);
         E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
-        Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
-        managerController.addItem(newItem);
+//        Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
+        managerController.addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
     }
 
     // Method to add a product (Manager)
@@ -159,8 +156,8 @@ public class Controller_Menu {
         System.out.print("Enter minimum quantity: ");
         int minQuantity = scanner.nextInt();
 
-        Product newProduct = new Product(name, category, subCategory, size, minQuantity, null);
-        managerController.add_product(newProduct);
+//        Product newProduct = new Product(name, category, subCategory, size, minQuantity, null);
+        managerController.add_product(name, category, subCategory, size, minQuantity);
     }
 
     private static void removeItem() {
@@ -178,12 +175,12 @@ public class Controller_Menu {
         scanner.nextLine();  // Consume newline after nextInt
         // Convert the user's choice into the appropriate enum value for place
         E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
-        Item item_to_remove = managerController.findItem(name, category, subCategory, size, place);
-        if (item_to_remove == null) {
+//        Item item_to_remove = managerController.findItem(name, category, subCategory, size, place);
+        if (managerController.findItem(name, category, subCategory, size, place) == null) {
             System.out.println("the item dont exists");
             return;
         }
-        managerController.removeItem(item_to_remove);
+        managerController.removeItem(managerController.findItem(name, category, subCategory, size, place));
     }
 
     private static void moveItem() {
@@ -205,12 +202,12 @@ public class Controller_Menu {
             place_item = E_Item_Place.Warehouse;
             place_to_move = E_Item_Place.Store;
         }
-        Item item_to_move = managerController.findItem(name, category, subCategory, size, place_item);
-        if (item_to_move == null) {
+//        Item item_to_move = managerController.findItem(name, category, subCategory, size, place_item);
+        if (managerController.findItem(name, category, subCategory, size, place_item) == null) {
             System.out.println("the item dont exists");
             return;
         }
-        managerController.moveItem(item_to_move, place_to_move);
+        managerController.moveItem(managerController.findItem(name, category, subCategory, size, place_item), place_to_move);
     }
 
     private static void viewProductDetails() {
@@ -222,12 +219,12 @@ public class Controller_Menu {
         String subCategory = scanner.nextLine();
         System.out.print("Enter the size: ");
         double size = Double.parseDouble(scanner.nextLine());
-        Product product = managerController.findOrProduct(name, category, subCategory, size);
-        if (product == null) {
+//        Product product = managerController.findOrProduct(name, category, subCategory, size);
+        if (managerController.findOrProduct(name, category, subCategory, size) == null) {
             System.out.println("the product dont exists");
             return;
         }
-        System.out.println(product);
+        System.out.println(managerController.findOrProduct(name, category, subCategory, size));
 
     }
 
@@ -240,26 +237,26 @@ public class Controller_Menu {
             case 1:
                 System.out.print("Enter category: ");
                 String category = scanner.next();
-                List<Product> report = managerController.inventory.getProductsByCategory(category);
-                System.out.println(report);
+//                List<Product> report = managerController.inventory.getProductsByCategory(category);
+                System.out.println( managerController.inventory.getProductsByCategory(category));
                 break;
             case 2:
                 System.out.print("Enter sub-category: ");
                 String subCategory = scanner.next();
-                List<Product> report2 = managerController.inventory.getProductsBySubCategory(subCategory);
-                System.out.println(report2);
+//                List<Product> report2 = managerController.inventory.getProductsBySubCategory(subCategory);
+                System.out.println(managerController.inventory.getProductsBySubCategory(subCategory));
                 break;
             case 3:
-                List<Product> report3 = managerController.inventory.getProductsByStatus(E_Product_Status.about_to_finish);
-                System.out.println(report3);
+//                List<Product> report3 = managerController.inventory.getProductsByStatus(E_Product_Status.about_to_finish);
+                System.out.println(managerController.inventory.getProductsByStatus(E_Product_Status.about_to_finish));
                 break;
             case 4:
-                List<Item> report4 = managerController.inventory.getItemsByStatus(E_Item_Status.about_to_expire);
-                System.out.println(report4);
+//                List<Item> report4 = managerController.inventory.getItemsByStatus(E_Item_Status.about_to_expire);
+                System.out.println(managerController.inventory.getItemsByStatus(E_Item_Status.about_to_expire));
                 break;
             case 5:
-                List<Item> report5 = managerController.inventory.getItemsByStatus(E_Item_Status.EXPIRED);
-                System.out.println(report5);
+//                List<Item> report5 = managerController.inventory.getItemsByStatus(E_Item_Status.EXPIRED);
+                System.out.println(managerController.inventory.getItemsByStatus(E_Item_Status.EXPIRED));
                 break;
             case 6:
                 System.out.println(managerController.inventory);

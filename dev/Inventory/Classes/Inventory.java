@@ -7,6 +7,7 @@ import dev.Inventory.Interfaces.I_Discount;
 import dev.Inventory.Interfaces.I_Inventory;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 //All the complexity of the Inventory is hidden from the user
 //The user only needs to interact with the Inventory class
 
-public class Inventory implements I_Inventory
+public class Inventory
 {
     //A Singleton Inventory
     //There is only one instance of the Inventory
@@ -38,8 +39,9 @@ public class Inventory implements I_Inventory
     }
 
 
-    public void addProduct(Product product)
+    public void addProduct(String name, String category, String subCategory, double size, int minQuantity)
     {
+        Product product = new Product(name, category, subCategory, size, minQuantity, null);
         //Add a product to the inventory
         for (Product prod : products.values())
         {
@@ -68,8 +70,9 @@ public class Inventory implements I_Inventory
         }
     }
 
-    public void addItem(Item item)
+    public void addItem(String name, double costPrice, double sellingPrice, String manufacturer, String category, String subCategory, double size, LocalDate expiry, E_Item_Status Status, E_Item_Place place)
     {
+        Item item = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, Status, place);
         //Add an item to the inventory
         for (Product product : products.values())
         {
@@ -244,7 +247,7 @@ public class Inventory implements I_Inventory
         System.out.println(msg);
     }
 
-    public void applyDiscountToProduct(Product p1, Discount discount) {
+    public void applyDiscountToProduct(Product p1, double discountPercentage, LocalDate startDay, LocalDate endDay) {
         //Apply a discount to the product
         //If the product does not exist, throw an exception
         int count=0;
@@ -253,6 +256,7 @@ public class Inventory implements I_Inventory
             errorMsg("Product does not exist");
             return;
         }
+        Discount discount = new Discount(discountPercentage, startDay, endDay);
         if (products.containsKey(p1.HashCode()))
         {
             products.get(p1.HashCode()).setDiscount(discount);
@@ -264,11 +268,12 @@ public class Inventory implements I_Inventory
             SystemMsg(discount.toString() +" applied to all items in the Product : " + p1.HashCode());
         }
     }
-    public void applyDiscountToCategory(String category, Discount discount)
+    public void applyDiscountToCategory(String category,double discountPercentage, LocalDate startDay, LocalDate endDay)
     {
         //Apply a discount to the category
         //If the category does not exist, throw an exception
         int count =0 ;
+        Discount discount = new Discount(discountPercentage, startDay, endDay);
         for (Product product : products.values())
         {
             if (product.getCategory().equals(category))
@@ -284,11 +289,12 @@ public class Inventory implements I_Inventory
         }
 
     }
-    public void applyDiscountToSubCategory(String subcategory, Discount discount)
+    public void applyDiscountToSubCategory(String subcategory, double discountPercentage, LocalDate startDay, LocalDate endDay)
     {
         //Apply a discount to the sub-category
         //If the sub-category does not exist, throw an exception
         int count =0 ;
+        Discount discount = new Discount(discountPercentage, startDay, endDay);
         for (Product product : products.values())
         {
             if (product.getSub_category().equals(subcategory))
