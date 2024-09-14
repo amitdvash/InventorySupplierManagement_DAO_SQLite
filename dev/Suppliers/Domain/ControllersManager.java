@@ -410,18 +410,16 @@ public class ControllersManager {
 
     // 7. Print All Suppliers
     public void printAllSuppliers() {
+        if (supplierController.getSuppliers().isEmpty()){
+            System.out.println("No existing suppliers in the system.");
+            return;
+        }
         supplierController.getSuppliers().forEach(Supplier::printSupplierDetails);
     }
 
     // 8. Print All Orders
     public void printAllOrders() {
         orderController.generateOrdersReport();
-    }
-
-    // Helper Methods
-    private Supplier getValidSupplier() {
-        String supplierID = inputValidator.getValidatedInput("Enter Supplier ID: ");
-        return supplierController.getSupplierById(supplierID);
     }
 
     private PaymentMethod getValidatedPaymentMethod() {
@@ -496,6 +494,156 @@ public class ControllersManager {
                 default:
                     System.out.println("Invalid option.");
             }
+        }
+    }
+    public void uploadBasicInformation(){
+
+        Supplier supplier1 = supplierController.createSupplier("S1", "Bank1", PaymentMethod.CreditCard, null, "Supplier One", "123456", "email1@example.com");
+
+        // Creating discounts and products for Supplier 1
+        HashMap<Integer, Double> product1Discounts = new HashMap<>();
+        product1Discounts.put(10, 5.0);  // 5% discount for 10 or more units
+        product1Discounts.put(20, 10.0); // 10% discount for 20 or more units
+
+        HashMap<Integer, Double> product2Discounts = new HashMap<>();
+        product2Discounts.put(5, 3.0);   // 3% discount for 5 or more units
+        product2Discounts.put(15, 7.0);  // 7% discount for 15 or more units
+
+        Product product1 = productController.createProduct("Product 1", product1Discounts, 10.0, 30, 2.0, null);
+        Product product2 = productController.createProduct("Product 2", product2Discounts, 20.0, 50, 3.5, null);
+
+        Agreement agreement1 = agreementController.createAgreement(new ArrayList<>(List.of(product1, product2)), new HashMap<>(), new ArrayList<>(List.of("Monday", "Wednesday")), true);
+
+        supplier1.setSupplierAgreement(agreement1);  // Link agreement to supplier
+        orderController.addSupplier(supplier1);  // Add supplier to OrderController
+
+        // Example 2: Supplier 2 with Agreement and Products
+        Supplier supplier2 = supplierController.createSupplier("S2", "Bank2", PaymentMethod.Cash, null, "Supplier Two", "654321", "email2@example.com");
+
+        // Creating discounts and products for Supplier 2
+        HashMap<Integer, Double> product3Discounts = new HashMap<>();
+        product3Discounts.put(8, 4.0);   // 4% discount for 8 or more units
+        product3Discounts.put(12, 8.0);  // 8% discount for 12 or more units
+
+        HashMap<Integer, Double> product4Discounts = new HashMap<>();
+        product4Discounts.put(10, 6.0);  // 6% discount for 10 or more units
+        product4Discounts.put(20, 12.0); // 12% discount for 20 or more units
+
+        Product product3 = productController.createProduct("Product 3", product3Discounts, 15.0, 40, 5.0, null);
+        Product product4 = productController.createProduct("Product 4", product4Discounts, 25.0, 60, 1.5, null);
+
+
+        Agreement agreement2 = agreementController.createAgreement(new ArrayList<>(List.of(product3, product4)), new HashMap<>(), new ArrayList<>(List.of("Tuesday", "Thursday")), false);
+
+        supplier2.setSupplierAgreement(agreement2);  // Link agreement to supplier
+        orderController.addSupplier(supplier2);  // Add supplier to OrderController
+
+        // Example Orders
+        System.out.println("Creating example orders...");
+
+        // Creating orders for supplier 1
+        HashMap<Product, Integer> order1Products = new HashMap<>();
+        order1Products.put(product1, 15);  // 15 units of Product 1
+        order1Products.put(product2, 7);   // 7 units of Product 2
+        Order order1 = new Order(supplier1.getSupplierID(), new java.util.Date(), order1Products);
+        orderController.addOrder(order1);
+
+        // Creating orders for supplier 2
+        HashMap<Product, Integer> order2Products = new HashMap<>();
+        order2Products.put(product3, 9);   // 9 units of Product 3
+        order2Products.put(product4, 12);  // 12 units of Product 4
+        Order order2 = new Order(supplier2.getSupplierID(), new java.util.Date(), order2Products);
+        orderController.addOrder(order2);
+    }
+
+    public void uploadOnlyOrders(){
+        //Order: String supplierID, Date orderDate, HashMap<Product, Integer> productQuantityMap
+        //Product: String name, HashMap<Integer, Double> discountDetails, double price, int expirationDays, double weight, Agreement agreement
+        //Agreement: List<Product> productList, HashMap<String, HashMap<Integer, Double>> discountDetails, List<String> supplyDays, boolean selfSupply) {
+
+        String SupplierID1 = "SP1";
+        String SupplierID2 = "SP2";
+        Date date = new java.util.Date(); // Order date for all orders
+
+        // Create the product-quantity maps for each order
+        HashMap<Product, Integer> productQuantityMap1 = new HashMap<>();
+        HashMap<Product, Integer> productQuantityMap2 = new HashMap<>();
+        HashMap<Product, Integer> productQuantityMap3 = new HashMap<>();
+        HashMap<Product, Integer> productQuantityMap4 = new HashMap<>();
+
+        // Define discounts for the products for each supplier
+        HashMap<Integer, Double> bananaDiscountSupplier1= new HashMap<>();
+        HashMap<Integer, Double> tableDiscountSupplier1 = new HashMap<>();
+        HashMap<Integer, Double> tableDiscountSupplier2 = new HashMap<>();
+        HashMap<Integer, Double> noteBookDiscountSupplier1 = new HashMap<>();
+        HashMap<Integer, Double> noteBookDiscountSupplier2 = new HashMap<>();
+        HashMap<Integer, Double> phoneDiscountSupplier2 = new HashMap<>();
+
+        // Adding discount values for products
+        bananaDiscountSupplier1.put(10, 5.0);
+        bananaDiscountSupplier1.put(15, 10.0);
+        bananaDiscountSupplier1.put(20, 12.0);
+
+        tableDiscountSupplier1.put(2, 25.0);
+        tableDiscountSupplier1.put(4, 50.0);
+
+        tableDiscountSupplier2.put(3, 28.0);
+        tableDiscountSupplier2.put(5, 54.0);
+
+        noteBookDiscountSupplier1.put(10, 15.0);
+        noteBookDiscountSupplier1.put(20, 30.0);
+
+        noteBookDiscountSupplier2.put(10, 20.0);
+        noteBookDiscountSupplier2.put(25, 28.0);
+
+        phoneDiscountSupplier2.put(2, 8.0);
+
+        // Create products
+        Product banana = new Product("Banana", bananaDiscountSupplier1, 3, 7, 1, null); // No agreement yet
+        Product tableSupplier1 = new Product("Table", tableDiscountSupplier1, 400,  3650, 8, null); // Agreement will be assigned later
+        Product tableSupplier2 = new Product("Table", tableDiscountSupplier2, 400,  3650, 8, null); // Agreement will be assigned later
+        Product noteBookSupplier1 = new Product("Notebook", noteBookDiscountSupplier1, 5, 180, 1.5, null); // Agreement will be assigned later
+        Product noteBookSupplier2 = new Product("Notebook", noteBookDiscountSupplier2, 5, 180, 1.5, null); // Agreement will be assigned later
+        Product phone = new Product("Phone", phoneDiscountSupplier2, 2500, 1000, 2, null); // Agreement will be assigned later
+
+        // Create agreements for suppliers
+        List<Product> productList1 = new ArrayList<>(List.of(banana, tableSupplier1, noteBookSupplier1));
+        List<Product> productList2 = new ArrayList<>(List.of(tableSupplier2, noteBookSupplier2, phone));
+
+        Agreement agreement1 = new Agreement(productList1, new HashMap<>(), List.of("Monday", "Wednesday"), true); // Self-supply
+        Agreement agreement2 = new Agreement(productList2, new HashMap<>(), List.of("Tuesday", "Thursday"), false); // Supplier-supply
+
+        // Assign the agreements to the products
+        banana.setAgreement(agreement1);
+        tableSupplier1.setAgreement(agreement1);
+        noteBookSupplier1.setAgreement(agreement1);
+
+        tableSupplier2.setAgreement(agreement2);
+        noteBookSupplier2.setAgreement(agreement2);
+        phone.setAgreement(agreement2);
+
+        // Add product quantities to the maps for the orders
+        productQuantityMap1.put(banana, 12); // Order 1, 12 bananas
+        productQuantityMap1.put(tableSupplier1, 3); // Order 1, 3 tables
+
+        productQuantityMap2.put(noteBookSupplier1, 15); // Order 2, 15 notebooks
+
+        productQuantityMap3.put(tableSupplier2, 4); // Order 3, 4 tables
+        productQuantityMap3.put(phone, 1); // Order 3, 1 phone
+
+        productQuantityMap4.put(noteBookSupplier2, 20); // Order 4, 20 notebooks
+
+        // Create orders
+        Order order1 = new Order(SupplierID1, date, productQuantityMap1);
+        Order order2 = new Order(SupplierID1, date, productQuantityMap2);
+        Order order3 = new Order(SupplierID2, date, productQuantityMap3);
+        Order order4 = new Order(SupplierID2, date, productQuantityMap4);
+
+        // Add the orders to a list for demonstration purposes
+        List<Order> orders = Arrays.asList(order1, order2, order3, order4);
+
+        for(Order order: orders){
+            orderController.addOrder(order);
         }
     }
 }

@@ -15,6 +15,20 @@ public class UI {
     // Method to display the menu and interact with the user
     public void displayMenu() {
         Scanner scanner = new Scanner(System.in);
+
+        // Ask the user to choose how to start the system
+        int startOption = getValidatedStartChoice(scanner);
+        if (startOption == 1) {
+            controllersManager.uploadBasicInformation();
+            System.out.println("Basic information uploaded, System is ready.");
+        } else if (startOption == 2) {
+            controllersManager.uploadOnlyOrders();
+            System.out.println("Only orders uploaded, System is ready.");
+        } else if (startOption == 3) {
+            System.out.println("system is ready with no information.");
+        }
+
+
         int choice;
 
         do {
@@ -81,5 +95,28 @@ public class UI {
                 System.out.println("Invalid input. Please enter a valid number.");
             }
         }
+    }
+
+    // Method to get and validate the user's start choice (1 for basic information, 2 for orders only)
+    private int getValidatedStartChoice(Scanner scanner) {
+        int startChoice = -1;
+        while (startChoice != 1 && startChoice != 2 && startChoice != 3) {
+            System.out.println("How would you like to start the system?");
+            System.out.println("1. Start with basic information");
+            System.out.println("2. Start with orders only");
+            System.out.println("3. Start with no information at all");
+            System.out.print("Please enter 1, 2 or 3: ");
+            String input = scanner.nextLine().trim();
+
+            try {
+                startChoice = Integer.parseInt(input);
+                if (startChoice != 1 && startChoice != 2 && startChoice != 3) {
+                    System.out.println("Invalid input. Please enter 1,2 or 3.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number (1, 2 or 3).");
+            }
+        }
+        return startChoice;
     }
 }
