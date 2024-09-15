@@ -205,7 +205,7 @@ public class Controller_Menu {
 //        Discount discount = new Discount(discountPercentage, startDay, endDay);
             // Get the target for the discount (Product, Category, or Subcategory)
             System.out.println("Apply discount to: 1. Product  2. Category  3. Subcategory");
-            String choice = scanner.nextLine();
+            String choice = scanner.next();
             scanner.nextLine();
             System.out.print("Enter the name: ");
             String name = scanner.nextLine();
