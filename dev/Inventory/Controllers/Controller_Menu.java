@@ -15,6 +15,11 @@ public class Controller_Menu {
     protected static Scanner scanner = new Scanner(System.in);
     protected static Inventory inventory = Inventory.getInstance();
 
+
+    public static void runProgram() {
+        Controller_Menu.dataMenu();
+        Controller_Menu.registerMenu();
+    }
     static void dataMenu() {
         System.out.println("===== Data Menu =====");
         System.out.println("1. Initialize with Predefined Data");
@@ -91,10 +96,6 @@ public class Controller_Menu {
             }
         }
     }
-
-
-
-
 
 
 
