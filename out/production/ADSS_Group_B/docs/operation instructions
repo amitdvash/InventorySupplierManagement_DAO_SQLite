@@ -73,20 +73,20 @@ Cost price: $10.0, Selling price: $15.0
 Manufacturer: Manufacturer1
 Category: Drink, Sub-category: Sparkling
 Size: 500, Place: Store
-Expiry: 10 days
+Expiry: 10 days ago
 Item 2:
 Cost price: $10.0, Selling price: $15.0
 Manufacturer: Manufacturer1
 Category: Drink, Sub-category: Sparkling
 Size: 500, Place: Warehouse
-Expiry: 15 days
+Expiry: 15 days ago
 Item 3:
 Cost price: $10.0, Selling price: $15.0
 Manufacturer: Manufacturer1
 Category: Drink, Sub-category: Sparkling
 
 Size: 500, Place: Store
-Expiry: 20 days ן בישמעק
+Expiry: 20 days ago
 Product: Chips | Category: Snack | Sub-category: Salty | Size: 200 | Min Quantity: 5
 Item 1:
 Cost price: $5.0, Selling price: $10.0
