@@ -1,5 +1,7 @@
 package dev.Suppliers.Domain;
 
+import dev.Suppliers.Domain.Exception.ExitException;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +14,14 @@ public class InputValidator {
     // Method to validate generic string input
     public String getValidatedInput(String prompt) {
         System.out.print(prompt);
-        return scanner.nextLine().trim();
+        String input = scanner.nextLine().trim();
+
+        // Exit condition handling
+        if (input.equalsIgnoreCase("exit")) {
+            throw new ExitException("User requested exit.");
+        }
+
+        return input;
     }
 
     // Overloaded method to validate input with a custom validator
@@ -21,6 +30,12 @@ public class InputValidator {
         do {
             System.out.print(prompt);
             input = scanner.nextLine().trim();
+
+            // Exit condition handling
+            if (input.equalsIgnoreCase("exit")) {
+                throw new ExitException("User requested exit.");
+            }
+
             if (validator.test(input)) {
                 return input;
             } else {
@@ -35,6 +50,12 @@ public class InputValidator {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
+
+            // Exit condition handling
+            if (input.equalsIgnoreCase("exit")) {
+                throw new ExitException("User requested exit.");
+            }
+
             try {
                 value = Integer.parseInt(input);
                 if (value >= 0) { // Positive numbers only
@@ -54,6 +75,12 @@ public class InputValidator {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
+
+            // Exit condition handling
+            if (input.equalsIgnoreCase("exit")) {
+                throw new ExitException("User requested exit.");
+            }
+
             try {
                 value = Double.parseDouble(input);
                 if (value > 0) { // Positive numbers only
@@ -73,6 +100,12 @@ public class InputValidator {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
+
+            // Exit condition handling
+            if (input.equalsIgnoreCase("exit")) {
+                throw new ExitException("User requested exit.");
+            }
+
             try {
                 value = Double.parseDouble(input);
                 if (value >= 1 && value <= 100) { // Valid discount percentage range
