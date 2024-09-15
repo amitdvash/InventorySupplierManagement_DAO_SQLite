@@ -44,19 +44,19 @@ public class Controller_Menu {
         System.out.println("=========================");
         System.out.print("Select an option: ");
 
-        int choice = scanner.nextInt();
-        scanner.nextLine();  // Consume newline
+        String choice = scanner.nextLine();
+//        scanner.nextLine();  // Consume newline
 
         switch (choice) {
-            case 1:
+            case "1":
                 System.out.println("Initializing system with predefined data...");
                 SystemInitializer.initializeSystem();  // Call to the initializer with predefined data
                 break;
-            case 2:
+            case "2":
                 System.out.println("Starting with an empty system...");
                 // No data initialization, system will be empty
                 break;
-            case 3:
+            case "4":
                 System.out.println("Exiting...");
                 System.exit(0);
             default:
@@ -77,13 +77,13 @@ public class Controller_Menu {
             System.out.println("3. Exit");
             System.out.println("=========================");
             System.out.print("Select an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            String choice = scanner.nextLine();
+//            scanner.nextLine();  // Consume newline
             switch (choice) {
-                case 1:
+                case "1":
                     System.out.print("Enter your name: ");
                     String name1 = scanner.nextLine();
-                    System.out.print("Enter your password: ");
+                    System.out.print("Enter your password:(1111) ");
                     String password = scanner.nextLine();
                     if (managerController.registerManager(name1 , password)) {
                         ManagerMenu();
@@ -93,10 +93,10 @@ public class Controller_Menu {
                         System.out.println("Registration failed. Please try again.");
                     }
                     break;
-                case 2:
+                case "2":
                     System.out.print("Enter your name: ");
                     String name2 = scanner.nextLine();
-                    System.out.print("Enter your password: ");
+                    System.out.print("Enter your password:(1111) ");
                     String password2 = scanner.nextLine();
                     if (managerController.registerWorker(name2,password2)) {
                         WorkerMenu();
@@ -104,7 +104,7 @@ public class Controller_Menu {
                         System.out.println("Registration failed. Please try again.");
                     }
                     break;
-                case 3:
+                case "3":
                     System.out.println("Exiting...");
                     System.exit(0);
                 default:
@@ -115,7 +115,7 @@ public class Controller_Menu {
 
     private static void ManagerMenu()
     {
-        System.out.println("Registered as Worker successfully.");
+        System.out.println("Registered as Manager successfully.");
         while(true)
         {
             System.out.println("===== Inventory Management System Menu - Manager menu =====");
@@ -126,22 +126,22 @@ public class Controller_Menu {
             System.out.println("9. Exit");
             System.out.println("============================================");
             System.out.print("Select an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            String choice = scanner.nextLine();
+//            scanner.nextLine();  // Consume newline
             switch (choice) {
-                case 5:
+                case "5":
                     generateInventoryReport();
                     break;
-                case 6:
+                case "6":
                     addProduct();
                     break;
-                case 7:
+                case "7":
                     setDiscount();
                     break;
-                case 8:
+                case "8":
                     WorkerMenu();
                     break;
-                case 9:
+                case "9":
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -152,7 +152,7 @@ public class Controller_Menu {
 
     private static void WorkerMenu()
     {
-        System.out.println("Registered as Manager successfully.");
+        System.out.println("Registered as Worker successfully.");
         while(true)
         {
             System.out.println("===== Inventory Management System Menu - Worker menu =====");
@@ -163,22 +163,22 @@ public class Controller_Menu {
             System.out.println("9. Exit");
             System.out.println("============================================");
             System.out.print("Select an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            String choice = scanner.nextLine();
+//            scanner.nextLine();  // Consume newline
             switch (choice) {
-                case 1:
+                case "1":
                     addItem();
                     break;
-                case 2:
+                case "2":
                     removeItem();
                     break;
-                case 3:
+                case "3":
                     moveItem();
                     break;
-                case 4:
+                case "4":
                     viewProductDetails();
                     break;
-                case 9:
+                case "9":
                     System.out.println("Exiting...");;
                     return;
                 default:
@@ -189,197 +189,241 @@ public class Controller_Menu {
     }
 
 
-    private static void setDiscount() {
-        // Get discount details from the user
-        System.out.print("Enter discount percentage: ");
-        double discountPercentage = scanner.nextDouble();
-        System.out.println("Enter the Start date (yyyy-mm-dd): ");
-        String startString = scanner.next();
-        LocalDate startDay = LocalDate.parse(startString);
-        System.out.println("Enter the End date (yyyy-mm-dd): ");
-        String endString = scanner.next();
-        LocalDate endDay = LocalDate.parse(endString);
+    private static void setDiscount()
+    {
+        try {
+            // Get discount details from the user
+            System.out.print("Enter discount percentage: ");
+            double discountPercentage = scanner.nextDouble();
+            System.out.println("Enter the Start date (yyyy-mm-dd): ");
+            String startString = scanner.next();
+            LocalDate startDay = LocalDate.parse(startString);
+            System.out.println("Enter the End date (yyyy-mm-dd): ");
+            String endString = scanner.next();
+            LocalDate endDay = LocalDate.parse(endString);
+
 //        Discount discount = new Discount(discountPercentage, startDay, endDay);
-        // Get the target for the discount (Product, Category, or Subcategory)
-        System.out.println("Apply discount to: 1. Product  2. Category  3. Subcategory");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Enter the name: ");
-        String name = scanner.nextLine();
-        switch (choice) {
-            case 1:
-                System.out.print("Enter the Category: ");
-                String Category = scanner.nextLine();
-                System.out.print("Enter the SubCategory: ");
-                String SubCategory = scanner.nextLine();
-                System.out.print("Enter the Size: ");
-                double Size = Double.parseDouble(scanner.nextLine());
+            // Get the target for the discount (Product, Category, or Subcategory)
+            System.out.println("Apply discount to: 1. Product  2. Category  3. Subcategory");
+            String choice = scanner.nextLine();
+            scanner.nextLine();
+            System.out.print("Enter the name: ");
+            String name = scanner.nextLine();
+            switch (choice) {
+                case "1":
+                    System.out.print("Enter the Category: ");
+                    String Category = scanner.nextLine();
+                    System.out.print("Enter the SubCategory: ");
+                    String SubCategory = scanner.nextLine();
+                    System.out.print("Enter the Size: ");
+                    double Size = Double.parseDouble(scanner.nextLine());
 //                Product product = managerController.inventory.getProduct(name, Category, SubCategory, Size);
-                managerController.applyDiscountToProduct(name, Category, SubCategory, Size, discountPercentage, startDay, endDay);
-                break;
-            case 2:
-                managerController.applyDiscountToCategory(name, discountPercentage, startDay, endDay);
-                break;
+                    managerController.applyDiscountToProduct(name, Category, SubCategory, Size, discountPercentage, startDay, endDay);
+                    break;
+                case "2":
+                    managerController.applyDiscountToCategory(name, discountPercentage, startDay, endDay);
+                    break;
 
-            case 3:
-                managerController.applyDiscountToSubCategory(name, discountPercentage, startDay, endDay);
-                break;
+                case "3":
+                    managerController.applyDiscountToSubCategory(name, discountPercentage, startDay, endDay);
+                    break;
 
 
-            default:
-                System.out.println("Invalid choice.");
-                break; // Keep looping until a valid choice is made
+                default:
+                    System.out.println("Invalid choice.");
+                    break; // Keep looping until a valid choice is made
 
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Invalid input. Please try again.");
         }
     }
 
     // Method to add an item (Worker)
     private static void addItem() {
-        System.out.print("Enter item name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter category: ");
-        String category = scanner.next();
-        System.out.print("Enter sub-category: ");
-        String subCategory = scanner.next();
-        System.out.print("Enter size: ");
-        double size = scanner.nextDouble();
-        System.out.print("Enter cost price: ");
-        double costPrice = scanner.nextDouble();
-        System.out.print("Enter selling price: ");
-        double sellingPrice = scanner.nextDouble();
-        System.out.print("Enter manufacturer: ");
-        String manufacturer = scanner.next();
-        System.out.print("Enter item place (1: Store, 2: Warehouse): ");
-        int placeChoice = scanner.nextInt();
-        System.out.println("Enter the expiry date (yyyy-mm-dd): ");
-        String expiryDate = scanner.next();
-        LocalDate expiry = LocalDate.parse(expiryDate);
-        E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
+        try {
+            System.out.print("Enter item name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter category: ");
+            String category = scanner.next();
+            System.out.print("Enter sub-category: ");
+            String subCategory = scanner.next();
+            System.out.print("Enter size: ");
+            double size = scanner.nextDouble();
+            System.out.print("Enter cost price: ");
+            double costPrice = scanner.nextDouble();
+            System.out.print("Enter selling price: ");
+            double sellingPrice = scanner.nextDouble();
+            System.out.print("Enter manufacturer: ");
+            String manufacturer = scanner.next();
+            System.out.print("Enter item place (1: Store, 2: Warehouse): ");
+            int placeChoice = scanner.nextInt();
+            System.out.println("Enter the expiry date (yyyy-mm-dd): ");
+            String expiryDate = scanner.next();
+            LocalDate expiry = LocalDate.parse(expiryDate);
+            E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
 //        Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
-        managerController.addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
+            managerController.addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Invalid input. Please try again.");
+        }
     }
 
     // Method to add a product (Manager)
     private static void addProduct() {
-        System.out.print("Enter product name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter category: ");
-        String category = scanner.nextLine();
-        System.out.print("Enter sub-category: ");
-        String subCategory = scanner.nextLine();
-        System.out.print("Enter size: ");
-        double size = scanner.nextDouble();
-        System.out.print("Enter minimum quantity: ");
-        int minQuantity = scanner.nextInt();
+        try {
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter category: ");
+            String category = scanner.nextLine();
+            System.out.print("Enter sub-category: ");
+            String subCategory = scanner.nextLine();
+            System.out.print("Enter size: ");
+            double size = scanner.nextDouble();
+            System.out.print("Enter minimum quantity: ");
+            int minQuantity = scanner.nextInt();
 
 //        Product newProduct = new Product(name, category, subCategory, size, minQuantity, null);
-        managerController.add_product(name, category, subCategory, size, minQuantity);
+            managerController.add_product(name, category, subCategory, size, minQuantity);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Invalid input. Please try again.");
+        }
     }
 
     private static void removeItem() {
-        // Get input from the user for category, sub-category, size, and place
-        System.out.print("Enter product name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter the Category: ");
-        String category = scanner.nextLine();
-        System.out.print("Enter the Sub-Category: ");
-        String subCategory = scanner.nextLine();
-        System.out.print("Enter the size: ");
-        double size = Double.parseDouble(scanner.nextLine());
-        System.out.print("Enter item place (1: Store, 2: Warehouse): ");
-        int placeChoice = scanner.nextInt();
-        scanner.nextLine();  // Consume newline after nextInt
-        // Convert the user's choice into the appropriate enum value for place
-        E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
+        try {
+            // Get input from the user for category, sub-category, size, and place
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter the Category: ");
+            String category = scanner.nextLine();
+            System.out.print("Enter the Sub-Category: ");
+            String subCategory = scanner.nextLine();
+            System.out.print("Enter the size: ");
+            double size = Double.parseDouble(scanner.nextLine());
+            System.out.print("Enter item place (1: Store, 2: Warehouse): ");
+            int placeChoice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline after nextInt
+            // Convert the user's choice into the appropriate enum value for place
+            E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
 //        Item item_to_remove = managerController.findItem(name, category, subCategory, size, place);
-        if (managerController.findItem(name, category, subCategory, size, place) == null) {
-            System.out.println("the item dont exists");
-            return;
+            if (managerController.findItem(name, category, subCategory, size, place) == null) {
+                System.out.println("the item dont exists");
+                return;
+            }
+            managerController.removeItem(managerController.findItem(name, category, subCategory, size, place));
         }
-        managerController.removeItem(managerController.findItem(name, category, subCategory, size, place));
+        catch (Exception e)
+        {
+            System.out.println("Invalid input. Please try again.");
+        }
     }
 
     private static void moveItem() {
-        System.out.print("Enter product name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter the Category: ");
-        String category = scanner.nextLine();
-        System.out.print("Enter the Sub-Category: ");
-        String subCategory = scanner.nextLine();
-        System.out.print("Enter the size: ");
-        double size = Double.parseDouble(scanner.nextLine());
-        System.out.print("Enter where you want to move the item (1: Warehouse ,2: Store): ");
-        int placeChoice = scanner.nextInt();
-        E_Item_Place place_item, place_to_move;
-        if (placeChoice == 1) {
-            place_item = E_Item_Place.Store;
-            place_to_move = E_Item_Place.Warehouse;
-        } else {
-            place_item = E_Item_Place.Warehouse;
-            place_to_move = E_Item_Place.Store;
-        }
+        try {
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter the Category: ");
+            String category = scanner.nextLine();
+            System.out.print("Enter the Sub-Category: ");
+            String subCategory = scanner.nextLine();
+            System.out.print("Enter the size: ");
+            double size = Double.parseDouble(scanner.nextLine());
+            System.out.print("Enter where you want to move the item (1: Warehouse ,2: Store): ");
+            int placeChoice = scanner.nextInt();
+            E_Item_Place place_item, place_to_move;
+            if (placeChoice == 1) {
+                place_item = E_Item_Place.Store;
+                place_to_move = E_Item_Place.Warehouse;
+            } else {
+                place_item = E_Item_Place.Warehouse;
+                place_to_move = E_Item_Place.Store;
+            }
 //        Item item_to_move = managerController.findItem(name, category, subCategory, size, place_item);
-        if (managerController.findItem(name, category, subCategory, size, place_item) == null) {
-            System.out.println("the item dont exists");
-            return;
+            if (managerController.findItem(name, category, subCategory, size, place_item) == null) {
+                System.out.println("the item dont exists");
+                return;
+            }
+            managerController.moveItem(managerController.findItem(name, category, subCategory, size, place_item), place_to_move);
         }
-        managerController.moveItem(managerController.findItem(name, category, subCategory, size, place_item), place_to_move);
+        catch (Exception e)
+        {
+            System.out.println("Invalid input. Please try again.");
+        }
     }
 
     private static void viewProductDetails() {
-        System.out.print("Enter product name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter the Category: ");
-        String category = scanner.nextLine();
-        System.out.print("Enter the Sub-Category: ");
-        String subCategory = scanner.nextLine();
-        System.out.print("Enter the size: ");
-        double size = Double.parseDouble(scanner.nextLine());
+        try {
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter the Category: ");
+            String category = scanner.nextLine();
+            System.out.print("Enter the Sub-Category: ");
+            String subCategory = scanner.nextLine();
+            System.out.print("Enter the size: ");
+            double size = Double.parseDouble(scanner.nextLine());
 //        Product product = managerController.findOrProduct(name, category, subCategory, size);
-        if (managerController.findOrProduct(name, category, subCategory, size) == null) {
-            System.out.println("the product dont exists");
-            return;
+            if (managerController.findOrProduct(name, category, subCategory, size) == null) {
+                System.out.println("the product dont exists");
+                return;
+            }
+            System.out.println(managerController.findOrProduct(name, category, subCategory, size));
         }
-        System.out.println(managerController.findOrProduct(name, category, subCategory, size));
+        catch (Exception e)
+        {
+            System.out.println("Invalid input. Please try again.");
+        }
 
     }
 
     private static void generateInventoryReport()
     {
-        System.out.println("enter filter : ");
-        System.out.println("1. Category\n2. Sub-Category\n3.About to Finish\n4.About to Expire\n5. Expired\n6. All");
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                System.out.print("Enter category: ");
-                String category = scanner.next();
+        try {
+            System.out.println("enter filter : ");
+            System.out.println("1. Category\n2. Sub-Category\n3.About to Finish\n4.About to Expire\n5. Expired\n6. All");
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter category: ");
+                    String category = scanner.next();
 //                List<Product> report = managerController.inventory.getProductsByCategory(category);
-                System.out.println( managerController.inventory.getProductsByCategory(category));
-                break;
-            case 2:
-                System.out.print("Enter sub-category: ");
-                String subCategory = scanner.next();
+                    System.out.println(managerController.inventory.getProductsByCategory(category));
+                    break;
+                case 2:
+                    System.out.print("Enter sub-category: ");
+                    String subCategory = scanner.next();
 //                List<Product> report2 = managerController.inventory.getProductsBySubCategory(subCategory);
-                System.out.println(managerController.inventory.getProductsBySubCategory(subCategory));
-                break;
-            case 3:
+                    System.out.println(managerController.inventory.getProductsBySubCategory(subCategory));
+                    break;
+                case 3:
 //                List<Product> report3 = managerController.inventory.getProductsByStatus(E_Product_Status.about_to_finish);
-                System.out.println(managerController.inventory.getProductsByStatus(E_Product_Status.about_to_finish));
-                break;
-            case 4:
+                    System.out.println(managerController.inventory.getProductsByStatus(E_Product_Status.about_to_finish));
+                    break;
+                case 4:
 //                List<Item> report4 = managerController.inventory.getItemsByStatus(E_Item_Status.about_to_expire);
-                System.out.println(managerController.inventory.getItemsByStatus(E_Item_Status.about_to_expire));
-                break;
-            case 5:
+                    System.out.println(managerController.inventory.getItemsByStatus(E_Item_Status.about_to_expire));
+                    break;
+                case 5:
 //                List<Item> report5 = managerController.inventory.getItemsByStatus(E_Item_Status.EXPIRED);
-                System.out.println(managerController.inventory.getItemsByStatus(E_Item_Status.EXPIRED));
-                break;
-            case 6:
-                System.out.println(managerController.inventory);
-                break;
-            default:
-                System.out.println("Invalid choice.");
-                break;
+                    System.out.println(managerController.inventory.getItemsByStatus(E_Item_Status.EXPIRED));
+                    break;
+                case 6:
+                    System.out.println(managerController.inventory);
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Invalid input. Please try again.");
         }
     }
 }

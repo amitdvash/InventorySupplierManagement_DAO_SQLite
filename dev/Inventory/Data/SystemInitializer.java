@@ -33,9 +33,9 @@ public class SystemInitializer {
         inventory.addProduct(milk.getName(), milk.getCategory(), milk.getSub_category(), milk.getSize(), milk.getMin_quantity());
 
         // Add 3 items to the Cola product
-        Item colaItem1 = new Item("Cola", 10.0, 15.0, "Manufacturer1", "Drink", "Sparkling", 500, LocalDate.now().plusDays(10), E_Item_Status.Available, E_Item_Place.Store);
-        Item colaItem2 = new Item("Cola", 10.0, 15.0, "Manufacturer1", "Drink", "Sparkling", 500, LocalDate.now().plusDays(15), E_Item_Status.Available, E_Item_Place.Warehouse);
-        Item colaItem3 = new Item("Cola", 10.0, 15.0, "Manufacturer1", "Drink", "Sparkling", 500, LocalDate.now().plusDays(20), E_Item_Status.Available, E_Item_Place.Store);
+        Item colaItem1 = new Item("Cola", 10.0, 15.0, "Manufacturer1", "Drink", "Sparkling", 500, LocalDate.now().plusDays(-10), E_Item_Status.Available, E_Item_Place.Store);
+        Item colaItem2 = new Item("Cola", 10.0, 15.0, "Manufacturer1", "Drink", "Sparkling", 500, LocalDate.now().plusDays(-15), E_Item_Status.Available, E_Item_Place.Warehouse);
+        Item colaItem3 = new Item("Cola", 10.0, 15.0, "Manufacturer1", "Drink", "Sparkling", 500, LocalDate.now().plusDays(-20), E_Item_Status.Available, E_Item_Place.Store);
         inventory.addItem(colaItem1.getName(), colaItem1.getCost_price(), colaItem1.getSelling_price(), colaItem1.getManufacturer(), colaItem1.getCategory(), colaItem1.getSub_category(), colaItem1.getSize(), colaItem1.getExpiry_date(), colaItem1.getStatus(), colaItem1.getPlace());
         inventory.addItem(colaItem2.getName(), colaItem2.getCost_price(), colaItem2.getSelling_price(), colaItem2.getManufacturer(), colaItem2.getCategory(), colaItem2.getSub_category(), colaItem2.getSize(), colaItem2.getExpiry_date(), colaItem2.getStatus(), colaItem2.getPlace());
         inventory.addItem(colaItem3.getName(), colaItem3.getCost_price(), colaItem3.getSelling_price(), colaItem3.getManufacturer(), colaItem3.getCategory(), colaItem3.getSub_category(), colaItem3.getSize(), colaItem3.getExpiry_date(), colaItem3.getStatus(), colaItem3.getPlace());

@@ -46,10 +46,18 @@ public class Controller_Manager extends Controller_Worker
 
     public boolean registerManager(String name1, String password)
     {
-        return inventory.registerManager(name1, password);
+        if (password.equals("1111"))
+            return true;
+        else
+            return false;
+//            return inventory.registerManager(name1, password);
     }
     public boolean registerWorker(String name1, String password)
     {
-        return inventory.registerWorker(name1, password);
+        if (password.equals("1111"))
+            return true;
+        else
+            return false;
+//            return inventory.registerWorker(name1, password);
     }
 }

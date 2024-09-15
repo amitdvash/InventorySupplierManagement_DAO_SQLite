@@ -3,13 +3,13 @@ package dev.Inventory.Classes;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
-import dev.Inventory.Interfaces.I_Product;
+//import dev.Inventory.Interfaces.I_Product;
 
 
 import java.time.LocalDate;
 import java.util.*;
 
-public class Product implements I_Product
+public class Product
 {
     private HashMap<Integer , Item> items;
     private int quantity_in_store;
@@ -21,7 +21,6 @@ public class Product implements I_Product
     private double size;
     private Discount discount;
     private E_Product_Status status;
-    private boolean Discount_Status;
     public Product(String name, String category, String sub_category, double size,int min_quantity , Discount discount)
     {
         this.name = name;

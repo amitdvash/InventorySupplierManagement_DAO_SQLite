@@ -1,1 +1,17 @@
 207698911_318760477
+
+the password for entering the system is 1111
+the name isn't matter
+
+the system divided to 2 main controllers - the one of the manager and the one of the worker
+the manager is able to :
+generate different kinds of report ,  add new products to the system , Set a new discount for a chosen product / category / Subcategory... , and to reach the worker menu
+
+the worker is able to :
+add new item to a certain product , remove item from a certain product , update changes of items location inside the store , to view detailes of a certain product ...
+
+the functionallity of the system is based on the use of the following classes using Facade(the inventory) design pattern:
+1. Product - represents a product in the store
+2. Item - represents a single item of a product
+3. Discount - represents a discount that can be applied to a product / category / subcategory
+4. inventory -The Facade of the System , represents the inventory of the store

@@ -2,7 +2,6 @@ package dev.Inventory.Controllers;
 
 import dev.Inventory.Classes.Inventory;
 import dev.Inventory.Classes.Item;
-import dev.Inventory.Classes.Product;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 
@@ -32,9 +31,9 @@ public class Controller_Worker {
         inventory.moveItemTo(item, new_palace);
     }
 
-    public void viewProductDetails(Product product){
-        System.out.println(inventory.getProduct(product).toString());
-    }
+//    public void viewProductDetails(Product product){
+//        System.out.println(inventory.getProduct(product).toString());
+//    }
 
     // Generate weekly reports for selected categories
 //    public void generateInventoryReport(String category) {
