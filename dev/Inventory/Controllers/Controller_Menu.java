@@ -44,8 +44,8 @@ public class Controller_Menu {
         System.out.println("=========================");
         System.out.print("Select an option: ");
 
-        String choice = scanner.nextLine();
-//        scanner.nextLine();  // Consume newline
+        String choice = scanner.next();
+        scanner.nextLine();  // Consume newline
 
         switch (choice) {
             case "1":
@@ -77,8 +77,8 @@ public class Controller_Menu {
             System.out.println("3. Exit");
             System.out.println("=========================");
             System.out.print("Select an option: ");
-            String choice = scanner.nextLine();
-//            scanner.nextLine();  // Consume newline
+            String choice = scanner.next();
+            scanner.nextLine();  // Consume newline
             switch (choice) {
                 case "1":
                     System.out.print("Enter your name: ");
@@ -126,8 +126,8 @@ public class Controller_Menu {
             System.out.println("9. Exit");
             System.out.println("============================================");
             System.out.print("Select an option: ");
-            String choice = scanner.nextLine();
-//            scanner.nextLine();  // Consume newline
+            String choice = scanner.next();
+            scanner.nextLine();  // Consume newline
             switch (choice) {
                 case "5":
                     generateInventoryReport();
@@ -163,8 +163,8 @@ public class Controller_Menu {
             System.out.println("9. Exit");
             System.out.println("============================================");
             System.out.print("Select an option: ");
-            String choice = scanner.nextLine();
-//            scanner.nextLine();  // Consume newline
+            String choice = scanner.next();
+            scanner.nextLine();  // Consume newline
             switch (choice) {
                 case "1":
                     addItem();
