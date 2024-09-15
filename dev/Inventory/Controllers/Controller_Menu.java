@@ -30,10 +30,42 @@ public class Controller_Menu {
 
 
     public static void main(String[] args) {
-        SystemInitializer.initializeSystem();//  initializer the system with data
+        dataMenu();
         registerMenu();
 
     }
+
+
+    private static void dataMenu() {
+        System.out.println("===== Data Menu =====");
+        System.out.println("1. Initialize with Predefined Data");
+        System.out.println("2. Start with Empty System");
+        System.out.println("3. Exit");
+        System.out.println("=========================");
+        System.out.print("Select an option: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        switch (choice) {
+            case 1:
+                System.out.println("Initializing system with predefined data...");
+                SystemInitializer.initializeSystem();  // Call to the initializer with predefined data
+                break;
+            case 2:
+                System.out.println("Starting with an empty system...");
+                // No data initialization, system will be empty
+                break;
+            case 3:
+                System.out.println("Exiting...");
+                System.exit(0);
+            default:
+                System.out.println("Invalid option. Please try again.");
+                dataMenu();  // Recursive call to show the menu again if invalid option
+        }
+    }
+
+
 
     private static void registerMenu()
     {
