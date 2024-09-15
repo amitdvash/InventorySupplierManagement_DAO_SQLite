@@ -13,8 +13,8 @@ public class UI {
     public UI(ControllersManager controllersManager) {
         this.controllersManager = controllersManager;
         credentials = new HashMap<>();
-        credentials.put("senior", "555");
-        credentials.put("junior", "888");
+        credentials.put("senior", "1111");
+        credentials.put("junior", "2222");
     }
 
     // Method to display the startup options
