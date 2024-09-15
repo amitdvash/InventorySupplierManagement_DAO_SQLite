@@ -1,4 +1,5 @@
 package dev.Inventory.Controllers;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
@@ -6,6 +7,7 @@ import dev.Inventory.Classes.Inventory;
 
 //---------------------------------------------------------------------
 //To Take the following classes from the Inventory package
+import dev.Inventory.Data.SystemInitializer;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
@@ -28,50 +30,9 @@ public class Controller_Menu {
 
 
     public static void main(String[] args) {
+        SystemInitializer.initializeSystem();//  initializer the system with data
         registerMenu();
-//        while (true) {
-//            System.out.println("===== Inventory Management System Menu - worker menu =====");
-//            System.out.println("1. Add Item (Worker)");
-//            System.out.println("2. Remove Item (Worker)");
-//            System.out.println("3. Move Item (Worker)");
-//            System.out.println("4. View Product Details (Worker)");
-//            System.out.println("5. Generate Inventory Report (Worker)");
-//            System.out.println("6. Add Product (Manager)");
-//            System.out.println("7. Set a discount (Manager)");
-//            System.out.println("9. Exit");
-//            System.out.println("============================================");
-//            System.out.print("Select an option: ");
-//            int choice = scanner.nextInt();
-//            scanner.nextLine();  // Consume newline
-//            switch (choice) {
-//                case 1:
-//                    addItem();
-//                    break;
-//                case 2:
-//                    removeItem();
-//                    break;
-//                case 3:
-//                    moveItem();
-//                    break;
-//                case 4:
-//                    viewProductDetails();
-//                    break;
-//                case 5:
-//                    generateInventoryReport();
-//                    break;
-//                case 6:
-//                    addProduct();
-//                    break;
-//                case 7:
-//                    setDiscount();
-//                    break;
-//                case 9:
-//                    System.out.println("Exiting...");
-//                    return;
-//                default:
-//                    System.out.println("Invalid option. Please try again.");
-//            }
-//        }
+
     }
 
     private static void registerMenu()

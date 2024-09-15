@@ -179,7 +179,7 @@ public class Item implements I_Item
                 ", size=" + size +
                 ", expiry_date=" + expiry_date +
                 ", status=" + status +
-                ", place=" + place +
+                ", plac=e" + place +
                 '}';
     }
 }
