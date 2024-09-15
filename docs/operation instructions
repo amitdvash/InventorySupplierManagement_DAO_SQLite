@@ -3,15 +3,126 @@
 the password for entering the system is 1111
 the name isn't matter
 
-the system divided to 2 main controllers - the one of the manager and the one of the worker
-the manager is able to :
-generate different kinds of report ,  add new products to the system , Set a new discount for a chosen product / category / Subcategory... , and to reach the worker menu
 
-the worker is able to :
-add new item to a certain product , remove item from a certain product , update changes of items location inside the store , to view detailes of a certain product ...
+Overview
 
-the functionallity of the system is based on the use of the following classes using Facade(the inventory) design pattern:
-1. Product - represents a product in the store
-2. Item - represents a single item of a product
-3. Discount - represents a discount that can be applied to a product / category / subcategory
-4. inventory -The Facade of the System , represents the inventory of the store
+The Inventory Management System allows users to manage inventory through two roles: Manager
+and Worker. Managers can add products, set discounts, and generate reports, while workers can
+manage individual items (adding, moving, removing), and view product details
+
+-----Log in to Inventory Management System-----
+Manager:
+Full access to inventory management (add products, set discounts, generate reports)
+Password: 1111 (Username is irrelevant).
+
+Worker:
+Can manage items (add, move, remove) but cannot set discounts or add new products.
+Password: 1111 (Username is irrelevant).
+
+----System Initialization----
+At the system startup, you are prompted to initialize the system with sample data or begin with
+an empty inventory. If sample data is chosen, the system is preloaded with products and items.
+Option 1: Initialize with predefined data (Cola, Chips, Milk products).
+Option 2: Start with an empty system, allowing you to add new products manually.
+
+----Available Menu Options----
+After successful login as either a Manager or a Worker, the system presents different menus
+based on the user role.
+Manager Menu:
+
+Generate Inventory Report: View detailed reports based on product categories, sub-
+categories, or statuses (e.g., products about to expire).
+
+Add Product: Add new products to the inventory.
+
+Set Discount: Apply discounts to a product, category, or sub-category.
+
+Switch to Worker Menu: Allows managers to access the worker-level functionality.
+
+Exit: Exit the system.
+
+----Worker menu----
+Add Item: Add individual items to existing products in the inventory.
+
+Remove Item: Remove an item from the inventory.
+
+Move Item: Change the location of an item between store and warehouse.
+
+View Product Details: View details of a specific product.
+
+Exit: Exit the system.
+
+----Important Notes----
+
+Product-Item Relationship: Items can only belong to a product if their name, category, sub-
+category, and size are identical. A product is a container for items with matching attributes.
+
+No Persistent Storage: All data is stored in memory and will be reset each time the system is
+restarted.
+Manager Privileges: Only managers can add products or set discounts, while workers are
+limited to managing items within products.
+Product First: Before adding items to the inventory, the product must first be added by a
+manager. Only after a product exists in the inventory can items be added under it.
+
+Sample Data (if initialized)
+When the system is initialized with sample data, the following products and items are preloaded into
+the inventory:
+Product: Cola | Category: Drink | Sub-category: Sparkling | Size: 500 | Min Quantity: 10
+Item 1:
+Cost price: $10.0, Selling price: $15.0
+Manufacturer: Manufacturer1
+Category: Drink, Sub-category: Sparkling
+Size: 500, Place: Store
+Expiry: 10 days ago
+Item 2:
+Cost price: $10.0, Selling price: $15.0
+Manufacturer: Manufacturer1
+Category: Drink, Sub-category: Sparkling
+Size: 500, Place: Warehouse
+Expiry: 15 days ago
+Item 3:
+Cost price: $10.0, Selling price: $15.0
+Manufacturer: Manufacturer1
+Category: Drink, Sub-category: Sparkling
+
+Size: 500, Place: Store
+Expiry: 20 days ago
+Product: Chips | Category: Snack | Sub-category: Salty | Size: 200 | Min Quantity: 5
+Item 1:
+Cost price: $5.0, Selling price: $10.0
+Manufacturer: Manufacturer2
+Category: Snack, Sub-category: Salty
+Size: 200, Place: Store
+Expiry: in 10 days
+Item 2:
+Cost price: $5.0, Selling price: $10.0
+Manufacturer: Manufacturer2
+Category: Snack, Sub-category: Salty
+Size: 200, Place: Warehouse
+Expiry: in 15 days
+Item 3:
+Cost price: $5.0, Selling price: $10.0
+Manufacturer: Manufacturer2
+Category: Snack, Sub-category: Salty
+Size: 200, Place: Store
+Expiry: in 20 days
+Product: Milk | Category: Dairy | Sub-category: Whole | Size: 1L | Min Quantity: 8
+Item 1:
+Cost price: $3.0, Selling price: $5.0
+Manufacturer: Manufacturer3
+Category: Dairy, Sub-category: Whole
+Size: 1000, Place: Store
+Expiry: in 7 days
+Item 2:
+Cost price: $3.0, Selling price: $5.0
+Manufacturer: Manufacturer3
+
+Category: Dairy, Sub-category: Whole
+Size: 1000, Place: Warehouse
+Expiry: in 10 days
+Item 3:
+Cost price: $3.0, Selling price: $5.0
+Manufacturer: Manufacturer3
+Category: Dairy, Sub-category: Whole
+Size: 1000, Place: Store
+Expiry: in 15 days

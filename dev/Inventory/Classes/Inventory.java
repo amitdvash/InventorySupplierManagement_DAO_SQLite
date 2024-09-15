@@ -3,8 +3,6 @@ package dev.Inventory.Classes;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
-import dev.Inventory.Interfaces.I_Discount;
-import dev.Inventory.Interfaces.I_Inventory;
 
 
 import java.io.*;

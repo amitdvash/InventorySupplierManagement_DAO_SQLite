@@ -1,10 +1,10 @@
 package dev.Inventory.Controllers;
 
-import dev.Inventory.Classes.Discount;
-import dev.Inventory.Classes.Inventory;
-import dev.Inventory.Classes.Item;
+//import dev.Inventory.Classes.Discount;
+//import dev.Inventory.Classes.Inventory;
+//import dev.Inventory.Classes.Item;
 import dev.Inventory.Classes.Product;
-import dev.Inventory.Enums.E_Item_Place;
+//import dev.Inventory.Enums.E_Item_Place;
 
 import java.time.LocalDate;
 
