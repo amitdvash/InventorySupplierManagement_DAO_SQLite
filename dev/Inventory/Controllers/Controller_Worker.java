@@ -5,7 +5,8 @@ import dev.Inventory.Enums.E_Item_Status;
 
 import java.time.LocalDate;
 
-public class Controller_Worker extends Controller_Menu{
+public class Controller_Worker extends Controller_Menu
+{
 
 
 //    private static Scanner scanner = new Scanner(System.in);
@@ -46,7 +47,6 @@ public class Controller_Worker extends Controller_Menu{
                     System.out.println("Invalid option. Please try again.");
             }
         }
-
     }
 
 

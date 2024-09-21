@@ -10,9 +10,10 @@ import java.time.LocalDate;
 
 public class SystemInitializer {
 
-    public static void initializeSystem() {
+    public static void initializeSystem(Inventory inventory)
+    {
         // Retrieve the singleton instance of Inventory
-        Inventory inventory = Inventory.getInstance();
+//        Inventory inventory = new Inventory();
 
         // Initialize sample products and items
         initializeProductsAndItems(inventory);

@@ -25,19 +25,19 @@ public class Inventory
     private String  ManagerFilePath = "dev/Inventory/Files/Managers.txt";
     private String  WorkerFilePath = "dev/Inventory/Files/Workers.txt";
 
-    private Inventory()
+    public Inventory()
     {
         //Initialize the Inventory
         products = new HashMap<String , Product>();
     }
-    public static Inventory getInstance()
-    {
-        if(instance == null)
-        {
-            instance = new Inventory();
-        }
-        return instance;
-    }
+//    public static Inventory getInstance()
+//    {
+//        if(instance == null)
+//        {
+//            instance = new Inventory();
+//        }
+//        return instance;
+//    }
 
 
     public void addProduct(String name, String category, String subCategory, double size, int minQuantity)
@@ -349,16 +349,16 @@ public class Inventory
         }
         return null;
     }
-    public Product getProduct(Product product)
-    {
-        //Return the product with the given name
-        //If the product does not exist, return null
-        if(products.containsKey(product.HashCode()))
-        {
-            return products.get(product.HashCode());
-        }
-        return null;
-    }
+//    public Product getProduct(Product product)
+//    {
+//        //Return the product with the given name
+//        //If the product does not exist, return null
+//        if(products.containsKey(product.HashCode()))
+//        {
+//            return products.get(product.HashCode());
+//        }
+//        return null;
+//    }
 
     public boolean registerManager(String name1, String password)
     {

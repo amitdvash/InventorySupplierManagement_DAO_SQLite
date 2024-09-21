@@ -22,7 +22,7 @@ public class InventoryTest {
 
     @BeforeEach
     public void setUp() {
-        inventory = Inventory.getInstance();
+        Inventory inventory = new Inventory();
 
         // Create test products
         product1 = new Product("Cola", "Drink", "Sparkling", 500, 10, null);

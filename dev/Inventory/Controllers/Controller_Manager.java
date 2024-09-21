@@ -101,6 +101,7 @@ public class Controller_Manager extends Controller_Worker
     }
     private static void generateInventoryReport()
     {
+
         try {
             System.out.println("enter filter : ");
             System.out.println("1. Category\n2. Sub-Category\n3.About to Finish\n4.About to Expire\n5. Expired\n6. All");
@@ -109,8 +110,20 @@ public class Controller_Manager extends Controller_Worker
                 case 1:
                     System.out.print("Enter category: ");
                     String category = scanner.next();
+                    System.out.println("would you like to add a sub-category filter? (y/n)");
+                    String subChoice = scanner.next();
+                    if (subChoice.equals("y")) {
+                        System.out.print("Enter sub-category: ");
+                        String subCategory = scanner.next();
+//                    List<Product> report = managerController.inventory.getProductsBySubCategory(subCategory);
+                        System.out.println(inventory.getProductsByCategory(category).stream().filter(product -> product.getSub_category().equals(subCategory)).toList());
+                    }
+                    if (subChoice.equals("n")) {
+//                    List<Product> report = managerController.inventory.getProductsByCategory(category);
+                        System.out.println(inventory.getProductsByCategory(category));
+                    }
 //                List<Product> report = managerController.inventory.getProductsByCategory(category);
-                    System.out.println(inventory.getProductsByCategory(category));
+//                    System.out.println(inventory.getProductsByCategory(category));
                     break;
                 case 2:
                     System.out.print("Enter sub-category: ");

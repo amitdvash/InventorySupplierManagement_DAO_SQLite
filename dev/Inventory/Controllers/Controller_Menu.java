@@ -8,13 +8,20 @@ import dev.Inventory.Data.SystemInitializer;
 //---------------------------------------------------------------------
 
 
-public class Controller_Menu {
-
+public class Controller_Menu
+{
     private static Controller_Manager managerController = new Controller_Manager();
     private static Controller_Worker workerController = new Controller_Worker();
     protected static Scanner scanner = new Scanner(System.in);
-    protected static Inventory inventory = Inventory.getInstance();
 
+    protected static Inventory inventory = new Inventory();
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     public static void runProgram() {
         Controller_Menu.dataMenu();
@@ -34,7 +41,7 @@ public class Controller_Menu {
         switch (choice) {
             case "1":
                 System.out.println("Initializing system with predefined data...");
-                SystemInitializer.initializeSystem();  // Call to the initializer with predefined data
+                SystemInitializer.initializeSystem(inventory);  // Call to the initializer with predefined data
                 break;
             case "2":
                 System.out.println("Starting with an empty system...");
