@@ -1,5 +1,3 @@
-
-
 import dev.Suppliers.Domain.Agreement;
 import dev.Suppliers.Domain.Product;
 import org.junit.jupiter.api.BeforeEach;

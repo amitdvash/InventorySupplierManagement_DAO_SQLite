@@ -1,4 +1,3 @@
-package dev.Suppliers.Test;
 
 import dev.Suppliers.Domain.Agreement;
 import dev.Suppliers.Domain.Product;
@@ -19,14 +18,10 @@ public class ProductTest {
         product = new Product( "Banana", new HashMap<>(), 10.0, 7, 1.5, agreement);  // Updated constructor
     }
 
-    @Test
-    void testGetProductID() {
-        assertEquals("P1", product.getCatalogID());
-    }
 
     @Test
     void testGetCatalogID() {
-        assertEquals("C1", product.getCatalogID());
+        assertEquals("P1", product.getCatalogID());
     }
 
     @Test

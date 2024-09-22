@@ -1,4 +1,3 @@
-package dev.Suppliers.Test;
 
 import dev.Suppliers.Domain.Agreement;
 import dev.Suppliers.Domain.Product;

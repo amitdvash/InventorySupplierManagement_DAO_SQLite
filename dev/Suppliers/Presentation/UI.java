@@ -115,6 +115,9 @@ public class UI {
             System.out.println("6. Update Products Discount Details");
             System.out.println("7. Print All Suppliers Cards");
             System.out.println("8. Print All Orders Reports");
+            System.out.println("9. Open New Order");
+            System.out.println("10. Update Active Order");
+            System.out.println("11. Print All Active Orders");
             System.out.println("0. Exit");
 
             choice = getValidatedMenuChoice(scanner);
@@ -144,6 +147,8 @@ public class UI {
                 case 8:
                     controllersManager.printAllOrders();
                     break;
+                case 9:
+                    controllersManager.openNewOrder();
                 case 0:
                     System.out.println("Exiting the system...");
                     break;
@@ -163,6 +168,9 @@ public class UI {
             System.out.println("6. Update Products Discount Details");
             System.out.println("7. Print All Suppliers Cards");
             System.out.println("8. Print All Orders Reports");
+            System.out.println("9. Open New Order");
+            System.out.println("10. Update Active Order");
+            System.out.println("11. Print All Active Orders");
             System.out.println("0. Exit");
 
             choice = getValidatedMenuChoice(scanner);
@@ -183,6 +191,8 @@ public class UI {
                 case 8:
                     controllersManager.printAllOrders();
                     break;
+                case 9:
+                    controllersManager.openNewOrder();
                 case 0:
                     System.out.println("Exiting the system...");
                     break;

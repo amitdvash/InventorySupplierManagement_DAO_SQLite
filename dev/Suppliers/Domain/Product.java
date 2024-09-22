@@ -43,7 +43,7 @@ public class Product {
     public Agreement getAgreement() { return agreement; }
     public void setAgreement(Agreement agreement) { this.agreement = agreement; }
 
-    public void setName(String apple) {
-
+    public void setName(String name) {
+        this.name = name;
     }
 }

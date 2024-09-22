@@ -31,6 +31,17 @@ public class Agreement {
         return productList;
     }
 
+    public Product getProductByName(String productName) {
+        for (Product product : productList) {
+            if (product.getName().equalsIgnoreCase(productName)) {
+                return product;
+            }
+        }
+        System.out.println("Product " + productName + " not found in this agreement.");
+        return null;
+    }
+
+
     public void setProductList(List<Product> productList) {
         this.productList = productList;
     }
