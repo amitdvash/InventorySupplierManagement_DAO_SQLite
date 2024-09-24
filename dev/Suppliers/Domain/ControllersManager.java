@@ -4,6 +4,7 @@ import dev.Suppliers.Domain.Exception.ExitException;
 import dev.Suppliers.Enums.PaymentMethod;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ControllersManager {
 
@@ -496,6 +497,102 @@ public class ControllersManager {
     }
 
 
+    public void updateConstantOrder() {
+        try {
+            // Step 1: Display all constant orders
+            List<Order> constantOrders = orderController.getActiveOrders().stream()
+                    .filter(Order::isConstantDelivery)
+                    .toList();
+
+            if (constantOrders.isEmpty()) {
+                System.out.println("No constant orders available.");
+                return;
+            }
+
+            System.out.println("Available constant orders:");
+            for (Order order : constantOrders) {
+                order.printOrderDetails();
+            }
+
+            // Step 2: Select an order to update
+            Order orderToUpdate = null;
+            while (orderToUpdate == null) {
+                String orderID = inputValidator.getValidatedInput("Enter Order ID to update: ");
+                orderToUpdate = constantOrders.stream()
+                        .filter(order -> order.getOrderID().equals(orderID))
+                        .findFirst()
+                        .orElse(null);
+
+                if (orderToUpdate == null) {
+                    System.out.println("Order not found. Please provide a valid Order ID.");
+                }
+            }
+
+            // Step 3: Provide update options
+            String updateOption = inputValidator.getValidatedInput(
+                    "Choose an option to update the order:\n1. Turn into non-constant order\n2. Update product list\nEnter 1 or 2: ",
+                    input -> input.equals("1") || input.equals("2"),
+                    "Invalid choice. Please enter 1 or 2."
+            );
+
+            if (updateOption.equals("1")) {
+                // Turn order into non-constant and exit
+                orderController.turnConstantOrderToRegular(orderToUpdate.getOrderID());
+                System.out.println("Order has been changed to a non-constant order.");
+                return;
+            } else if (updateOption.equals("2")) {
+                // Check if the order is arriving tomorrow
+
+                Calendar calendar = Calendar.getInstance();
+                int todayDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // Get current day of the week (e.g., Sunday = 1, Monday = 2, ...)
+
+                calendar.setTime(orderToUpdate.getDeliveryDate());
+                int deliveryDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // Get delivery day of the week
+
+                if ((todayDayOfWeek + 1) % 7 == deliveryDayOfWeek) { // Check if tomorrow is the delivery day
+                    System.out.println("It is not possible to update the order a day before its arrival.");
+                    return;
+                }
+
+                // Display available products from the supplier
+                Supplier supplier = orderToUpdate.getSupplier();
+                List<Product> availableProducts = supplier.getSupplierAgreement().getProductList();
+                System.out.println("Available products from Supplier " + supplier.getContact().getName() + ":");
+                for (Product product : availableProducts) {
+                    System.out.println("Product Name: " + product.getName());
+                }
+
+                // Create a new product-quantity map
+                HashMap<Product, Integer> newProductQuantityMap = new HashMap<>();
+                boolean addMoreProducts = true;
+                do {
+                    String productName = inputValidator.getValidatedInput("Enter Product's name to order: ");
+                    Product selectedProduct = availableProducts.stream()
+                            .filter(product -> product.getName().equalsIgnoreCase(productName))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (selectedProduct == null) {
+                        System.out.println("Product not found. Please enter a valid product name.");
+                        continue;
+                    }
+
+                    int quantity = inputValidator.getValidatedInt("Enter quantity to order: ");
+                    newProductQuantityMap.put(selectedProduct, quantity);
+
+                    addMoreProducts = inputValidator.getValidatedYesNoInput("Add another product? (yes/no): ").equalsIgnoreCase("yes");
+                } while (addMoreProducts);
+
+                // Update the order with the new product list
+                orderController.updateOrder(orderToUpdate.getOrderID(), newProductQuantityMap);
+                System.out.println("Order product list has been successfully updated.");
+            }
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
+
+
     // Helper method for validated quantity input with retry mechanism
     private int getValidatedQuantityInput() {
         int quantity = -1;
@@ -623,7 +720,7 @@ public class ControllersManager {
         HashMap<Product, Integer> order1Products = new HashMap<>();
         order1Products.put(product1, 15);  // 15 units of Product 1
         order1Products.put(product2, 7);   // 7 units of Product 2
-        orderController.createOrder(supplier1, order1Products, false);  // Create one-time order
+        orderController.createOrder(supplier1, order1Products, true);  // Create one-time order
 
         Supplier supplier2 = supplierController.createSupplier("S2", "Bank2", PaymentMethod.Cash, null, "Supplier Two", "654321", "email2@example.com");
 
@@ -649,7 +746,7 @@ public class ControllersManager {
         HashMap<Product, Integer> order2Products = new HashMap<>();
         order2Products.put(product3, 9);   // 9 units of Product 3
         order2Products.put(product4, 12);  // 12 units of Product 4
-        orderController.createOrder(supplier2, order2Products, false);  // Create one-time order
+        orderController.createOrder(supplier2, order2Products, true);  // Create one-time order
     }
     // Updated uploadOnlyOrders method
     public void uploadOnlyOrders() {
@@ -674,7 +771,7 @@ public class ControllersManager {
         // Create order 2 for temporary supplier 1
         HashMap<Product, Integer> productQuantityMap2 = new HashMap<>();
         productQuantityMap2.put(tempProduct3, 15);
-        orderController.createOrder(tempSupplier1, productQuantityMap2, false); // One-time order
+        orderController.createOrder(tempSupplier1, productQuantityMap2, true); // One-time order
 
         // Create order 3 for temporary supplier 2
         HashMap<Product, Integer> productQuantityMap3 = new HashMap<>();
@@ -685,7 +782,7 @@ public class ControllersManager {
         // Create order 4 for temporary supplier 2
         HashMap<Product, Integer> productQuantityMap4 = new HashMap<>();
         productQuantityMap4.put(tempProduct3, 20);
-        orderController.createOrder(tempSupplier2, productQuantityMap4, false); // One-time order
+        orderController.createOrder(tempSupplier2, productQuantityMap4, true); // One-time order
     }
 
     // Method to print all active orders

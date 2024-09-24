@@ -119,8 +119,12 @@ public class Order {
 
     // Check if the order is relevant based on delivery date
     public boolean isOrderActive() {
+        if (isConstantDelivery()) {
+            return true; // Constant deliveries are always active
+        }
+
         Date today = new Date();
-        return !deliveryDate.before(today) && !isConstantDelivery();
+        return !deliveryDate.before(today); // Non-constant deliveries check the delivery date
     }
 
     public void updateDeliveryDate() {
@@ -181,6 +185,7 @@ public class Order {
     public void printOrderDetails() {
         System.out.println("Order ID: " + this.orderID);
         System.out.println("Supplier ID: " + this.supplier.getSupplierID());
+        System.out.println("Constant Order: " + this.isConstantDelivery);
         System.out.println("Order Date: " + this.orderDate);
         System.out.println("Delivery Date: " + this.deliveryDate);
         System.out.println("Products Ordered:");
