@@ -116,7 +116,7 @@ public class UI {
             System.out.println("7. Print All Suppliers Cards");
             System.out.println("8. Print All Orders Reports");
             System.out.println("9. Open New Order");
-            System.out.println("10. Update Active Order");
+            System.out.println("10. Update Constant Order");
             System.out.println("11. Print All Active Orders");
             System.out.println("0. Exit");
 
@@ -149,8 +149,13 @@ public class UI {
                     break;
                 case 9:
                     controllersManager.openNewOrder();
+                    break;
+                case 10:
+                    controllersManager.updateConstantOrder();
+                    break;
                 case 11:
                     controllersManager.printActiveOrders();
+                    break;
                 case 0:
                     System.out.println("Exiting the system...");
                     break;
@@ -171,7 +176,7 @@ public class UI {
             System.out.println("7. Print All Suppliers Cards");
             System.out.println("8. Print All Orders Reports");
             System.out.println("9. Open New Order");
-            System.out.println("10. Update Active Order");
+            System.out.println("10. Update Constant Order");
             System.out.println("11. Print All Active Orders");
             System.out.println("0. Exit");
 
@@ -195,8 +200,13 @@ public class UI {
                     break;
                 case 9:
                     controllersManager.openNewOrder();
+                    break;
+                case 10:
+                    controllersManager.updateConstantOrder();
+                    break;
                 case 11:
                     controllersManager.printActiveOrders();
+                    break;
                 case 0:
                     System.out.println("Exiting the system...");
                     break;
