@@ -149,6 +149,8 @@ public class UI {
                     break;
                 case 9:
                     controllersManager.openNewOrder();
+                case 11:
+                    controllersManager.printActiveOrders();
                 case 0:
                     System.out.println("Exiting the system...");
                     break;
@@ -193,6 +195,8 @@ public class UI {
                     break;
                 case 9:
                     controllersManager.openNewOrder();
+                case 11:
+                    controllersManager.printActiveOrders();
                 case 0:
                     System.out.println("Exiting the system...");
                     break;

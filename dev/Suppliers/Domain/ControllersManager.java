@@ -687,4 +687,12 @@ public class ControllersManager {
         productQuantityMap4.put(tempProduct3, 20);
         orderController.createOrder(tempSupplier2, productQuantityMap4, false); // One-time order
     }
+
+    // Method to print all active orders
+    public void printActiveOrders() {
+        List<Order> activeOrders = orderController.getActiveOrders();
+        for (Order order : activeOrders) {
+            order.printOrderDetails();
+        }
+    }
 }
