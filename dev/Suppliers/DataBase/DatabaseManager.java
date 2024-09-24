@@ -6,7 +6,6 @@ import dev.Suppliers.Domain.Order;
 import dev.Suppliers.Enums.PaymentMethod;
 
 import java.sql.*;
-import java.util.HashMap;
 
 public class DatabaseManager {
 
@@ -100,7 +99,6 @@ public class DatabaseManager {
     // Insert an order into the database
     public void insertOrder(Order order) {
         String sql = "INSERT INTO Orders(orderID, supplierID, orderDate, isConstantDelivery, totalPrice) VALUES(?, ?, ?, ?, ?)";
-
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, order.getOrderID());
@@ -110,6 +108,45 @@ public class DatabaseManager {
             pstmt.setDouble(5, order.getPriceAfterDiscount());
             pstmt.executeUpdate();
             System.out.println("Order inserted: " + order.getOrderID());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Delete a supplier by ID
+    public void deleteSupplier(String supplierID) {
+        String sql = "DELETE FROM Suppliers WHERE supplierID = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, supplierID);
+            pstmt.executeUpdate();
+            System.out.println("Supplier deleted: " + supplierID);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Delete a product by catalogID
+    public void deleteProduct(String catalogID) {
+        String sql = "DELETE FROM Products WHERE catalogID = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, catalogID);
+            pstmt.executeUpdate();
+            System.out.println("Product deleted: " + catalogID);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Delete an order by ID
+    public void deleteOrder(String orderID) {
+        String sql = "DELETE FROM Orders WHERE orderID = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, orderID);
+            pstmt.executeUpdate();
+            System.out.println("Order deleted: " + orderID);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
