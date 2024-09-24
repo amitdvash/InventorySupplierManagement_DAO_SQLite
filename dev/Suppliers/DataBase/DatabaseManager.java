@@ -33,10 +33,12 @@ public class DatabaseManager {
 
         String createProductsTable = "CREATE TABLE IF NOT EXISTS Products (" +
                 "catalogID TEXT PRIMARY KEY, " +
+                "supplierID TEXT NOT NULL, " +
                 "name TEXT NOT NULL, " +
                 "price REAL NOT NULL, " +
                 "expirationDays INTEGER NOT NULL, " +
-                "weight REAL NOT NULL);";
+                "weight REAL NOT NULL" +
+                "FOREIGN KEY (supplierID) REFERENCES Suppliers(supplierID));";
 
         String createOrdersTable = "CREATE TABLE IF NOT EXISTS Orders (" +
                 "orderID TEXT PRIMARY KEY, " +
