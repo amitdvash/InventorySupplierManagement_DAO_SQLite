@@ -1,26 +1,31 @@
 package dev.Suppliers.Domain;
 
+import dev.Suppliers.DataBase.AgreementDTO;
+import dev.Suppliers.DataBase.ProductDTO;
+import dev.Suppliers.DataBase.SupplierDTO;
 import dev.Suppliers.Enums.PaymentMethod;
 
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 
 public class SupplierController {
-    private List<Supplier> suppliers;
+    private SupplierDTO supplierDTO;
+    private ProductDTO productDTO;
+    private AgreementDTO agreementDTO;
 
-    public SupplierController() {
-        suppliers = new ArrayList<>();
+    public SupplierController(Connection connection) {
+        this.supplierDTO = new SupplierDTO(connection);
+        this.productDTO = new ProductDTO(connection);
+        this.agreementDTO = new AgreementDTO(connection);
     }
 
-    // Add a supplier
-    public Supplier createSupplier(String companyID, String bankAccount, PaymentMethod paymentMethod, Agreement supplierAgreement, String name, String phoneNumber, String email) {
-        SupplierContact contact = new SupplierContact(name, phoneNumber, email);
-        Supplier supplier = new Supplier(companyID, bankAccount, paymentMethod, supplierAgreement, contact);
-        if (supplier.getSupplierAgreement() != null ){
-            supplier.getSupplierAgreement().setSupplier(supplier);
-        }
-        suppliers.add(supplier);
-        System.out.println("Supplier created: " + supplier.getSupplierID());
+    // Add a supplier to the database
+    public Supplier createSupplier(String companyID, String bankAccount, String paymentMethod, Agreement agreement, String name, String phoneNumber, String email) {
+        Supplier supplier = new Supplier(0, companyID, bankAccount, PaymentMethod.valueOf(paymentMethod), agreement, new SupplierContact(name, phoneNumber, email));
+        int supplierID = supplierDTO.create(supplier); // Get supplierID from database
+        supplier.setSupplierID(supplierID); // Set the generated supplierID to the supplier object
+        System.out.println("Supplier created: " + supplierID);
         return supplier;
     }
 
@@ -29,6 +34,8 @@ public class SupplierController {
         Agreement agreement = supplier.getSupplierAgreement();
         if (agreement != null) {
             agreement.addProduct(product);
+            productDTO.create(product); // Add the product to the database
+            agreementDTO.update(agreement); // Update the agreement in the database
             System.out.println("Product " + product.getName() + " added to supplier " + supplier.getContact().getName());
         } else {
             System.out.println("Supplier has no agreement.");
@@ -36,19 +43,30 @@ public class SupplierController {
     }
 
     // Delete a product from a supplier's agreement
-    public void deleteProductFromSupplier(Supplier supplier, String productID) {
+    public void deleteProductFromSupplier(Supplier supplier, int productID) {
         Agreement agreement = supplier.getSupplierAgreement();
         if (agreement != null) {
             Product productToDelete = null;
+
+            // Step 1: Find the product in the agreement's product list
             for (Product product : agreement.getProductList()) {
-                if (product.getCatalogID().equals(productID)) {
+                if (product.getCatalogID() == productID) {
                     productToDelete = product;
                     break;
                 }
             }
+
             if (productToDelete != null) {
+                // Step 2: Remove the product from the agreement's product list
                 agreement.getProductList().remove(productToDelete);
-                agreement.getDiscountDetails().remove(productID);
+
+                // Step 3: Remove any discounts associated with this product (if applicable)
+                productToDelete.setDiscountDetails(new HashMap<>()); // Clear the discount details of the product
+
+                // Step 4: Update the product and agreement in the database
+                productDTO.delete(productToDelete.getCatalogID()); // Delete the product from the database
+                agreementDTO.update(agreement); // Update the agreement in the database
+
                 System.out.println("Product " + productToDelete.getName() + " deleted from supplier " + supplier.getContact().getName());
             } else {
                 System.out.println("Product not found.");
@@ -59,10 +77,11 @@ public class SupplierController {
     }
 
     // Update supplier's payment method
-    public void updatePaymentMethod(String supplierID, PaymentMethod paymentMethod) {
+    public void updatePaymentMethod(int supplierID, PaymentMethod paymentMethod) {
         Supplier supplier = getSupplierById(supplierID);
         if (supplier != null) {
             supplier.setPaymentMethod(paymentMethod);
+            supplierDTO.update(supplier); // Update the database through the DTO
             System.out.println("Updated payment method for supplier: " + supplierID);
         } else {
             System.out.println("Supplier not found: " + supplierID);
@@ -70,72 +89,33 @@ public class SupplierController {
     }
 
     // Get supplier by ID
-    public Supplier getSupplierById(String supplierID) {
-        for (Supplier supplier : suppliers) {
-            if (supplier.getSupplierID().equals(supplierID)) {
-                return supplier;
-            }
-        }
-        return null;
+    public Supplier getSupplierById(int supplierID) {
+        // Fetch supplier from the database through the DTO
+        return supplierDTO.read(supplierID);
     }
 
+    // Get all suppliers
     public List<Supplier> getSuppliers() {
-        return suppliers;
+        // Fetch all suppliers from the database through the DTO
+        return supplierDTO.readAll();
     }
 
-    public void deleteSupplier(String supplierID) {
+    // Delete a supplier from the database
+    public void deleteSupplier(int supplierID) {
         Supplier supplierToDelete = getSupplierById(supplierID);
         if (supplierToDelete != null) {
-            suppliers.remove(supplierToDelete);
+            Agreement agreement = supplierToDelete.getSupplierAgreement();
+            if (agreement != null) {
+                agreementDTO.delete(agreement.getAgreementID()); // Delete the agreement first
+            }
+            supplierDTO.delete(supplierID); // Delete the supplier from the database
             System.out.println("Supplier deleted: " + supplierID);
         } else {
             System.out.println("Supplier not found: " + supplierID);
         }
     }
 
-    /*
-
-    // Validate Company ID
-    public boolean isValidCompanyID(String companyID) {
-        return companyID.matches("\\d+");
+    public void updateSupplierAgreement(int supplierID, int agreementID) {
+        supplierDTO.updateSupplierAgreement(supplierID, agreementID);
     }
-
-    // Validate Bank Account
-    public boolean isValidBankAccount(String bankAccount) {
-        return bankAccount.matches("\\d+");
-    }
-
-    // Validate Phone Number
-    public boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber.matches("\\d+"); // Adjust regex as needed
-    }
-
-    // Validate Email
-    public boolean isValidEmail(String email) {
-        // Simplified regex for email validation
-        return email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
-    }
-
-    // Update Supplier Details
-    public void updateCompanyID(Supplier supplier, String companyID) {
-        if (isValidCompanyID(companyID)) {
-            supplier.setCompanyID(companyID);
-        }
-    }
-
-    public void updateBankAccount(Supplier supplier, String bankAccount) {
-        if (isValidBankAccount(bankAccount)) {
-            supplier.setBankAccount(bankAccount);
-        }
-    }
-
-    public void updatePaymentMethod(Supplier supplier, PaymentMethod paymentMethod) {
-        supplier.setPaymentMethod(paymentMethod);
-    }
-
-    public void updateContactInfo(Supplier supplier, SupplierContact contact) {
-        supplier.setContact(contact);
-    }
-
-     */
 }

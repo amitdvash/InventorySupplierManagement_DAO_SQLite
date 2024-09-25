@@ -4,20 +4,25 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Agreement {
-    private static int runningIndex = 1;  // Static running index
-    private int agreementID;
-    private Supplier supplier;
+    private int agreementID; // ID managed by the database
+    private int supplierID; // Reference to the supplier
     private List<Product> productList;
-    private HashMap<String, HashMap<Integer, Double>> discountDetails;
     private List<String> supplyDays;
     private boolean selfSupply;
 
-    // Constructor - ID is auto-assigned
-    public Agreement(List<Product> productList, HashMap<String, HashMap<Integer, Double>> discountDetails,
-                     List<String> supplyDays, boolean selfSupply) {
-        this.agreementID = runningIndex++;  // Auto-generate agreementID
+    // Constructor without auto-generated ID
+    public Agreement(int agreementID, int supplierID, List<Product> productList, List<String> supplyDays, boolean selfSupply) {
+        this.agreementID = agreementID; // ID set from the database or DTO
+        this.supplierID = supplierID;
         this.productList = productList;
-        this.discountDetails = discountDetails;
+        this.supplyDays = supplyDays;
+        this.selfSupply = selfSupply;
+    }
+
+    // Simplified constructor for DTO creation without ID
+    public Agreement(int supplierID, List<Product> productList, List<String> supplyDays, boolean selfSupply) {
+        this.supplierID = supplierID;
+        this.productList = productList;
         this.supplyDays = supplyDays;
         this.selfSupply = selfSupply;
     }
@@ -27,20 +32,22 @@ public class Agreement {
         return agreementID;
     }
 
+    public void setAgreementID(int agreementID) {
+        this.agreementID = agreementID;
+    }
+
+
+    public int getSupplierID() {
+        return supplierID;
+    }
+
+    public void setSupplierID(int supplierID) {
+        this.supplierID = supplierID;
+    }
+
     public List<Product> getProductList() {
         return productList;
     }
-
-    public Product getProductByName(String productName) {
-        for (Product product : productList) {
-            if (product.getName().equalsIgnoreCase(productName)) {
-                return product;
-            }
-        }
-        System.out.println("Product " + productName + " not found in this agreement.");
-        return null;
-    }
-
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
@@ -56,17 +63,6 @@ public class Agreement {
         } else {
             System.out.println("Product not found in the list.");
         }
-    }
-
-
-    public HashMap<String, HashMap<Integer, Double>> getDiscountDetails() {
-        return discountDetails;
-    }
-
-
-
-    public void setDiscountDetails(HashMap<String, HashMap<Integer, Double>> discountDetails) {
-        this.discountDetails = discountDetails;
     }
 
     public List<String> getSupplyDays() {
@@ -85,36 +81,27 @@ public class Agreement {
         this.selfSupply = selfSupply;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    // Method to get a product by its name from the productList
+    public Product getProductByName(String productName) {
+        for (Product product : productList) {
+            if (product.getName().equalsIgnoreCase(productName)) {
+                return product;
+            }
+        }
+        System.out.println("Product " + productName + " not found in this agreement.");
+        return null;
     }
-
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-
 
     public void printAgreementDetails() {
         System.out.println("----- Agreement Details -----");
         System.out.println("Agreement ID: " + agreementID);
+        System.out.println("Supplier ID: " + supplierID);
 
         System.out.println("Products covered by this agreement:");
         if (productList != null && !productList.isEmpty()) {
             for (Product product : productList) {
                 System.out.println("  - Product Name: " + product.getName() + ", Catalog ID: " + product.getCatalogID() + ", Price: " + product.getPrice());
-
-                // Print discount details for the product
-
-                HashMap<Integer, Double> discounts = product.getDiscountDetails();
-                if (discounts != null && !discounts.isEmpty()) {
-                    System.out.println("    Discounts:");
-                    for (Integer quantity : discounts.keySet()) {
-                        Double discountPercent = discounts.get(quantity);
-                        System.out.println("      - Buy " + quantity + " units or more: " + discountPercent + "% discount");
-                    }
-                } else {
-                    System.out.println("    No discounts available.");
-                }
+                product.printDiscountDetails(); // Print discount details from Product
             }
         } else {
             System.out.println("  No products in this agreement.");
@@ -130,27 +117,4 @@ public class Agreement {
         System.out.println("Supplier Responsible for Supply: " + (selfSupply ? "Yes" : "No"));
         System.out.println("-------------------------------");
     }
-
-    // Print only discount details
-    public void printDiscountDetails() {
-        System.out.println("----- Discount Details -----");
-        if (discountDetails != null && !discountDetails.isEmpty()) {
-            for (String productID : discountDetails.keySet()) {
-                HashMap<Integer, Double> discounts = discountDetails.get(productID);
-                System.out.println("Product ID: " + productID);
-                if (discounts != null && !discounts.isEmpty()) {
-                    for (Integer quantity : discounts.keySet()) {
-                        Double discountPercent = discounts.get(quantity);
-                        System.out.println("  - Buy " + quantity + " units or more: " + discountPercent + "% discount");
-                    }
-                } else {
-                    System.out.println("  No discounts available.");
-                }
-            }
-        } else {
-            System.out.println("No discount details available.");
-        }
-        System.out.println("------------------------------");
-    }
-
 }
