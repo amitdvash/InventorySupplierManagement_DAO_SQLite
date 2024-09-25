@@ -55,7 +55,8 @@ public class SupplierDTO implements IDTO<Supplier> {
 
                 // Fetch Agreement and Contact Separately
                 Agreement agreement = getAgreementBySupplierID(supplierID);
-                SupplierContact contact = getSupplierContactBySupplierID(supplierID);
+                //SupplierContact contact = getSupplierContactBySupplierID(supplierID);
+                SupplierContact contact = new SupplierContact(rs.getString("name"), rs.getString("phone"), rs.getString("email"));
 
                 Supplier supplier = new Supplier(
                         supplierID,
@@ -82,8 +83,7 @@ public class SupplierDTO implements IDTO<Supplier> {
             if (rs.next()) {
                 // Retrieve the Agreement and SupplierContact from their respective DTOs
                 Agreement agreement = getAgreementBySupplierID(supplierID);
-                SupplierContact contact = getSupplierContactBySupplierID(supplierID);
-
+                SupplierContact contact = new SupplierContact(rs.getString("name"), rs.getString("phone"), rs.getString("email"));
                 supplier = new Supplier(
                         rs.getInt("supplierID"),
                         rs.getString("companyID"),
@@ -139,17 +139,5 @@ public class SupplierDTO implements IDTO<Supplier> {
         // Placeholder return, should return a valid SupplierContact object
         SupplierContactDTO supplierContactDTO = new SupplierContactDTO(connection);
         return supplierContactDTO.readBySupplierID(supplierID);
-    }
-
-    // Method to update the supplier's agreement in the database
-    public void updateSupplierAgreement(int supplierID, int agreementID) {
-        String sql = "UPDATE Suppliers SET agreementID = ? WHERE supplierID = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, agreementID);
-            pstmt.setInt(2, supplierID);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

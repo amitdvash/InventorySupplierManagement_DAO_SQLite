@@ -34,33 +34,33 @@ public class AgreementController {
     }
 
     // Update product's discount details within an agreement
-    public void updateProductDiscountDetails(int agreementID, String productID, HashMap<Integer, Double> newDiscountDetails) {
+    public void updateProductDiscountDetails(int agreementID, int catalogID, HashMap<Integer, Double> newDiscountDetails) {
         Agreement agreement = agreementDTO.read(agreementID);
         if (agreement != null) {
-            agreementDTO.updateDiscountDetails(agreement, productID, newDiscountDetails);
-            System.out.println("Updated discount details for product ID: " + productID);
+            agreementDTO.updateDiscountDetails(agreement, catalogID, newDiscountDetails);
+            System.out.println("Updated discount details for product ID: " + catalogID);
         } else {
             System.out.println("Agreement not found: " + agreementID);
         }
     }
 
     // Add a discount to a product in an agreement
-    public void addDiscountToProduct(int agreementID, String productID, int quantity, double discountPercent) {
+    public void addDiscountToProduct(int agreementID, int catalogID, int quantity, double discountPercent) {
         Agreement agreement = agreementDTO.read(agreementID);
         if (agreement != null) {
-            agreementDTO.addDiscount(agreement, productID, quantity, discountPercent);
-            System.out.println("Discount added for product ID: " + productID + ", Quantity: " + quantity + ", Discount: " + discountPercent + "%");
+            agreementDTO.addDiscount(agreement, catalogID, quantity, discountPercent);
+            System.out.println("Discount added for product ID: " + catalogID + ", Quantity: " + quantity + ", Discount: " + discountPercent + "%");
         } else {
             System.out.println("Agreement not found: " + agreementID);
         }
     }
 
     // Delete a discount from a product in an agreement
-    public void deleteDiscountFromProduct(int agreementID, String productID, int quantity) {
+    public void deleteDiscountFromProduct(int agreementID, int catalogID, int quantity) {
         Agreement agreement = agreementDTO.read(agreementID);
         if (agreement != null) {
-            agreementDTO.removeDiscount(agreement, productID, quantity);
-            System.out.println("Discount removed for product ID: " + productID + ", Quantity: " + quantity);
+            agreementDTO.removeDiscount(agreement, catalogID, quantity);
+            System.out.println("Discount removed for product ID: " + catalogID + ", Quantity: " + quantity);
         } else {
             System.out.println("Agreement not found: " + agreementID);
         }

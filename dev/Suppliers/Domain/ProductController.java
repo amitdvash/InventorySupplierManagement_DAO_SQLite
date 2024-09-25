@@ -5,6 +5,7 @@ import dev.Suppliers.DataBase.ProductDTO;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductController {
     private ProductDTO productDTO;
@@ -30,6 +31,16 @@ public class ProductController {
     // Get all product names from the database
     public List<String> getAllProductNames() {
         return productDTO.getAllProductNames(); // Get all product names from the database through DTO
+    }
+
+    public int createProductInDatabase(Product product) {
+        return productDTO.create(product); // Returns the generated catalogID
+    }
+
+    public void addProductDiscounts(int catalogID, HashMap<Integer, Double> discountDetails) {
+        for (Map.Entry<Integer, Double> entry : discountDetails.entrySet()) {
+            productDTO.addDiscount(catalogID, entry.getKey(), entry.getValue());
+        }
     }
 
 }

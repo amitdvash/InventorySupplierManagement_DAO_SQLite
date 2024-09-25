@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDTO implements IDTO<Product> {
     private Connection connection;
@@ -32,12 +33,33 @@ public class ProductDTO implements IDTO<Product> {
             ResultSet rs = pstmt.getGeneratedKeys();
 
             if (rs.next()) {
-                return rs.getInt(1); // Return the generated catalogID
+                int catalogID = rs.getInt(1); // Retrieve and store the generated catalogID
+
+                // Insert discount details into productDiscounts table
+                insertProductDiscounts(catalogID, product.getDiscountDetails());
+
+                return catalogID; // Return the generated catalogID
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return -1; // Return -1 if creation failed
+    }
+
+    // Helper method to insert discount details into the productDiscounts table
+    private void insertProductDiscounts(int catalogID, HashMap<Integer, Double> discountDetails) {
+        String sql = "INSERT INTO productDiscounts (catalogID, quantity, discount) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            for (Map.Entry<Integer, Double> entry : discountDetails.entrySet()) {
+                pstmt.setInt(1, catalogID);
+                pstmt.setInt(2, entry.getKey());
+                pstmt.setDouble(3, entry.getValue());
+                pstmt.addBatch(); // Add to batch for batch execution
+            }
+            pstmt.executeBatch(); // Execute all inserts in a single batch
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public List<Product> readAll() {
@@ -174,5 +196,17 @@ public class ProductDTO implements IDTO<Product> {
             e.printStackTrace();
         }
         return product;
+    }
+
+    public void addDiscount(int catalogID, int quantity, double discount) {
+        String sql = "INSERT INTO productDiscounts (catalogID, quantity, discount) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, catalogID);
+            pstmt.setInt(2, quantity);
+            pstmt.setDouble(3, discount);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

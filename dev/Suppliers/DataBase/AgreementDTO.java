@@ -167,7 +167,7 @@ public class AgreementDTO implements IDTO<Agreement> {
                 Product product = new Product(
                         rs.getInt("catalogID"),
                         rs.getString("name"),
-                        getProductDiscountDetails(rs.getString("catalogID")),
+                        getProductDiscountDetails(rs.getInt("catalogID")),
                         rs.getDouble("price"),
                         rs.getInt("expirationDays"),
                         rs.getDouble("weight"),
@@ -228,11 +228,11 @@ public class AgreementDTO implements IDTO<Agreement> {
     }
 
     // Helper method to get product discount details from the productDiscounts table
-    private HashMap<Integer, Double> getProductDiscountDetails(String catalogID) {
+    private HashMap<Integer, Double> getProductDiscountDetails(int catalogID) {
         HashMap<Integer, Double> discountDetails = new HashMap<>();
         String sql = "SELECT * FROM productDiscounts WHERE catalogID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, catalogID);
+            pstmt.setInt(1, catalogID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 discountDetails.put(rs.getInt("quantity"), rs.getDouble("discount"));
@@ -244,14 +244,14 @@ public class AgreementDTO implements IDTO<Agreement> {
     }
 
     // Method to add a discount to a product in an agreement
-    public void addDiscount(Agreement agreement, String productID, int quantity, double discountPercent) {
-        HashMap<Integer, Double> discountDetails = getProductDiscountDetails(productID);
+    public void addDiscount(Agreement agreement, int catalogID, int quantity, double discountPercent) {
+        HashMap<Integer, Double> discountDetails = getProductDiscountDetails(catalogID);
         discountDetails.put(quantity, discountPercent);
 
         String sql = "INSERT INTO productDiscounts (catalogID, quantity, discount) VALUES (?, ?, ?) " +
                 "ON CONFLICT (catalogID, quantity) DO UPDATE SET discount = EXCLUDED.discount";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, productID);
+            pstmt.setInt(1, catalogID);
             pstmt.setInt(2, quantity);
             pstmt.setDouble(3, discountPercent);
             pstmt.executeUpdate();
@@ -261,10 +261,10 @@ public class AgreementDTO implements IDTO<Agreement> {
     }
 
     // Method to remove a discount from a product in an agreement
-    public void removeDiscount(Agreement agreement, String productID, int quantity) {
+    public void removeDiscount(Agreement agreement, int catalogID, int quantity) {
         String sql = "DELETE FROM productDiscounts WHERE catalogID = ? AND quantity = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, productID);
+            pstmt.setInt(1, catalogID);
             pstmt.setInt(2, quantity);
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -273,11 +273,11 @@ public class AgreementDTO implements IDTO<Agreement> {
     }
 
     // Method to update discount details in an agreement
-    public void updateDiscountDetails(Agreement agreement, String productID, HashMap<Integer, Double> newDiscountDetails) {
+    public void updateDiscountDetails(Agreement agreement, int catalogID, HashMap<Integer, Double> newDiscountDetails) {
         // Remove existing discounts for the product
         String deleteSql = "DELETE FROM productDiscounts WHERE catalogID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(deleteSql)) {
-            pstmt.setString(1, productID);
+            pstmt.setInt(1, catalogID);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -285,7 +285,7 @@ public class AgreementDTO implements IDTO<Agreement> {
 
         // Insert new discount details
         for (Map.Entry<Integer, Double> entry : newDiscountDetails.entrySet()) {
-            addDiscount(agreement, productID, entry.getKey(), entry.getValue());
+            addDiscount(agreement, catalogID, entry.getKey(), entry.getValue());
         }
     }
     public Agreement readBySupplierID(int supplierID) {

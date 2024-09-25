@@ -104,18 +104,14 @@ public class SupplierController {
     public void deleteSupplier(int supplierID) {
         Supplier supplierToDelete = getSupplierById(supplierID);
         if (supplierToDelete != null) {
-            Agreement agreement = supplierToDelete.getSupplierAgreement();
-            if (agreement != null) {
-                agreementDTO.delete(agreement.getAgreementID()); // Delete the agreement first
-            }
+//            Agreement agreement = supplierToDelete.getSupplierAgreement();
+//            if (agreement != null) {
+//                agreementDTO.delete(agreement.getAgreementID()); // Delete the agreement first
+//            }
             supplierDTO.delete(supplierID); // Delete the supplier from the database
             System.out.println("Supplier deleted: " + supplierID);
         } else {
             System.out.println("Supplier not found: " + supplierID);
         }
-    }
-
-    public void updateSupplierAgreement(int supplierID, int agreementID) {
-        supplierDTO.updateSupplierAgreement(supplierID, agreementID);
     }
 }

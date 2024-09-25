@@ -43,7 +43,7 @@ public class ControllersManager {
 
                 // Collect discount details for the product
                 HashMap<Integer, Double> discountDetails = new HashMap<>();
-                if (inputValidator.getValidatedYesNoInput("Are there any discount details? (yes/no)").equalsIgnoreCase("yes")) {
+                if (inputValidator.getValidatedYesNoInput("Are there any discount details? (yes/no): ").equalsIgnoreCase("yes")) {
                     boolean addMoreDiscounts;
                     do {
                         int quantity = inputValidator.getValidatedInt("Enter minimum quantity for discount: ");
@@ -73,129 +73,126 @@ public class ControllersManager {
 
             // Create the agreement with the product list and supplierID
             Agreement agreement = agreementController.createAgreement(productList, supplyDays, selfSupply,supplierID);
-            int agreementID = agreement.getAgreementID();
 
-            // Step 5: Update the supplier in the database with the agreementID
-            supplierController.updateSupplierAgreement(supplierID, agreementID);
-
-            // Step 6: Create each product in the database with agreementID
-            for (Product product : productList) {
-                product.setAgreement(agreement);
-                productController.createProduct(product.getName(), product.getDiscountDetails(), product.getPrice(), product.getExpirationDays(), product.getWeight(), agreement);
-            }
-
+            supplier.setSupplierAgreement(agreement);
             System.out.println("Supplier successfully created.");
             supplier.printSupplierDetails();
         } catch (ExitException e) {
             System.out.println("Action cancelled.");
         }
     }
-    // 2. Delete Supplier Card
-//    public void deleteSupplierCard() {
-//        try {
-//            if (supplierController.getSuppliers().isEmpty()) {
-//                System.out.println("No suppliers available.");
-//                return;
-//            }
-//
-//            // Display all available suppliers
-//            System.out.println("Available suppliers:");
-//            supplierController.getSuppliers().forEach(supplier ->
-//                    System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName()));
-//
-//            // Step 1: Get valid supplier ID
-//            Supplier supplier = null;
-//            while (supplier == null) {
-//                String supplierID = inputValidator.getValidatedInput("Enter Supplier ID (starting with 'S'): ", inputValidator::isValidSupplierID, "Invalid Supplier ID. Please enter again.");
-//                supplier = supplierController.getSupplierById(supplierID);
-//
-//                if (supplier == null) {
-//                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
-//                }
-//            }
-//
-//            // Step 2: Confirm deletion
-//            String confirmDeletion = inputValidator.getValidatedYesNoInput("Are you sure you want to delete this supplier? (yes/no)");
-//            if (!confirmDeletion.equalsIgnoreCase("yes")) {
-//                System.out.println("Supplier deletion cancelled.");
-//                return;
-//            }
-//
-//            // Step 3: Remove supplier from all products in ProductController
-//            Agreement agreement = supplier.getSupplierAgreement();
-//            if (agreement != null) {
-//                for (Product product : agreement.getProductList()) {
-//                    productController.removeSupplierFromProduct(product.getName(), supplier);
-//                }
-//            }
-//
-//            // Step 4: Delete the supplier's agreement if it exists
-//            if (agreement != null) {
-//                agreementController.deleteAgreement(agreement.getAgreementID());
-//            }
-//
-//            // Step 5: Delete supplier
-//            supplierController.deleteSupplier(supplier.getSupplierID());
-//            System.out.println("Supplier successfully deleted.");
-//        } catch (ExitException e) {
-//            System.out.println("Action cancelled.");
-//        }
-//    }
+     //2. Delete Supplier Card
+// 2. Delete Supplier Card
+     public void deleteSupplierCard() {
+         try {
+             if (supplierController.getSuppliers().isEmpty()) {
+                 System.out.println("No suppliers available.");
+                 return;
+             }
 
-//    public void addProductToSupplier() {
-//        try {
-//            if (supplierController.getSuppliers().isEmpty()) {
-//                System.out.println("No suppliers available.");
-//                return;
-//            }
-//
-//            Supplier supplier = null;
-//            while (supplier == null) {
-//                String supplierID = inputValidator.getValidatedInput("Enter Supplier ID (starting with 'S'): ", inputValidator::isValidSupplierID, "Invalid Supplier ID. Please enter again.");
-//                supplier = supplierController.getSupplierById(supplierID);
-//
-//                if (supplier == null) {
-//                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
-//                }
-//            }
-//
-//            if (supplier.getSupplierAgreement() == null) {
-//                System.out.println("Supplier does not have an agreement.");
-//                return;
-//            }
-//
-//            // Collect product details
-//            String productName = inputValidator.getValidatedInput("Enter Product's name: ");
-//            double price = inputValidator.getValidatedDouble("Enter Product's price: ");
-//            int expirationDays = inputValidator.getValidatedInt("Enter Product's expiration days: ");
-//            double weight = inputValidator.getValidatedDouble("Enter Product's weight: ");
-//
-//            HashMap<Integer, Double> discountDetails = new HashMap<>();
-//            if (inputValidator.getValidatedYesNoInput("Any discounts? (yes/no): ").equalsIgnoreCase("yes")) {
-//                boolean addMoreDiscounts;
-//                do {
-//                    int quantity = inputValidator.getValidatedInt("Enter minimum quantity for discount: ");
-//                    double discountPercent = inputValidator.getValidatedDiscountPercentage("Enter discount percent: ");
-//                    discountDetails.put(quantity, discountPercent);
-//
-//                    addMoreDiscounts = inputValidator.getValidatedYesNoInput("Add another discount? (yes/no): ").equalsIgnoreCase("yes");
-//                } while (addMoreDiscounts);
-//            }
-//
-//            // Create and add the product to the supplier's agreement
-//            Product product = productController.createProduct(productName, discountDetails, price, expirationDays, weight, null);
-//            supplier.getSupplierAgreement().addProduct(product);
-//            supplier.getSupplierAgreement().getDiscountDetails().put(product.getCatalogID(), discountDetails);
-//
-//            // Add the product and supplier to the productSupplierMap in ProductController
-//            productController.addSupplierForProduct(productName, supplier);
-//
-//            System.out.println("Product added to supplier.");
-//        } catch (ExitException e) {
-//            System.out.println("Action cancelled.");
-//        }
-//    }
-//
+             // Display all available suppliers
+             System.out.println("Available suppliers:");
+             supplierController.getSuppliers().forEach(supplier ->
+                     System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName()));
+
+             // Step 1: Get valid supplier ID
+             Supplier supplier = null;
+             while (supplier == null) {
+                 int supplierID = inputValidator.getValidatedInt("Enter Supplier ID: ");
+                 supplier = supplierController.getSupplierById(supplierID);
+
+                 if (supplier == null) {
+                     System.out.println("Supplier not found. Please provide a valid Supplier ID.");
+                 }
+             }
+
+             // Step 2: Confirm deletion
+             String confirmDeletion = inputValidator.getValidatedYesNoInput("Are you sure you want to delete this supplier? (yes/no)");
+             if (!confirmDeletion.equalsIgnoreCase("yes")) {
+                 System.out.println("Supplier deletion cancelled.");
+                 return;
+             }
+
+             // Step 3: Delete supplier from the database (cascade deletion will handle agreements and products)
+             supplierController.deleteSupplier(supplier.getSupplierID());
+             System.out.println("Supplier successfully deleted.");
+         } catch (ExitException e) {
+             System.out.println("Action cancelled.");
+         }
+     }
+
+    public void addProductToSupplier() {
+        try {
+            // Check if there are any suppliers
+            List<Supplier> suppliers = supplierController.getSuppliers();
+            if (suppliers.isEmpty()) {
+                System.out.println("No suppliers available.");
+                return;
+            }
+
+            // Print all existing suppliers
+            System.out.println("Available suppliers:");
+            for (Supplier supplier : suppliers) {
+                System.out.println("Supplier ID: " + supplier.getSupplierID() +
+                        ", Name: " + supplier.getContact().getName() +
+                        ", Phone: " + supplier.getContact().getPhoneNumber() +
+                        ", Email: " + supplier.getContact().getEmail());
+            }
+
+            // Step 1: Get Supplier
+            Supplier supplier = null;
+            while (supplier == null) {
+                int supplierID = inputValidator.getValidatedInt("Enter Supplier ID: ");
+                supplier = supplierController.getSupplierById(supplierID);
+
+                if (supplier == null) {
+                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
+                }
+            }
+
+            // Step 2: Check if supplier has an agreement
+            Agreement agreement = supplier.getSupplierAgreement();
+            if (agreement == null) {
+                System.out.println("Supplier does not have an agreement.");
+                return;
+            }
+
+            // Step 3: Collect product details
+            String productName = inputValidator.getValidatedInput("Enter Product's name: ");
+            double price = inputValidator.getValidatedDouble("Enter Product's price: ");
+            int expirationDays = inputValidator.getValidatedInt("Enter Product's expiration days: ");
+            double weight = inputValidator.getValidatedDouble("Enter Product's weight: ");
+
+            // Step 4: Collect discount details for the product
+            HashMap<Integer, Double> discountDetails = new HashMap<>();
+            if (inputValidator.getValidatedYesNoInput("Any discounts? (yes/no): ").equalsIgnoreCase("yes")) {
+                boolean addMoreDiscounts;
+                do {
+                    int quantity = inputValidator.getValidatedInt("Enter minimum quantity for discount: ");
+                    double discountPercent = inputValidator.getValidatedDiscountPercentage("Enter discount percent: ");
+                    discountDetails.put(quantity, discountPercent);
+
+                    addMoreDiscounts = inputValidator.getValidatedYesNoInput("Add another discount? (yes/no): ").equalsIgnoreCase("yes");
+                } while (addMoreDiscounts);
+            }
+
+            // Step 5: Create and add the product to the supplier's agreement
+            Product product = new Product(0, productName, discountDetails, price, expirationDays, weight, agreement);
+            productController.createProductInDatabase(product); // Create product in DB and get catalogID
+
+            // Step 6: Update the product instance with catalogID and add to agreement
+            //product.setCatalogID(catalogID);
+            //agreement.addProduct(product); // Add the product to the agreement's list
+
+            // Step 7: Save the discount details in the database
+            //productController.addProductDiscounts(catalogID, discountDetails); // Save discounts in the database
+
+            System.out.println("Product added to supplier.");
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
+
 //    public void deleteProductFromSupplier() {
 //        try {
 //            if (supplierController.getSuppliers().isEmpty()) {

@@ -21,7 +21,9 @@ public class Main {
 
         // Initialize the ControllersManager
         ControllersManager controllersManager = new ControllersManager(supplierController, productController, agreementController, orderController);
-        controllersManager.openNewSupplierCard();
+        //controllersManager.openNewSupplierCard();
+        //controllersManager.deleteSupplierCard();
+        controllersManager.addProductToSupplier();
 //        // Initialize the UI
 //        UI ui = new UI(controllersManager);
 //
