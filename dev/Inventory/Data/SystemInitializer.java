@@ -7,16 +7,21 @@ import dev.Inventory.Classes.Product;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 
+import java.sql.Connection;
 import java.time.LocalDate;
 
 public class SystemInitializer {
+
+
+    private Connection connection;
 
     public static void initializeSystem(Inventory inventory)
     {
         // Retrieve the singleton instance of Inventory
 //        Inventory inventory = new Inventory();
 
-        // Initialize sample products and items
+        // Initialize sample products and items\
+
         initializeProductsAndItems(inventory);
 
         // Additional initialization logic can go here...
@@ -29,10 +34,15 @@ public class SystemInitializer {
         Product chips = new Product("Chips", "Snack", "Salty", 200, 5, null);
         Product milk = new Product("Milk", "Dairy", "Whole", 1000, 8, null);
 
+
+
         // Add products to inventory
         inventory.addProduct(cola.getName(), cola.getCategory(), cola.getSub_category(), cola.getSize(), cola.getMin_quantity());
         inventory.addProduct(chips.getName(), chips.getCategory(), chips.getSub_category(), chips.getSize(), chips.getMin_quantity());
         inventory.addProduct(milk.getName(), milk.getCategory(), milk.getSub_category(), milk.getSize(), milk.getMin_quantity());
+
+
+
 
         // Add 3 items to the Cola product
         Item colaItem1 = new Item("Cola", 10.0, 15.0, "Manufacturer1", "Drink", "Sparkling", 500, LocalDate.now().plusDays(10), E_Item_Status.Available, E_Item_Place.Store);

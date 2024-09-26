@@ -1,3 +1,4 @@
+
 package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;

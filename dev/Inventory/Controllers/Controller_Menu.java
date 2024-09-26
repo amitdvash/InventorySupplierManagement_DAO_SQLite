@@ -1,6 +1,5 @@
 package dev.Inventory.Controllers;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 import dev.Inventory.Classes.Inventory;
@@ -8,7 +7,9 @@ import dev.Inventory.Classes.Inventory;
 //---------------------------------------------------------------------
 //To Take the following classes from the Inventory package
 import dev.Inventory.Data.SystemInitializer;
-import dev.Inventory.SqlLite.CreatTable;
+import dev.Inventory.SqlLite.CreateTable;
+import dev.Inventory.SqlLite.Item_SQL;
+import dev.Inventory.SqlLite.ProductSQL;
 import dev.Inventory.SqlLite.SQLiteDB;
 //---------------------------------------------------------------------
 
@@ -20,11 +21,13 @@ public class Controller_Menu
     protected static Scanner scanner = new Scanner(System.in);
 
     protected static Connection sql_Connection;
+    protected static Item_SQL item_sql;
+    protected static ProductSQL productSQL;
 
     protected static Inventory inventory = new Inventory();
 
     public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+        Controller_Menu.inventory = inventory;
     }
     public Inventory getInventory() {
         return inventory;
@@ -37,11 +40,19 @@ public class Controller_Menu
     }
 
     public static void runProgram() throws SQLException {
-
-        Controller_Menu.InitializeDB();
+        initializeSQLConnection();
         Controller_Menu.dataMenu();
         Controller_Menu.registerMenu();
     }
+
+    private static void initializeSQLConnection() throws SQLException {
+        sql_Connection = SQLiteDB.connect();
+        CreateTable.initializeTables();
+        item_sql = new Item_SQL(sql_Connection);
+        productSQL = new ProductSQL(sql_Connection);
+    }
+
+
     static void dataMenu() {
         System.out.println("===== Data Menu =====");
         System.out.println("1. Initialize with Predefined Data");
@@ -122,12 +133,7 @@ public class Controller_Menu
 
 
 
-    public static void InitializeDB() throws SQLException {
-        // Initialize database connection
-        sql_Connection = SQLiteDB.connect();
-        System.out.println("Database connected.");
-        CreatTable.createTables();
-    }
+
 
 
 

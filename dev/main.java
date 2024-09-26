@@ -7,7 +7,12 @@ import dev.Inventory.Classes.Product;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
+import dev.Inventory.SqlLite.CreateTable;
+import dev.Inventory.SqlLite.Item_SQL;
+import dev.Inventory.SqlLite.ProductSQL;
+import dev.Inventory.SqlLite.SQLiteDB;
 
+import java.sql.SQLException;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.Date;
@@ -17,14 +22,12 @@ import java.util.Scanner;
 
 public class main
 {
-    public static void main(String[] args)
-
-    {
+    public static void main(String[] args) throws SQLException {
        // System.out.println("Hello World");
+////        System.out.println(item1.toString());
 //        Item item1 = new Item("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
 //        Item item2 = new Item("P2", 20, 30, "Manufacturer2", "Category2", "SubCategory2", 10, LocalDate.now(), E_Item_Status.Available, E_Item_Place.Warehouse);
-////        System.out.println(item1.toString());
-////        System.out.println(item2.toString());
+//////        System.out.println(item2.toString());
       /*   Product P1 = new Product ( "cola" , "drink" , "sparkling" , 300 ,4 , null);
         Product P2= new Product ( "cola" , "drink" , "sparkling" , 500 ,4 , null);
         Inventory inventory = Inventory.getInstance();
@@ -39,20 +42,20 @@ public class main
                inventory.addItem(item1);
                 Item item2 = new Item("cola", 10, 20, "Manufacturer1", "drink", "sparkling", 500, null, E_Item_Status.Available, E_Item_Place.Store);
                 inventory.addItem(item2);
-                System.out.println(inventory);*/
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the start date (yyyy-mm-dd): ");
-        String startDate = scanner.next();
-        LocalDate Sdate = LocalDate.parse(startDate);
-        System.out.println("Enter the end date (yyyy-mm-dd): ");
-        String endDate = scanner.next();
-        LocalDate Edate = LocalDate.parse(endDate);
-//        System.out.println(date.isBefore(LocalDate.now()));
-        Discount D = new Discount(10, Sdate, Edate);
-        System.out.println(D.isAvailable());
-//
-//
-//
+//                System.out.println(inventory);*/
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Enter the start date (yyyy-mm-dd): ");
+//        String startDate = scanner.next();
+//        LocalDate Sdate = LocalDate.parse(startDate);
+//        System.out.println("Enter the end date (yyyy-mm-dd): ");
+//        String endDate = scanner.next();
+//        LocalDate Edate = LocalDate.parse(endDate);
+////        System.out.println(date.isBefore(LocalDate.now()));
+//        Discount D = new Discount(10, Sdate, Edate);
+//        System.out.println(D.isAvailable());
+////
+////
+////
 //         System.out.println(P1.toString());
 //        P1.addItem(item1);
 //        P1.addItem(item2);
@@ -101,6 +104,25 @@ public class main
 ////inventory.moveItemTo(item1, E_Item_Place.Warehouse);
 ////System.out.println(inventory.getItemsByPlace(E_Item_Place.Warehouse));
 ////System.out.println(inventory.toString());
+        Item item1 = new Item("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
+        Item item2 = new Item("P2", 20, 30, "Manufacturer2", "Category2", "SubCategory2", 10, LocalDate.now(), E_Item_Status.Available, E_Item_Place.Warehouse);
+
+        Product product1=new Product("P1","Category1","SubCategory1",10,4,null);
+        Product product2=new Product("P1","Category","SubCategory1",10,4,null);
+
+        CreateTable.initializeTables();
+//        Item_SQL itemSql=new Item_SQL(SQLiteDB.connect());
+//        itemSql.create(item1);
+//        item1.setSelling_price(32131311);
+//        itemSql.update(item1);
+//      //  itemSql.delete(item1);
+//        System.out.println(itemSql.readAll());
+
+        ProductSQL productSQL=new ProductSQL(SQLiteDB.connect());
+        productSQL.create(product1);
+        productSQL.create(product2);
+
+
 
     }
 }

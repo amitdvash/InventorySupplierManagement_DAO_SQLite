@@ -176,7 +176,8 @@ public class Controller_Manager extends Controller_Worker
             System.out.print("Enter minimum quantity: ");
             int minQuantity = scanner.nextInt();
 
-//        Product newProduct = new Product(name, category, subCategory, size, minQuantity, null);
+        Product newProduct = new Product(name, category, subCategory, size, minQuantity, null);
+        productSQL.create(newProduct);
             add_product(name, category, subCategory, size, minQuantity);
         }
         catch (Exception e)
