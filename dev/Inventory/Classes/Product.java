@@ -152,7 +152,7 @@ public class Product
                 break;
         }
         //Update the status of the product
-       updateStatus();
+        updateStatus();
     }
 
     private void updateDiscountToItem(Item item)
@@ -262,7 +262,7 @@ public class Product
 
 
     public void moveItemTo(Item item , E_Item_Place place)
-       {
+    {
         if(item.getPlace() == place)
         {
             System.out.println("Item is already in the " + place.toString() );
@@ -273,7 +273,7 @@ public class Product
         {
             item.setPlace(place);
         }
-       else if(item.getPlace() == E_Item_Place.Warehouse)
+        else if(item.getPlace() == E_Item_Place.Warehouse)
         {
             item.setPlace(place);
         }
@@ -339,14 +339,14 @@ public class Product
                 this.sub_category.equals(product.getSub_category()) &&
                 this.size == product.getSize();
     }
-public boolean isDiscountAvailable()
-{
-    if(this.discount == null)
+    public boolean isDiscountAvailable()
     {
-        return false;
+        if(this.discount == null)
+        {
+            return false;
+        }
+        return this.discount.isAvailable();
     }
-    return this.discount.isAvailable();
-}
 
 
 //    public void activateDiscount() {

@@ -328,16 +328,16 @@ public class Inventory
         return null;
     }
     public Product findOrProduct(String name, String category, String subCategory, double size) {
-    // Iterate through all products in the inventory
-    for (Product product : products.values()) {
-        // Check if the product matches the category, sub-category, and size
-        if (product.getCategory().equals(category) && product.getSub_category().equals(subCategory) && product.getSize() == size && name.equals(product.getName())) {
-            return product;
+        // Iterate through all products in the inventory
+        for (Product product : products.values()) {
+            // Check if the product matches the category, sub-category, and size
+            if (product.getCategory().equals(category) && product.getSub_category().equals(subCategory) && product.getSize() == size && name.equals(product.getName())) {
+                return product;
+            }
         }
+        // If neither an item nor a product is found, return null
+        return null;
     }
-    // If neither an item nor a product is found, return null
-    return null;
-}
 
     public Product getProduct(String name , String Category , String SubCategory , double size)
     {

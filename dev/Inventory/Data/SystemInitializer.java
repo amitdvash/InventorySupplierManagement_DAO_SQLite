@@ -1,3 +1,4 @@
+
 package dev.Inventory.Data;
 
 import dev.Inventory.Classes.Inventory;

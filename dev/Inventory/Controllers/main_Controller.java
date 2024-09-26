@@ -1,10 +1,10 @@
 package dev.Inventory.Controllers;
-import dev.Inventory.Controllers.Controller_Menu;
 
+
+import java.sql.SQLException;
 
 public class main_Controller
 {
-    public static void main(String[] args) {
-        Controller_Menu.runProgram();
+    public static void main(String[] args) throws SQLException {Controller_Menu.runProgram();
     }
 }

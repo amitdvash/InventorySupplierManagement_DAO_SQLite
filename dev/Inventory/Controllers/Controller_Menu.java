@@ -1,10 +1,15 @@
 package dev.Inventory.Controllers;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 import dev.Inventory.Classes.Inventory;
 
 //---------------------------------------------------------------------
 //To Take the following classes from the Inventory package
 import dev.Inventory.Data.SystemInitializer;
+import dev.Inventory.SqlLite.CreatTable;
+import dev.Inventory.SqlLite.SQLiteDB;
 //---------------------------------------------------------------------
 
 
@@ -13,6 +18,8 @@ public class Controller_Menu
     private static Controller_Manager managerController = new Controller_Manager();
     private static Controller_Worker workerController = new Controller_Worker();
     protected static Scanner scanner = new Scanner(System.in);
+
+    protected static Connection sql_Connection;
 
     protected static Inventory inventory = new Inventory();
 
@@ -23,7 +30,15 @@ public class Controller_Menu
         return inventory;
     }
 
-    public static void runProgram() {
+
+
+    public static Connection getSqlConnection(){
+        return Controller_Menu.sql_Connection;
+    }
+
+    public static void runProgram() throws SQLException {
+
+        Controller_Menu.InitializeDB();
         Controller_Menu.dataMenu();
         Controller_Menu.registerMenu();
     }
@@ -107,15 +122,15 @@ public class Controller_Menu
 
 
 
-    // Method to add an item (Worker)
-
-
-    // Method to add a product (Manager)
-
+    public static void InitializeDB() throws SQLException {
+        // Initialize database connection
+        sql_Connection = SQLiteDB.connect();
+        System.out.println("Database connected.");
+        CreatTable.createTables();
+    }
 
 
 
 
 
 }
-

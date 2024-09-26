@@ -82,7 +82,7 @@ public class Controller_Worker extends Controller_Menu
     }
 
     public static void addItem(String name, double costPrice, double sellingPrice, String manufacturer, String category, String subCategory, double size, LocalDate expiry, E_Item_Status Status, E_Item_Place place) {
-     inventory.addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, Status, place);
+        inventory.addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, Status, place);
     }
 
 

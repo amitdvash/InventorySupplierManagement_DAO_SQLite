@@ -195,9 +195,9 @@ public class Controller_Manager extends Controller_Worker
         inventory.applyDiscountToProduct(inventory.getProduct(name, Category, SubCategory, Size), discountPercentage , startDay , endDay);
     }
 
-     public static void applyDiscountToCategory(String category, double discountPercentage, LocalDate startDay, LocalDate endDay){
+    public static void applyDiscountToCategory(String category, double discountPercentage, LocalDate startDay, LocalDate endDay){
         inventory.applyDiscountToCategory(category, discountPercentage, startDay, endDay);
-     }
+    }
 
     public static void applyDiscountToSubCategory(String subcategory, double discountPercentage, LocalDate startDay, LocalDate endDay){
         inventory.applyDiscountToSubCategory(subcategory, discountPercentage, startDay, endDay);

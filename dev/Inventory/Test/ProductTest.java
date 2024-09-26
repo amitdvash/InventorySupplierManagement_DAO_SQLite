@@ -23,6 +23,7 @@ class ProductTest
     Item expiringWarehouseItem, availableWarehouseItem1, availableWarehouseItem2, availableWarehouseItem3, availableWarehouseItem4, differentProductItem;
     Discount productDiscount,newDiscount;
 
+
     @BeforeEach
     void setUp() {
         // Initializing items for the product
