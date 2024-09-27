@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDTO implements IDTO<Order> {
     private Connection connection;
@@ -131,16 +132,25 @@ public class OrderDTO implements IDTO<Order> {
         return order;
     }
 
-    private void insertOrderProducts(Order order) {
-        String sql = "INSERT INTO orderProducts (orderID, catalogID, quantity) VALUES (?, ?, ?)";
+    public void insertOrderProducts(Order order) {
+        String sql = "INSERT INTO orderProducts (orderID, catalogID, quantity, price, discount) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            for (Product product : order.getProductQuantityMap().keySet()) {
+            for (Map.Entry<Product, Integer> entry : order.getProductQuantityMap().entrySet()) {
+                Product product = entry.getKey();
+                int quantity = entry.getValue();
+                double price = product.getPrice() * quantity; // Calculate the price based on quantity
+
+                // Get the discount for the product's catalogID from the Order's getDiscountDetails method
+                double discount = order.getDiscountDetails(product.getCatalogID()).getOrDefault(quantity, 0.0);
+
                 pstmt.setInt(1, order.getOrderID());
                 pstmt.setInt(2, product.getCatalogID());
-                pstmt.setInt(3, order.getProductQuantityMap().get(product));
+                pstmt.setInt(3, quantity);
+                pstmt.setDouble(4, price);
+                pstmt.setDouble(5, discount);
                 pstmt.addBatch();
             }
-            pstmt.executeBatch();
+            pstmt.executeBatch(); // Execute all the batches together
         } catch (SQLException e) {
             e.printStackTrace();
         }

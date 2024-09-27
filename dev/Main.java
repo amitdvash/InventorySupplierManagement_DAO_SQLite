@@ -23,7 +23,13 @@ public class Main {
         ControllersManager controllersManager = new ControllersManager(supplierController, productController, agreementController, orderController);
         //controllersManager.openNewSupplierCard();
         //controllersManager.deleteSupplierCard();
-        controllersManager.addProductToSupplier();
+        //controllersManager.addProductToSupplier();
+        //controllersManager.deleteProductFromSupplier();
+        //controllersManager.updateSupplierFields();
+        //controllersManager.updateDiscountDetails();
+        controllersManager.openNewOrder();
+
+
 //        // Initialize the UI
 //        UI ui = new UI(controllersManager);
 //

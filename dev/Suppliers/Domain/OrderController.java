@@ -15,8 +15,8 @@ public class OrderController {
     }
 
     // Method to create a new order
-    public void createOrder(int orderID, Supplier supplier, HashMap<Product, Integer> productQuantityMap, boolean isConstantDelivery) {
-        Order newOrder = new Order(orderID, supplier, productQuantityMap, isConstantDelivery);
+    public void createOrder(Supplier supplier, HashMap<Product, Integer> productQuantityMap, boolean isConstantDelivery) {
+        Order newOrder = new Order(supplier, productQuantityMap, isConstantDelivery);
         orderDTO.create(newOrder); // Save to database
         System.out.println("Order created: " + newOrder.getOrderID());
     }

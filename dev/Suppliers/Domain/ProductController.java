@@ -1,6 +1,7 @@
 package dev.Suppliers.Domain;
 
 import dev.Suppliers.DataBase.ProductDTO;
+import dev.Suppliers.DataBase.SupplierDTO;
 
 import java.sql.Connection;
 import java.util.HashMap;
@@ -9,6 +10,9 @@ import java.util.Map;
 
 public class ProductController {
     private ProductDTO productDTO;
+    private SupplierDTO supplierDTO;
+
+
 
     public ProductController(Connection connection) {
         this.productDTO = new ProductDTO(connection);
@@ -43,4 +47,20 @@ public class ProductController {
         }
     }
 
+    // Method to delete a product from the database based on the catalog ID
+    public void deleteProductFromDatabase(int catalogID) {
+        // Delete product discounts first
+        productDTO.deleteProductDiscounts(catalogID); // Ensure all associated discounts are deleted first
+        // Then delete the product itself
+        productDTO.delete(catalogID);
+        System.out.println("Product with Catalog ID " + catalogID + " deleted from the database.");
+    }
+
+    public void deleteProductDiscount(int catalogID, int quantity) {
+        productDTO.deleteDiscount(catalogID, quantity); // Call DTO method to delete the discount
+    }
+
+    public Product getProductByName(String productName) {
+        return productDTO.readByName(productName); // Use DTO to get the product by name
+    }
 }

@@ -97,6 +97,16 @@ public class AgreementController {
         }
     }
 
+    public void updateSelfSupply(int agreementID, boolean selfSupply) {
+        agreementDTO.updateSelfSupplyInDatabase(agreementID, selfSupply); // Call DTO method
+        System.out.println("Self-supply status updated successfully.");
+    }
+
+    public void updateSupplyDays(int agreementID, List<String> supplyDays) {
+        agreementDTO.updateSupplyDaysInDatabase(agreementID, supplyDays); // Call DTO method
+        System.out.println("Supply days updated successfully.");
+    }
+
     // Get all agreements from the database
     public List<Agreement> getAllAgreements() {
         return agreementDTO.readAll(); // Get all agreements from the database

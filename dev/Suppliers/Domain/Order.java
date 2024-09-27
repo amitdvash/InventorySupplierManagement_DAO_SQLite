@@ -1,10 +1,7 @@
 package dev.Suppliers.Domain;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Order {
 
@@ -58,6 +55,9 @@ public class Order {
             // Calculate discount amount based on percentage
             double discountPercentage = calculateHighestDiscount(product, quantity);
             discountAmount += (product.getPrice() * quantity) * (discountPercentage / 100);
+
+            // Update discount details for this product in the map
+            product.getDiscountDetails().put(quantity, discountPercentage);
         }
 
         priceAfterDiscount = priceBeforeDiscount - discountAmount;
@@ -226,6 +226,21 @@ public class Order {
     public void setConstantDelivery(boolean constantDelivery) {
         isConstantDelivery = constantDelivery;
     }
+
+
+    public Map<Integer, Double> getDiscountDetails(int catalogID) {
+        Map<Integer, Double> discountDetails = new HashMap<>();
+        for (Product product : productQuantityMap.keySet()) {
+            if (product.getCatalogID() == catalogID) {
+                discountDetails = product.getDiscountDetails(); // Return discount details for this product
+                break;
+            }
+        }
+        return discountDetails;
+    }
+
+
+
 
     // Method to print the order details, including catalog numbers of products and supplier ID
     public void printOrderDetails() {

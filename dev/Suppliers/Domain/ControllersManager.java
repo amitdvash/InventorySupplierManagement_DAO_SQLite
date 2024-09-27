@@ -193,231 +193,302 @@ public class ControllersManager {
         }
     }
 
-//    public void deleteProductFromSupplier() {
-//        try {
-//            if (supplierController.getSuppliers().isEmpty()) {
-//                System.out.println("No suppliers available.");
-//                return;
-//            }
-//
-//            // Display all available suppliers
-//            System.out.println("Available suppliers:");
-//            supplierController.getSuppliers().forEach(supplier ->
-//                    System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName()));
-//
-//            // Step 1: Get valid supplier ID
-//            Supplier supplier = null;
-//            while (supplier == null) {
-//                String supplierID = inputValidator.getValidatedInput("Enter Supplier ID (starting with 'S'): ", inputValidator::isValidSupplierID, "Invalid Supplier ID. Please enter again.");
-//                supplier = supplierController.getSupplierById(supplierID);
-//
-//                if (supplier == null) {
-//                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
-//                }
-//            }
-//
-//            if (supplier.getSupplierAgreement() == null) {
-//                System.out.println("Supplier does not have an agreement.");
-//                return;
-//            }
-//
-//            // Step 2: Display all available products for the supplier
-//            Agreement agreement = supplier.getSupplierAgreement();
-//            List<Product> productList = agreement.getProductList();
-//            if (productList.isEmpty()) {
-//                System.out.println("No products available for this supplier.");
-//                return;
-//            }
-//
-//            System.out.println("Available products for Supplier " + supplier.getContact().getName() + ":");
-//            for (Product product : productList) {
-//                System.out.println("Catalog ID: " + product.getCatalogID() + ", Product Name: " + product.getName());
-//            }
-//
-//            // Step 3: Get a valid product catalog ID
-//            Product productToDelete = null;
-//            while (productToDelete == null) {
-//                String catalogID = inputValidator.getValidatedInput("Enter Product's catalog ID to delete: ");
-//                productToDelete = productList.stream()
-//                        .filter(product -> product.getCatalogID().equals(catalogID))
-//                        .findFirst().orElse(null);
-//
-//                if (productToDelete == null) {
-//                    System.out.println("Product not found. Please provide a valid Product ID.");
-//                }
-//            }
-//
-//            // Remove the product and supplier from the productSupplierMap in ProductController
-//            productController.removeSupplierFromProduct(productToDelete.getName(), supplier);
-//
-//            // Step 4: Remove the product from the supplier's agreement
-//            agreement.getProductList().remove(productToDelete);
-//            agreement.getDiscountDetails().remove(productToDelete.getCatalogID());
-//
-//            System.out.println("Product successfully deleted.");
-//        } catch (ExitException e) {
-//            System.out.println("Action cancelled.");
-//        }
-//    }
-//
-//    public void updateSupplierFields() {
-//        try {
-//            if (supplierController.getSuppliers().isEmpty()) {
-//                System.out.println("No suppliers available.");
-//                return;
-//            }
-//
-//            // Display all available suppliers
-//            System.out.println("Available suppliers:");
-//            supplierController.getSuppliers().forEach(supplier ->
-//                    System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName()));
-//
-//            // Step 1: Get valid supplier ID
-//            Supplier supplier = null;
-//            while (supplier == null) {
-//                String supplierID = inputValidator.getValidatedInput("Enter Supplier ID (starting with 'S'): ", inputValidator::isValidSupplierID, "Invalid Supplier ID. Please enter again.");
-//                supplier = supplierController.getSupplierById(supplierID);
-//
-//                if (supplier == null) {
-//                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
-//                }
-//            }
-//
-//            // Step 2: Update supplier fields
-//            boolean keepUpdating = true;
-//            while (keepUpdating) {
-//                System.out.println("Which field would you like to update?");
-//                System.out.println("1. Company ID\n2. Bank Account\n3. Payment Method\n4. Contact Info\n5. Supplier Agreement\n6. Exit");
-//                int choice = inputValidator.getValidatedInt("Choose an option: ");
-//
-//                switch (choice) {
-//                    case 1:
-//                        String newCompanyID = inputValidator.getValidatedInput("Enter new Company ID: ", inputValidator::isValidCompanyOrBankAccount, "Invalid Company ID. Must contain only digits.");
-//                        supplier.setCompanyID(newCompanyID);
-//                        System.out.println("Company ID has been changed to: " + newCompanyID);
-//                        break;
-//                    case 2:
-//                        String newBankAccount = inputValidator.getValidatedInput("Enter new Bank Account: ", inputValidator::isValidCompanyOrBankAccount, "Invalid Bank Account. Must contain only digits.");
-//                        supplier.setBankAccount(newBankAccount);
-//                        System.out.println("Bank Account has been changed to: " + newBankAccount);
-//                        break;
-//                    case 3:
-//                        PaymentMethod newPaymentMethod = getValidatedPaymentMethod();
-//                        supplier.setPaymentMethod(newPaymentMethod);
-//                        System.out.println("Payment Method has been changed to: " + newPaymentMethod);
-//                        break;
-//                    case 4:
-//                        String name = inputValidator.getValidatedInput("Enter new Name: ");
-//                        String phone = inputValidator.getValidatedInput("Enter new Phone: ", inputValidator::isValidPhoneNumber, "Invalid phone number. Must contain only digits.");
-//                        String email = inputValidator.getValidatedInput("Enter new Email: ", inputValidator::isValidEmail, "Invalid email format.");
-//                        supplier.setContact(new SupplierContact(name, phone, email));
-//                        System.out.println("Contact Info updated: Name: " + name + ", Phone: " + phone + ", Email: " + email);
-//                        break;
-//                    case 5:
-//                        updateSupplierAgreement(supplier.getSupplierAgreement());
-//                        break;
-//                    case 6:
-//                        keepUpdating = false;
-//                        break;
-//                    default:
-//                        System.out.println("Invalid option.");
-//                }
-//            }
-//
-//            // Print the updated supplier information after the updates are done
-//            System.out.println("Supplier information after updates:");
-//            supplier.printSupplierDetails();
-//        } catch (ExitException e) {
-//            System.out.println("Action cancelled.");
-//        }
-//    }
-//
-//    public void updateDiscountDetails() {
-//        try {
-//            if (supplierController.getSuppliers().isEmpty()) {
-//                System.out.println("No suppliers available.");
-//                return;
-//            }
-//
-//            // Display all available suppliers
-//            System.out.println("Available suppliers:");
-//            supplierController.getSuppliers().forEach(supplier ->
-//                    System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName()));
-//
-//            // Step 1: Get valid supplier ID
-//            Supplier supplier = null;
-//            while (supplier == null) {
-//                String supplierID = inputValidator.getValidatedInput("Enter Supplier ID (starting with 'S'):", inputValidator::isValidSupplierID, "Invalid Supplier ID. Please enter again.");
-//                supplier = supplierController.getSupplierById(supplierID);
-//
-//                if (supplier == null) {
-//                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
-//                }
-//            }
-//
-//            Agreement agreement = supplier.getSupplierAgreement();
-//            if (agreement == null || agreement.getProductList().isEmpty()) {
-//                System.out.println("No products available for this supplier.");
-//                return;
-//            }
-//
-//            // Display all available products for the supplier
-//            System.out.println("Available products for Supplier " + supplier.getContact().getName() + ":");
-//            for (Product product : agreement.getProductList()) {
-//                System.out.println("Catalog ID: " + product.getCatalogID() + ", Product Name: " + product.getName());
-//            }
-//
-//            // Step 2: Get valid Product ID
-//            Product product = null;
-//            while (product == null) {
-//                String productID = inputValidator.getValidatedInput("Enter Product ID: ");
-//                product = agreement.getProductList().stream()
-//                        .filter(p -> p.getCatalogID().equalsIgnoreCase(productID))
-//                        .findFirst().orElse(null);
-//
-//                if (product == null) {
-//                    System.out.println("Product not found. Please provide a valid Product ID.");
-//                }
-//            }
-//
-//            // Print existing discounts for the product before add/delete decision
-//            printProductDiscounts(product);
-//
-//            // Step 3: Ask to add or delete discount
-//            String action = inputValidator.getValidatedInput("Do you want to add or delete a discount? (add/delete): ",
-//                    input -> input.equalsIgnoreCase("add") || input.equalsIgnoreCase("delete"),
-//                    "Please enter 'add' or 'delete'.");
-//            if (action.equalsIgnoreCase("exit")) return;  // Exit option
-//
-//            if (action.equalsIgnoreCase("add")) {
-//                // Adding a discount
-//                int quantity = getValidatedQuantityInput();
-//                double discountPercent = inputValidator.getValidatedDiscountPercentage("Enter discount percent: ");
-//                agreementController.addDiscountToProduct(agreement, product.getCatalogID(), quantity, discountPercent);
-//                System.out.println("Discount added successfully.");
-//            } else if (action.equalsIgnoreCase("delete")) {
-//                if (product.getDiscountDetails().isEmpty()) {
-//                    System.out.println("No discounts available to delete.");
-//                    return;
-//                }
-//                // Show existing discounts before deletion
-//                printProductDiscounts(product);
-//
-//                int quantity = getValidatedQuantityInput();
-//                if (product.getDiscountDetails().containsKey(quantity)) {
-//                    agreementController.deleteDiscountFromProduct(agreement, product.getCatalogID(), quantity);
-//                    System.out.println("Discount for quantity " + quantity + " deleted successfully.");
-//                } else {
-//                    System.out.println("No discount found for the entered quantity.");
-//                }
-//            }
-//
-//            // Print updated discounts after modification
-//            printProductDiscounts(product);
-//        } catch (ExitException e) {
-//            System.out.println("Action cancelled.");
-//        }
-//    }
+    public void deleteProductFromSupplier() {
+        try {
+            // Step 1: Check if there are any suppliers available
+            if (supplierController.getSuppliers().isEmpty()) {
+                System.out.println("No suppliers available.");
+                return;
+            }
+
+            // Step 2: Display all available suppliers
+            System.out.println("Available suppliers:");
+            supplierController.getSuppliers().forEach(supplier ->
+                    System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName()));
+
+            // Step 3: Get a valid supplier ID using validated int input
+            Supplier supplier = null;
+            while (supplier == null) {
+                int supplierID = inputValidator.getValidatedInt("Enter Supplier ID: ");
+                supplier = supplierController.getSupplierById(supplierID);
+
+                if (supplier == null) {
+                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
+                }
+            }
+
+            // Step 4: Check if supplier has an agreement
+            if (supplier.getSupplierAgreement() == null) {
+                System.out.println("Supplier does not have an agreement.");
+                return;
+            }
+
+            // Step 5: Display all available products for the supplier
+            Agreement agreement = supplier.getSupplierAgreement();
+            List<Product> productList = agreement.getProductList();
+            if (productList.isEmpty()) {
+                System.out.println("No products available for this supplier.");
+                return;
+            }
+
+            // Step 6: Check if supplier has only one product, prevent deletion if so
+            if (productList.size() == 1) {
+                System.out.println("Cannot delete the last product of the supplier. A supplier must have at least one product.");
+                return;
+            }
+
+            // Step 7: Display available products
+            System.out.println("Available products for Supplier " + supplier.getContact().getName() + ":");
+            for (Product product : productList) {
+                System.out.println("Catalog ID: " + product.getCatalogID() + ", Product Name: " + product.getName());
+            }
+
+            // Step 8: Get a valid product catalog ID using validated int input
+            Product productToDelete = null;
+            while (productToDelete == null) {
+                int catalogID = inputValidator.getValidatedInt("Enter Product's catalog ID to delete: ");
+                productToDelete = productList.stream()
+                        .filter(product -> product.getCatalogID() == catalogID)
+                        .findFirst().orElse(null);
+
+                if (productToDelete == null) {
+                    System.out.println("Product not found. Please provide a valid Product ID.");
+                }
+            }
+
+            // Step 9: Remove the product from the supplier's agreement and database
+            productController.deleteProductFromDatabase(productToDelete.getCatalogID());
+            agreement.getProductList().remove(productToDelete);
+
+            System.out.println("Product successfully deleted.");
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
+
+    public void updateSupplierFields() {
+        try {
+            // Step 1: Check if there are any suppliers available
+            if (supplierController.getSuppliers().isEmpty()) {
+                System.out.println("No suppliers available.");
+                return;
+            }
+
+            // Step 2: Display all available suppliers
+            System.out.println("Available suppliers:");
+            supplierController.getSuppliers().forEach(supplier ->
+                    System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName()));
+
+            // Step 3: Get a valid supplier ID using validated int input
+            Supplier supplier = null;
+            while (supplier == null) {
+                int supplierID = inputValidator.getValidatedInt("Enter Supplier ID: ");
+                supplier = supplierController.getSupplierById(supplierID);
+
+                if (supplier == null) {
+                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
+                }
+            }
+
+            // Step 4: Update supplier fields
+            boolean keepUpdating = true;
+            while (keepUpdating) {
+                System.out.println("Which field would you like to update?");
+                System.out.println("1. Company ID\n2. Bank Account\n3. Payment Method\n4. Contact Info\n5. Supplier Agreement\n6. Exit");
+                int choice = inputValidator.getValidatedInt("Choose an option: ");
+
+                switch (choice) {
+                    case 1:
+                        String newCompanyID = inputValidator.getValidatedInput("Enter new Company ID: ", inputValidator::isValidCompanyOrBankAccount, "Invalid Company ID. Must contain only digits.");
+                        supplier.setCompanyID(newCompanyID);
+                        supplierController.updateSupplier(supplier); // Update in database
+                        System.out.println("Company ID has been changed to: " + newCompanyID);
+                        break;
+                    case 2:
+                        String newBankAccount = inputValidator.getValidatedInput("Enter new Bank Account: ", inputValidator::isValidCompanyOrBankAccount, "Invalid Bank Account. Must contain only digits.");
+                        supplier.setBankAccount(newBankAccount);
+                        supplierController.updateSupplier(supplier); // Update in database
+                        System.out.println("Bank Account has been changed to: " + newBankAccount);
+                        break;
+                    case 3:
+                        PaymentMethod newPaymentMethod = getValidatedPaymentMethod();
+                        supplier.setPaymentMethod(newPaymentMethod);
+                        supplierController.updateSupplier(supplier); // Update in database
+                        System.out.println("Payment Method has been changed to: " + newPaymentMethod);
+                        break;
+                    case 4:
+                        String newName = inputValidator.getValidatedInput("Enter new Name: ");
+                        String newPhone = inputValidator.getValidatedInput("Enter new Phone: ", inputValidator::isValidPhoneNumber, "Invalid phone number. Must contain only digits.");
+                        String newEmail = inputValidator.getValidatedInput("Enter new Email: ", inputValidator::isValidEmail, "Invalid email format.");
+                        supplier.getContact().setName(newName);
+                        supplier.getContact().setPhoneNumber(newPhone);
+                        supplier.getContact().setEmail(newEmail);
+                        supplierController.updateSupplier(supplier); // Update in database
+                        System.out.println("Contact Info updated: Name: " + newName + ", Phone: " + newPhone + ", Email: " + newEmail);
+                        break;
+                    case 5:
+                        updateSupplierAgreement(supplier.getSupplierAgreement());
+                        break;
+                    case 6:
+                        keepUpdating = false;
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            }
+
+            // Print the updated supplier information after the updates are done
+            System.out.println("Supplier information after updates:");
+            supplier.printSupplierDetails();
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
+
+    private void updateSupplierAgreement(Agreement agreement) {
+        if (agreement == null) {
+            System.out.println("Supplier has no agreement.");
+            return;
+        }
+
+        try {
+            boolean keepUpdating = true;
+            while (keepUpdating) {
+                System.out.println("Which agreement field would you like to update?");
+                System.out.println("1. Update Self Supply\n2. Update Supply Days\n3. Exit");
+                int choice = inputValidator.getValidatedInt("Choose an option: ");
+
+                switch (choice) {
+                    case 1:
+                        // Update Self Supply field
+                        boolean selfSupply = Boolean.parseBoolean(inputValidator.getValidatedInput("Is the supplier responsible for supplying products? (true/false): ",
+                                input -> input.equalsIgnoreCase("true") || input.equalsIgnoreCase("false"),
+                                "Please enter 'true' or 'false'."));
+                        agreement.setSelfSupply(selfSupply);
+                        agreementController.updateSelfSupply(agreement.getAgreementID(), selfSupply);
+                        System.out.println("Self-supply field has been updated to: " + (selfSupply ? "Supplier responsible" : "Company responsible"));
+                        break;
+                    case 2:
+                        // Update Supply Days
+                        List<String> newSupplyDays = selectSupplyDays(); // Get new supply days from user
+                        agreement.setSupplyDays(newSupplyDays);
+                        agreementController.updateSupplyDays(agreement.getAgreementID(), newSupplyDays);
+                        System.out.println("Supply days updated to: " + newSupplyDays);
+                        break;
+                    case 3:
+                        keepUpdating = false;
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            }
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
+
+
+    public void updateDiscountDetails() {
+        try {
+            // Check if there are any suppliers available
+            if (supplierController.getSuppliers().isEmpty()) {
+                System.out.println("No suppliers available.");
+                return;
+            }
+
+            // Display all available suppliers
+            System.out.println("Available suppliers:");
+            supplierController.getSuppliers().forEach(supplier ->
+                    System.out.println("Supplier ID: " + supplier.getSupplierID() + ", Supplier Name: " + supplier.getContact().getName())
+            );
+
+            // Step 1: Get a valid supplier ID
+            Supplier supplier = null;
+            while (supplier == null) {
+                int supplierID = inputValidator.getValidatedInt("Enter Supplier ID: ");
+                supplier = supplierController.getSupplierById(supplierID);
+
+                if (supplier == null) {
+                    System.out.println("Supplier not found. Please provide a valid Supplier ID.");
+                }
+            }
+
+            // Get the agreement associated with the supplier
+            Agreement agreement = supplier.getSupplierAgreement();
+            if (agreement == null || agreement.getProductList().isEmpty()) {
+                System.out.println("No products available for this supplier.");
+                return;
+            }
+
+            // Display all available products for the supplier
+            System.out.println("Available products for Supplier " + supplier.getContact().getName() + ":");
+            for (Product product : agreement.getProductList()) {
+                System.out.println("Catalog ID: " + product.getCatalogID() + ", Product Name: " + product.getName());
+            }
+
+            // Step 2: Get a valid product catalog ID
+            Product product = null;
+            while (product == null) {
+                int catalogID = inputValidator.getValidatedInt("Enter Product's Catalog ID: ");
+                product = agreement.getProductList().stream()
+                        .filter(p -> p.getCatalogID() == catalogID)
+                        .findFirst().orElse(null);
+
+                if (product == null) {
+                    System.out.println("Product not found. Please provide a valid Product ID.");
+                }
+            }
+
+            // Print existing discounts for the product before add/delete decision
+            printProductDiscounts(product);
+
+            // Step 3: Ask to add or delete a discount
+            String action = inputValidator.getValidatedInput("Do you want to add or delete a discount? (add/delete): ",
+                    input -> input.equalsIgnoreCase("add") || input.equalsIgnoreCase("delete"),
+                    "Please enter 'add' or 'delete'.");
+            if (action.equalsIgnoreCase("exit")) return; // Exit option
+
+            if (action.equalsIgnoreCase("add")) {
+                // Adding a discount
+                int quantity = getValidatedQuantityInput();
+                double discountPercent = inputValidator.getValidatedDiscountPercentage("Enter discount percent: ");
+
+                // Add discount to the database
+                productController.addProductDiscounts(product.getCatalogID(), new HashMap<>() {{
+                    put(quantity, discountPercent);
+                }});
+
+                // Update product in agreement (in-memory representation)
+                product.getDiscountDetails().put(quantity, discountPercent);
+                System.out.println("Discount added successfully.");
+            } else if (action.equalsIgnoreCase("delete")) {
+                if (product.getDiscountDetails().isEmpty()) {
+                    System.out.println("No discounts available to delete.");
+                    return;
+                }
+
+                // Show existing discounts before deletion
+                printProductDiscounts(product);
+
+                int quantity = getValidatedQuantityInput();
+                if (product.getDiscountDetails().containsKey(quantity)) {
+                    // Remove discount from the database
+                    productController.deleteProductDiscount(product.getCatalogID(), quantity);
+
+                    // Update product in agreement (in-memory representation)
+                    product.getDiscountDetails().remove(quantity);
+                    System.out.println("Discount for quantity " + quantity + " deleted successfully.");
+                } else {
+                    System.out.println("No discount found for the entered quantity.");
+                }
+            }
+
+            // Print updated discounts after modification
+            printProductDiscounts(product);
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
 
     // Helper method to print all discounts for a product
     private void printProductDiscounts(Product product) {
@@ -433,72 +504,70 @@ public class ControllersManager {
     }
 
 
-//    public void openNewOrder() {
-//        try {
-//            // Step 1: Choose order type
-//            String orderType = inputValidator.getValidatedInput(
-//                    "Choose the type of order:\n1. Shortage of products (one-time)\n2. Periodic product order (constant delivery)\nEnter 1 or 2: ",
-//                    input -> input.equals("1") || input.equals("2"),
-//                    "Invalid choice. Please enter 1 or 2."
-//            );
-//
-//            boolean isConstantDelivery = orderType.equals("2");
-//
-//            // Step 2: Display all products available in the system (names only)
-//            List<String> productNames = productController.getAllProductNames();
-//            if (productNames.isEmpty()) {
-//                System.out.println("No products available in the system.");
-//                return;
-//            }
-//
-//            System.out.println("Available products:");
-//            productNames.forEach(System.out::println); // Print only product names
-//
-//            // Step 3: Select products and quantities
-//            HashMap<Supplier, HashMap<Product, Integer>> supplierProductMap = new HashMap<>();
-//            boolean addMoreProducts = true;
-//
-//            do {
-//                String productName = inputValidator.getValidatedInput("Enter Product's name to order: ");
-//
-//                // Check if the product exists using getProductSupplierMap()
-//                if (!productController.getProductSupplierMap().containsKey(productName)) {
-//                    System.out.println("Product not found. Please enter a valid product name.");
-//                    continue;
-//                }
-//
-//                int quantity = inputValidator.getValidatedInt("Enter quantity to order: ");
-//
-//                // Find the cheapest supplier for the given product and quantity
-//                Supplier cheapestSupplier = productController.findCheapestSupplier(productName, quantity);
-//
-//                if (cheapestSupplier == null) {
-//                    System.out.println("No supplier found for the selected product and quantity.");
-//                    continue;
-//                }
-//
-//                // Get the product instance from the supplier's agreement
-//                Product selectedProduct = cheapestSupplier.getSupplierAgreement().getProductByName(productName);
-//
-//                // Add the product and quantity to the supplier's product map
-//                supplierProductMap.computeIfAbsent(cheapestSupplier, k -> new HashMap<>())
-//                        .merge(selectedProduct, quantity, Integer::sum);
-//
-//                addMoreProducts = inputValidator.getValidatedYesNoInput("Add another product? (yes/no): ").equalsIgnoreCase("yes");
-//            } while (addMoreProducts);
-//
-//            // Step 4: Create orders for each supplier in the map
-//            for (Supplier supplier : supplierProductMap.keySet()) {
-//                HashMap<Product, Integer> productQuantityMap = supplierProductMap.get(supplier);
-//                orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
-//            }
-//
-//            System.out.println("Orders successfully created.");
-//
-//        } catch (ExitException e) {
-//            System.out.println("Action cancelled.");
-//        }
-//    }
+    public void openNewOrder() {
+        try {
+            // Step 1: Choose order type
+            String orderType = inputValidator.getValidatedInput(
+                    "Choose the type of order:\n1. Shortage of products (one-time)\n2. Periodic product order (constant delivery)\nEnter 1 or 2: ",
+                    input -> input.equals("1") || input.equals("2"),
+                    "Invalid choice. Please enter 1 or 2."
+            );
+
+            boolean isConstantDelivery = orderType.equals("2");
+
+            // Step 2: Display all products available in the system (names only)
+            List<String> productNames = productController.getAllProductNames();
+            if (productNames.isEmpty()) {
+                System.out.println("No products available in the system.");
+                return;
+            }
+
+            System.out.println("Available products:");
+            productNames.forEach(System.out::println); // Print only product names
+
+            // Step 3: Select products and quantities
+            HashMap<Supplier, HashMap<Product, Integer>> supplierProductMap = new HashMap<>();
+            boolean addMoreProducts = true;
+
+            do {
+                String productName = inputValidator.getValidatedInput("Enter Product's name to order: ");
+
+                // Find the product in the database
+                Product product = productController.getProductByName(productName);
+                if (product == null) {
+                    System.out.println("Product not found. Please enter a valid product name.");
+                    continue;
+                }
+
+                int quantity = inputValidator.getValidatedInt("Enter quantity to order: ");
+
+                // Find the cheapest supplier for the given product and quantity using the database
+                Supplier cheapestSupplier = productController.findCheapestSupplier(productName, quantity);
+
+                if (cheapestSupplier == null) {
+                    System.out.println("No supplier found for the selected product and quantity.");
+                    continue;
+                }
+
+                // Add the product and quantity to the supplier's product map
+                supplierProductMap.computeIfAbsent(cheapestSupplier, k -> new HashMap<>())
+                        .merge(product, quantity, Integer::sum);
+
+                addMoreProducts = inputValidator.getValidatedYesNoInput("Add another product? (yes/no): ").equalsIgnoreCase("yes");
+            } while (addMoreProducts);
+
+            // Step 4: Create orders for each supplier in the map
+            for (Supplier supplier : supplierProductMap.keySet()) {
+                HashMap<Product, Integer> productQuantityMap = supplierProductMap.get(supplier);
+                orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
+            }
+
+            System.out.println("Orders successfully created.");
+
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
 
 
 //    public void updateConstantOrder() {
@@ -663,39 +732,6 @@ public class ControllersManager {
         }
 
         return supplyDays;
-    }
-
-    // 9. Update Supplier Agreement
-    private void updateSupplierAgreement(Agreement agreement) {
-        if (agreement == null) {
-            System.out.println("Supplier has no agreement.");
-            return;
-        }
-
-        System.out.println("Updating supplier's agreement.");
-        boolean keepUpdating = true;
-        while (keepUpdating) {
-            System.out.println("1. Update Supply Days\n2. Update Self Supply\n3. Exit");
-            int choice = inputValidator.getValidatedInt("Choose an option: ");
-
-            switch (choice) {
-                case 1:
-                    List<String> supplyDays = selectSupplyDays();
-                    agreement.setSupplyDays(supplyDays);
-                    System.out.println("Supply days updated to: " + supplyDays);
-                    break;
-                case 2:
-                    boolean selfSupply = Boolean.parseBoolean(inputValidator.getValidatedInput("Is the supplier responsible for supplying products? (true/false): ", input -> input.equalsIgnoreCase("true") || input.equalsIgnoreCase("false"), "Please enter 'true' or 'false'."));
-                    agreement.setSelfSupply(selfSupply);
-                    System.out.println("Self-supply field has been updated to: " + (selfSupply ? "Supplier responsible" : "Company responsible"));
-                    break;
-                case 3:
-                    keepUpdating = false;
-                    break;
-                default:
-                    System.out.println("Invalid option.");
-            }
-        }
     }
 
     // Updated uploadBasicInformation method

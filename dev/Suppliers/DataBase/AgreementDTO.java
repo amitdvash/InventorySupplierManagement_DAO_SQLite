@@ -308,4 +308,39 @@ public class AgreementDTO implements IDTO<Agreement> {
         }
         return agreement;
     }
+
+    public void updateSelfSupplyInDatabase(int agreementID, boolean selfSupply) {
+        String sql = "UPDATE Agreements SET selfSupply = ? WHERE agreementID = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setBoolean(1, selfSupply);
+            pstmt.setInt(2, agreementID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateSupplyDaysInDatabase(int agreementID, List<String> newSupplyDays) {
+        String deleteSQL = "DELETE FROM AgreementSupplyDays WHERE agreementID = ?";
+        String insertSQL = "INSERT INTO AgreementSupplyDays (agreementID, dayName) VALUES (?, ?)";
+
+        try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSQL)) {
+            deleteStmt.setInt(1, agreementID);
+            deleteStmt.executeUpdate(); // Delete existing supply days
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try (PreparedStatement insertStmt = connection.prepareStatement(insertSQL)) {
+            for (String day : newSupplyDays) {
+                insertStmt.setInt(1, agreementID);
+                insertStmt.setString(2, day);
+                insertStmt.addBatch();
+            }
+            insertStmt.executeBatch(); // Insert new supply days
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

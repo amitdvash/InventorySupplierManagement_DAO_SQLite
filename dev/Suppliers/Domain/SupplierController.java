@@ -114,4 +114,9 @@ public class SupplierController {
             System.out.println("Supplier not found: " + supplierID);
         }
     }
+
+    // Method to update supplier in the database
+    public void updateSupplier(Supplier supplier) {
+        supplierDTO.update(supplier); // Update supplier details in the database
+    }
 }

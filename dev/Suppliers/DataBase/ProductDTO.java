@@ -114,17 +114,19 @@ public class ProductDTO implements IDTO<Product> {
 
     // Find the cheapest supplier for a product and quantity using SQL queries
     public Supplier findCheapestSupplier(String productName, int quantity) {
-        String sql = "SELECT s.* FROM Products p " +
-                "JOIN productDiscounts pd ON p.catalogID = pd.catalogID " +
+        String sql = "SELECT s.*, p.price, COALESCE(pd.discount, 0) AS discount " +
+                "FROM Products p " +
+                "LEFT JOIN productDiscounts pd ON p.catalogID = pd.catalogID AND pd.quantity::integer <= ? " +
                 "JOIN Agreements a ON p.agreementID = a.agreementID " +
                 "JOIN Suppliers s ON a.supplierID = s.supplierID " +
-                "WHERE p.name = ? AND pd.quantity <= ? " +
-                "ORDER BY (p.price - (p.price * pd.discount / 100)) ASC " +
+                "WHERE p.name = ? " +
+                "ORDER BY (p.price - (p.price * COALESCE(pd.discount, 0) / 100)) ASC " +
                 "LIMIT 1";
+
         Supplier supplier = null;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, productName);
-            pstmt.setInt(2, quantity);
+            pstmt.setString(2, productName);
+            pstmt.setInt(1, quantity);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 supplier = new Supplier(
@@ -133,7 +135,7 @@ public class ProductDTO implements IDTO<Product> {
                         rs.getString("bankAccount"),
                         PaymentMethod.valueOf(rs.getString("paymentMethod")),
                         null,
-                        new SupplierContact(rs.getString("name"), rs.getString("phoneNumber"), rs.getString("email"))
+                        new SupplierContact(rs.getString("name"), rs.getString("phone"), rs.getString("email"))
                 );
             }
         } catch (SQLException e) {
@@ -209,4 +211,32 @@ public class ProductDTO implements IDTO<Product> {
             e.printStackTrace();
         }
     }
+
+    public void deleteProductDiscounts(int catalogID) {
+        String sql = "DELETE FROM productDiscounts WHERE catalogID = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, catalogID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteDiscount(int catalogID, int quantity) {
+        String sql = "DELETE FROM productDiscounts WHERE catalogID = ? AND quantity = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, catalogID);
+            pstmt.setInt(2, quantity);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Discount for catalogID " + catalogID + " and quantity " + quantity + " deleted successfully.");
+            } else {
+                System.out.println("No discount found for catalogID " + catalogID + " and quantity " + quantity + ".");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
