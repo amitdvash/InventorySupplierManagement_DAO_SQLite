@@ -19,12 +19,11 @@ public class Controller_Menu
     private static Controller_Manager managerController = new Controller_Manager();
     private static Controller_Worker workerController = new Controller_Worker();
     protected static Scanner scanner = new Scanner(System.in);
-
     protected static Connection sql_Connection;
-    protected static Item_SQL item_sql;
-    protected static ProductSQL productSQL;
 
-    protected static Inventory inventory = new Inventory();
+    protected static Inventory inventory;
+
+
 
     public void setInventory(Inventory inventory) {
         Controller_Menu.inventory = inventory;
@@ -40,20 +39,15 @@ public class Controller_Menu
     }
 
     public static void runProgram() throws SQLException {
-        initializeSQLConnection();
+        initializeInventorySystem();
         Controller_Menu.dataMenu();
         Controller_Menu.registerMenu();
     }
 
-    private static void initializeSQLConnection() throws SQLException {
-        sql_Connection = SQLiteDB.connect();
-        CreateTable.initializeTables();
-        item_sql = new Item_SQL(sql_Connection);
-        productSQL = new ProductSQL(sql_Connection);
-    }
 
 
-    static void dataMenu() {
+
+    static void dataMenu() throws SQLException {
         System.out.println("===== Data Menu =====");
         System.out.println("1. Initialize with Predefined Data");
         System.out.println("2. Start with Empty System");
@@ -130,7 +124,26 @@ public class Controller_Menu
         }
     }
 
+    // Method to initialize the connections and objects
+    public static void initializeInventorySystem() {
+        try {
+            // Establish the SQLite connection
+            sql_Connection = SQLiteDB.connect();
+            System.out.println("Database connection established successfully.");
 
+            // Initialize the Inventory object
+            inventory = new Inventory(sql_Connection);
+            System.out.println("Inventory initialized successfully.");
+
+            CreateTable.initializeTables(sql_Connection);
+
+            System.out.println("initializeTables was tables successfully");
+
+        } catch (SQLException e) {
+            // If there's an error during initialization, throw a runtime exception
+            throw new RuntimeException("Failed to initialize inventory system", e);
+        }
+    }
 
 
 

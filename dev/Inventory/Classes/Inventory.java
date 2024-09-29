@@ -3,399 +3,442 @@ package dev.Inventory.Classes;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
+import dev.Inventory.SqlLite.ProductSQL;
+import dev.Inventory.SqlLite.Item_SQL;
+import dev.Inventory.SqlLite.Discount_SQL;
 
-
-import java.io.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+public class Inventory {
 
-//Facade Design Pattern - Inventory
-//All the complexity of the Inventory is hidden from the user
-//The user only needs to interact with the Inventory class
+    private Connection connection;
+    private ProductSQL productSQL;
+    private Item_SQL itemSQL;
+    private Discount_SQL discountSQL;
 
-public class Inventory
-{
-    //A Singleton Inventory
-    //There is only one instance of the Inventory
-    private HashMap<String , Product> products;
-    private static Inventory instance = null;
-    private String  ManagerFilePath = "dev/Inventory/Files/Managers.txt";
-    private String  WorkerFilePath = "dev/Inventory/Files/Workers.txt";
-
-    public Inventory()
-    {
-        //Initialize the Inventory
-        products = new HashMap<String , Product>();
+    public Inventory(Connection connection) throws SQLException {
+        // Initialize database connection for products, items, and discounts
+        this.connection = connection; // Reuse this connection across operations
+        this.productSQL = new ProductSQL(connection);
+        this.itemSQL = new Item_SQL(connection);
+        this.discountSQL = new Discount_SQL(connection);
     }
-//    public static Inventory getInstance()
-//    {
-//        if(instance == null)
-//        {
-//            instance = new Inventory();
-//        }
-//        return instance;
-//    }
 
-
-    public void addProduct(String name, String category, String subCategory, double size, int minQuantity)
-    {
+    // Add a product to the inventory
+    public void addProduct(String name, String category, String subCategory, double size, int minQuantity) throws SQLException {
+        // Create a new product
         Product product = new Product(name, category, subCategory, size, minQuantity, null);
-        //Add a product to the inventory
-        for (Product prod : products.values())
-        {
-            if (prod.equals(product))
-            {
-                //If the product already exists throw an exception
-                errorMsg("Product : "+ product.getName() + " already exists in the inventory ");
-                return;
-            }
-        }
-        products.put(product.HashCode() , product);
-        SystemMsg("Product Creation: " +product.getName() + " added successfully to the inventory");
-    }
 
-    public void removeProduct (Product product)
-    {
-        //Remove the product from the inventory
-        //If the product does not exist throw an exception
-        if (products.containsKey(product.HashCode()))
-        {
-            products.remove(product.HashCode());
-        }
-        else
-        {
-            errorMsg("Product does not exist in the inventory");
-        }
-    }
-
-    public void addItem(String name, double costPrice, double sellingPrice, String manufacturer, String category, String subCategory, double size, LocalDate expiry, E_Item_Status Status, E_Item_Place place)
-    {
-        Item item = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, Status, place);
-        //Add an item to the inventory
-        for (Product product : products.values())
-        {
-            if (product.Matched_item_product(item))
-            {
-                //If the product matches to this item, add the item to the product
-                try
-                {
-                    product.addItem(item);
-                    item.updateStatus();
-                    SystemMsg(item.getName() + " ,id : " + item.getId() +" added successfully to " + product.getName());
-                    return;
-                }
-                catch (IllegalArgumentException e) {
-                    //If the item already exists in the product, throw an exception
-                    System.out.println(e.getMessage());
-                    return;
-                }
-            }
-        }
-
-        //If the product matches to this item does not exist, create a new product and add the item to it
-        errorMsg("Product named: " + item.getName() + " from Category: " + item.getCategory() + " and SubCategory: " + item.getSub_category() + " does not exist , so this item cannot be added\n please add a matching product first");
-//        Product product = new Product(item.getName() , item.getCategory() , item.getSub_category() , item.getSize() ,5 , null );
-//        this.addProduct(product);
-//        System.out.println(item.getName() + " ,id : " + item.getId() +" added successfully to " + product.getName());
-//        this.products.get(item.getName()).addItem(item);
-    }
-    public void removeItem(Item item)
-    {
-        //Remove an item from the inventory
-        for (Product product : products.values())
-        {
-            //If the product matches to this item, remove the item from the product
-            //inside the method of the product there is a check if the item exists
-
-            if (product.Matched_item_product(item))
-            {
-                try
-                {
-                    product.removeItem(item);
-                    SystemMsg(item.getName() + " ,id : " + item.getId() +" removed successfully from " + product.getName());
-
-                    return;
-                }
-                catch (IllegalArgumentException e) {
-                    //If the item does not exist in the product, throw an exception
-                    System.out.println(e.getMessage());
-                    return;
-
-                }
-            }
-        }
-        //If the product matches to this item does not exist, send a message
-        errorMsg(item.getName() + " ,id : " + item.getId() +" does not exist in the inventory");
-//        throw new IllegalArgumentException("Item does not exist in the inventory");
-    }
-
-
-
-
-
-    public List<Product> getProductsByName(String name)
-    {
-        //Return the product with the given name
-        //If the product does not exist, return null
-        return products.values().stream().filter(product -> product.getName().equals(name)).toList();
-    }
-    public List<Product> getProductsByStatus(E_Product_Status status)
-    {
-        /*Return a list of products with the given status
-        if the status is null , return empty list
-        */
-        return products.values().stream().filter(product -> product.getStatus() == status).toList();
-    }
-
-
-    public List<Product> getProductsByCategory(String category)
-    {
-        //Return a list of products with the given category
-        //If the category is null, return empty list
-        return products.values().stream().filter(product -> product.getCategory().equals(category)).toList();
-    }
-    public List<Product> getProductsBySubCategory(String Subcategory)
-    {
-        //Return a list of products with the given category
-        //If the category is null, return empty list
-        return products.values().stream().filter(product -> product.getSub_category().equals(Subcategory)).toList();
-    }
-    public List<Product> getProductsBySize(int size)
-    {
-        //Return a list of products with the given size
-        //If the size is null, return empty list
-        return products.values().stream().filter(product -> product.getSize() == size).toList();
-    }
-    public List<Item> getItemsByStatus(E_Item_Status Status)
-    {
-        //Return a list of items with the given place
-        //If the place is null, return empty list
-        List<Item> items = new ArrayList<Item>();
-        for (Product product : products.values())
-        {
-            for (Item item : product.getItemsByStatus(Status))
-            {
-                items.add(item);
-            }
-//            items.addAll(product.getItemsByStatus(Status));
-        }
-        return items;
-    }
-    public List<Item> getItemsByPlace(E_Item_Place place)
-    {
-        //Return a list of items with the given place
-        //If the place is null, return empty list
-        List<Item> items = new ArrayList<Item>();
-        for (Product product : products.values())
-        {
-            for (Item item : product.getItemsByPlace(place))
-            {
-                items.add(item);
-            }
-//            items.addAll(product.getItemsByStatus(Status));
-        }
-        return items;
-    }
-    @Override
-    public String toString() {
-        String prod_S = "";
-        for (Product prod : products.values())
-        {
-            prod_S+= ( prod.toString() + "\n");
-        }
-        return "Inventory\n{" +
-                "products : \n" + prod_S +
-                '}';
-    }
-
-    public void moveItemTo(Item item, E_Item_Place place) {
-        //Move an item to the given place
-        //If the item does not exist, throw an exception
-        for (Product product : products.values())
-        {
-            if (product.Matched_item_product(item))
-            {
-                product.moveItemTo(item , place);
-                return;
-            }
-        }
-        errorMsg("Item does not exist in the inventory");
-    }
-    public void SetMinQuantity(Product product , int min_quantity)
-    {
-        //Set the minimum quantity for the product
-        //If the product does not exist, throw an exception
-        if (products.containsKey(product.getName()))
-        {
-            products.get(product.getName()).setMin_quantity(min_quantity);
-        }
-        else
-        {
-            errorMsg("Product does not exist");
-        }
-    }
-    public void errorMsg(String msg)
-    {
-        //Print an error message
-        System.out.println(msg);
-    }
-    public void SystemMsg(String msg)
-    {
-        //Print a system message
-        System.out.println(msg);
-    }
-
-    public void applyDiscountToProduct(Product p1, double discountPercentage, LocalDate startDay, LocalDate endDay) {
-        //Apply a discount to the product
-        //If the product does not exist, throw an exception
-        int count=0;
-        if (p1 == null)
-        {
-            errorMsg("Product does not exist");
+        // Check if the product already exists
+        if (productSQL.readByCompositeKey(name, category, subCategory, size) != null) {
+            System.out.println("Error: Product " + name + " already exists in the inventory.");
             return;
         }
-        Discount discount = new Discount(discountPercentage, startDay, endDay);
-        if (products.containsKey(p1.HashCode()))
-        {
-            products.get(p1.HashCode()).setDiscount(discount);
-            count++;
-        }
-        if (count == 0) {
-            errorMsg("Product : " + p1.getName() +" does not exist");
-        } else {
-            SystemMsg(discount.toString() +" applied to all items in the Product : " + p1.HashCode());
-        }
+
+        // Insert the product into the database
+        productSQL.create(product);
+        System.out.println("Product " + name + " added successfully.");
     }
-    public void applyDiscountToCategory(String category,double discountPercentage, LocalDate startDay, LocalDate endDay)
-    {
-        //Apply a discount to the category
-        //If the category does not exist, throw an exception
-        int count =0 ;
-        Discount discount = new Discount(discountPercentage, startDay, endDay);
-        for (Product product : products.values())
-        {
-            if (product.getCategory().equals(category))
-            {
-                product.setDiscount(discount);
-                count++;
-            }
-        }
-        if (count == 0) {
-            errorMsg("Category : " + category +" does not exist");
-        } else {
-            SystemMsg(discount.toString() +" applied to all items in the category : " + category);
+
+    // Remove a product from the inventory
+    public void removeProduct(String name, String category, String subCategory, double size) throws SQLException {
+        // Find the product in the database
+        Product product = productSQL.readByCompositeKey(name, category, subCategory, size);
+
+        if (product == null) {
+            System.out.println("Error: Product " + name + " does not exist in the inventory.");
+            return;
         }
 
+        // Delete the product from the database
+        productSQL.delete(product);
+        System.out.println("Product " + name + " removed successfully.");
     }
-    public void applyDiscountToSubCategory(String subcategory, double discountPercentage, LocalDate startDay, LocalDate endDay)
-    {
-        //Apply a discount to the sub-category
-        //If the sub-category does not exist, throw an exception
-        int count =0 ;
-        Discount discount = new Discount(discountPercentage, startDay, endDay);
-        for (Product product : products.values())
-        {
-            if (product.getSub_category().equals(subcategory))
-            {
-                product.setDiscount(discount);
-                count++;
-            }
+
+    // Add an item to a product in the inventory
+    public void addItemToProduct(String name, double costPrice, double sellingPrice, String manufacturer, String category,
+                                 String subCategory, double size, LocalDate expiry, E_Item_Status status, E_Item_Place place) throws SQLException {
+        // Find the corresponding product
+        Product product = productSQL.readByCompositeKey(name, category, subCategory, size);
+
+        // Check if the product exists
+        if (product == null) {
+            System.out.println("Error: Product not found.");
+            return;
         }
-        if (count == 0) {
-            errorMsg("SubCategory : " + subcategory +" does not exist");
+
+
+
+        // Create a new item
+        Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, status, place);
+
+        // Add the item to the database
+        newItem.updateStatus();
+        if (itemSQL.create(newItem)) {
+            // Add the item to the product's list of items
+            product.addItem(newItem);  // Updates quantities in the product and status
+            productSQL.update(product);
+            System.out.println("Item " + name + " added to product " + product.getName() + " successfully.");
         } else {
-            SystemMsg(discount.toString() +" applied to all items in the Subcategory : " + subcategory);
+            System.out.println("Error: Could not add the item to the product.");
         }
     }
-    public Item findItem(String name, String category, String subCategory, double size, E_Item_Place place) {
-        // Iterate through all products in the inventory
-        for (Product product : products.values()) {
-            // Check if the product matches the category and sub-category
-            if (product.getCategory().equals(category) && product.getSub_category().equals(subCategory)) {
-                // If the product matches, check its items for a match
-                for (Item item : product.getItems().values()) {
-                    // Check if the item matches the name, size, and place (store or warehouse)
-                    if (item.getName().equals(name) && item.getSize() == size && item.getPlace() == place) {
-                        return item; // Item found
+
+    // Remove an item from a product in the inventory
+    public void removeItemFromProduct(String name, String category, String subCategory, double size, E_Item_Place place) throws SQLException {
+        // Find the corresponding product
+        Product product = productSQL.readByCompositeKey(name, category, subCategory, size);
+
+        // Check if the product exists
+        if (product == null) {
+            System.out.println("Error: Product not found.");
+            return;
+        }
+
+        // Check if the item exists in the product's inventory
+        Item item = itemSQL.readByCompositeKey(name, category, subCategory, size, place);
+        if (item == null) {
+            System.out.println("Error: Item not found for the product.");
+            return;
+        }
+
+        // Remove the item from the database
+        if (itemSQL.delete(item)) {
+            // Remove the item from the product's list of items
+            product.removeItem(item);  // Updates quantities in the product and status
+            productSQL.update(product);
+            System.out.println("Item " + name + " removed from product " + product.getName() + " successfully.");
+        } else {
+            System.out.println("Error: Could not remove the item from the product.");
+        }
+    }
+
+
+    // Transfer an item from the warehouse to the shop, or vice versa
+    // Transfer an item from one location to another
+    public void transferItem(String name, String category, String subCategory, double size, E_Item_Place fromPlace, E_Item_Place toPlace) throws SQLException {
+        // Find the item at its current place
+        Item item = itemSQL.readByCompositeKey(name, category, subCategory, size, fromPlace);
+
+        if (item == null) {
+            System.out.println("Error: Item not found in the " + fromPlace + ".");
+            return;
+        }
+
+        // Update the item's place to the new location
+        item.setPlace(toPlace);  // Set the new place
+
+        // Update the item in the database using the old place to find it
+        if (itemSQL.update_new(item, fromPlace)) {
+            System.out.println("Item " + name + " transferred from " + fromPlace + " to " + toPlace + " successfully.");
+        } else {
+            System.out.println("Error: Could not transfer the item.");
+        }
+    }
+    // Apply a discount to a specific product
+
+    public void applyDiscountToProduct(String name, double discountPercentage, LocalDate startDay, LocalDate endDay) throws SQLException {
+        // Find all products by name (returns a list)
+        List<Product> products = productSQL.readByName(name);
+
+        // Check if the list is empty
+        if (products == null || products.isEmpty()) {
+            System.out.println("Error: No products found with the name " + name);
+            return;
+        }
+
+        // Create the discount once and apply it to all products
+        Discount discount = new Discount(discountPercentage, startDay, endDay);
+        discountSQL.create(discount);  // Save the discount in the database
+
+        // Iterate through each product and apply the discount
+        for (Product product : products) {
+            product.setDiscount(discount);
+
+            // Update the priceAfterDiscount using Discount_SQL
+            discountSQL.updatePricesByName(product.getName(), discountPercentage);
+
+            // Update the product in the database
+            productSQL.update(product);
+
+            System.out.println("Discount applied to product " + product.getName() + " and prices updated.");
+        }
+    }
+
+    public void applyDiscountToCategory(String category, double discountPercentage, LocalDate startDay, LocalDate endDay) throws SQLException {
+        // Find all products in the specified category
+        List<Product> products = productSQL.readAllByCategory(category);
+
+        if (products == null || products.isEmpty()) {
+            System.out.println("Error: No products found in the category " + category);
+            return;
+        }
+
+        // Create the discount
+        Discount discount = new Discount(discountPercentage, startDay, endDay);
+        discountSQL.create(discount);
+
+        // Iterate through all products in the category
+        for (Product product : products) {
+            // Apply the discount to the product
+            product.setDiscount(discount);
+
+            // Update the product in the database
+            productSQL.update(product);
+        }
+
+        // Delegate price updating to Discount_SQL
+        discountSQL.updateCategoryPrices(category, discountPercentage);
+
+        System.out.println("Discount applied to all products in category " + category + " and prices updated.");
+    }
+
+    public void applyDiscountToSubCategory(String subCategory, double discountPercentage, LocalDate startDay, LocalDate endDay) throws SQLException {
+        // Find all products in the specified sub-category
+        List<Product> products = productSQL.readAllBySubCategory(subCategory);
+
+        if (products == null || products.isEmpty()) {
+            System.out.println("Error: No products found in the sub-category " + subCategory);
+            return;
+        }
+
+        // Create the discount
+        Discount discount = new Discount(discountPercentage, startDay, endDay);
+        discountSQL.create(discount);
+
+        // Iterate through all products in the sub-category
+        for (Product product : products) {
+            // Apply the discount to the product
+            product.setDiscount(discount);
+
+            // Update the product in the database
+            productSQL.update(product);
+        }
+
+        // Delegate price updating to Discount_SQL
+        discountSQL.updateSubCategoryPrices(subCategory, discountPercentage);
+
+        System.out.println("Discount applied to all products in sub-category " + subCategory + " and prices updated.");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+    public void generateAllProductsReport() {
+        List<Product> products = productSQL.readAll();  // Fetch all products from the database
+
+        if (products.isEmpty()) {
+            System.out.println("No products found.");
+        } else {
+            System.out.println("=== All Products Report ===");
+            for (Product product : products) {
+                System.out.println(product);  // Print product details (assuming Product has a meaningful toString() method)
+
+                // Fetch all items associated with the current product
+                List<Item> items = itemSQL.readAllByProduct(
+                        product.getName(),
+                        product.getCategory(),
+                        product.getSub_category(),
+                        product.getSize()
+                );
+
+                if (items.isEmpty()) {
+                    System.out.println("  No items found for this product.");
+                } else {
+                    System.out.println("  Items for this product:");
+                    for (Item item : items) {
+                        System.out.println("    " + item);  // Assuming Item has a meaningful toString() method
                     }
                 }
+
+                System.out.println("------------------------------------------");
             }
         }
-        // If no item is found, return null
-        return null;
-    }
-    public Product findOrProduct(String name, String category, String subCategory, double size) {
-        // Iterate through all products in the inventory
-        for (Product product : products.values()) {
-            // Check if the product matches the category, sub-category, and size
-            if (product.getCategory().equals(category) && product.getSub_category().equals(subCategory) && product.getSize() == size && name.equals(product.getName())) {
-                return product;
-            }
-        }
-        // If neither an item nor a product is found, return null
-        return null;
     }
 
-    public Product getProduct(String name , String Category , String SubCategory , double size)
-    {
-        //Return the product with the given name
-        //If the product does not exist, return null
-        if(products.containsKey(name+"_"+Category+"_"+SubCategory+"_"+size))
-        {
-            return products.get(name+"_"+Category+"_"+SubCategory+"_"+size);
-        }
-        return null;
-    }
-//    public Product getProduct(Product product)
-//    {
-//        //Return the product with the given name
-//        //If the product does not exist, return null
-//        if(products.containsKey(product.HashCode()))
-//        {
-//            return products.get(product.HashCode());
-//        }
-//        return null;
-//    }
+    public void generateProductReport(String productName, String category, String subCategory, double size) throws SQLException {
+        // Fetch the specific product by its composite key (name, category, subCategory, size)
+        Product product = productSQL.readByCompositeKey(productName, category, subCategory, size);
 
-    public boolean registerManager(String name1, String password)
-    {
+        if (product == null) {
+            System.out.println("Error: Product not found.");
+        } else {
+            System.out.println("=== Product Report for " + productName + " ===");
+            System.out.println(product);  // Print product details (assuming Product has a meaningful toString() method)
 
-        try (BufferedReader br = new BufferedReader(new FileReader(ManagerFilePath)))
-        {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.equals(name1 + " " + password))
-                {
-                    return true;
+            // Fetch all items associated with the specific product
+            List<Item> items = itemSQL.readAllByProduct(product.getName(), product.getCategory(), product.getSub_category(), product.getSize());
+
+            if (items.isEmpty()) {
+                System.out.println("  No items found for this product.");
+            } else {
+                System.out.println("  Items for this product:");
+                for (Item item : items) {
+                    System.out.println("    " + item);  // Print each item (assuming Item has a meaningful toString() method)
                 }
             }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
 
+            System.out.println("------------------------------------------");
+        }
     }
-    public boolean registerWorker(String name1, String password)
-    {
 
-        try (BufferedReader br = new BufferedReader(new FileReader(WorkerFilePath)))
-        {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.equals(name1 + " " + password))
-                {
-                    return true;
+    public void generateSubCategoryReport(String subCategory) throws SQLException {
+        // Fetch all products by subCategory
+        List<Product> products = productSQL.readAllBySubCategory(subCategory);
+
+        if (products.isEmpty()) {
+            System.out.println("No products found for sub-category: " + subCategory);
+        } else {
+            System.out.println("=== SubCategory Report for " + subCategory + " ===");
+            for (Product product : products) {
+                // Print each product's details
+                System.out.println(product);  // Assuming Product has a meaningful toString() method
+
+                // Fetch all items associated with this product
+                List<Item> items = itemSQL.readAllByProduct(product.getName(), product.getCategory(), product.getSub_category(), product.getSize());
+
+                if (items.isEmpty()) {
+                    System.out.println("  No items found for this product.");
+                } else {
+                    System.out.println("  Items for this product:");
+                    for (Item item : items) {
+                        System.out.println("    " + item);  // Assuming Item has a meaningful toString() method
+                    }
                 }
-            }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
 
+                System.out.println("------------------------------------------");
+            }
+        }
+    }
+
+    public void generateCategoryReport(String category) throws SQLException {
+        // Fetch all products by category
+        List<Product> products = productSQL.readAllByCategory(category);
+
+        if (products.isEmpty()) {
+            System.out.println("No products found for category: " + category);
+        } else {
+            System.out.println("=== Category Report for " + category + " ===");
+            for (Product product : products) {
+                // Print each product's details
+                System.out.println(product);  // Assuming Product has a meaningful toString() method
+
+                // Fetch all items associated with this product
+                List<Item> items = itemSQL.readAllByProduct(product.getName(), product.getCategory(), product.getSub_category(), product.getSize());
+
+                if (items.isEmpty()) {
+                    System.out.println("  No items found for this product.");
+                } else {
+                    System.out.println("  Items for this product:");
+                    for (Item item : items) {
+                        System.out.println("    " + item);  // Assuming Item has a meaningful toString() method
+                    }
+                }
+
+                System.out.println("------------------------------------------");
+            }
+        }
+    }
+
+    public void generateAboutToFinishReport() {
+        // Fetch all products with status "about_to_finish"
+        List<Product> products = productSQL.readAllByStatus(E_Product_Status.about_to_finish);
+
+        if (products.isEmpty()) {
+            System.out.println("No products are about to finish.");
+            return;
+        }
+
+        System.out.println("=== Products About to Finish Report ===");
+
+        for (Product product : products) {
+            System.out.println(product);  // Print the product details
+
+            // If you want to print associated items, you can retrieve and print them here
+            List<Item> items = itemSQL.readAllByProduct(product.getName(), product.getCategory(), product.getSub_category(), product.getSize());
+            for (Item item : items) {
+                System.out.println("   - " + item);  // Print item details
+            }
+        }
+    }
+
+    public void generateExpiredReport() {
+        // Fetch all items with status "EXPIRED"
+        List<Item> expiredItems = itemSQL.readAllByStatus(E_Item_Status.EXPIRED);
+
+        if (expiredItems.isEmpty()) {
+            System.out.println("No expired items found.");
+            return;
+        }
+
+        System.out.println("=== Expired Items Report ===");
+
+        // Iterate over expired items and print details
+        for (Item item : expiredItems) {
+            System.out.println(item);  // Print the item details
+
+            // Optionally, you can fetch associated products if needed
+            Product product = productSQL.readByCompositeKey(item.getName(), item.getCategory(), item.getSubCategory(), item.getSize());
+            if (product != null) {
+                System.out.println("   Associated Product: " + product);
+            }
+        }
+    }
+
+    public void generateAboutToExpireReport() {
+        // Fetch all items with status "about_to_expire"
+        List<Item> aboutToExpireItems = itemSQL.readAllByStatus(E_Item_Status.about_to_expire);
+
+        if (aboutToExpireItems.isEmpty()) {
+            System.out.println("No items are about to expire.");
+            return;
+        }
+
+        System.out.println("=== Items About to Expire Report ===");
+
+        // Iterate over items that are about to expire and print details
+        for (Item item : aboutToExpireItems) {
+            System.out.println(item);  // Print the item details
+
+            // Optionally, fetch the associated product for each item
+            Product product = productSQL.readByCompositeKey(item.getName(), item.getCategory(), item.getSubCategory(), item.getSize());
+            if (product != null) {
+                System.out.println("   Associated Product: " + product);  // Print associated product details
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public String toString() {
+        List<Product> products = productSQL.readAll();
+        StringBuilder result = new StringBuilder("Inventory:\n");
+        for (Product product : products) {
+            result.append(product.toString()).append("\n");
+        }
+        return result.toString();
     }
 }

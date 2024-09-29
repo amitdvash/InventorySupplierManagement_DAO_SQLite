@@ -3,6 +3,7 @@ import dev.Inventory.Classes.Item;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Controller_Worker extends Controller_Menu
@@ -73,7 +74,7 @@ public class Controller_Worker extends Controller_Menu
             LocalDate expiry = LocalDate.parse(expiryDate);
             E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
 //        Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
-            addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
+            inventory.addItemToProduct(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, E_Item_Status.Available, place);
         }
         catch (Exception e)
         {
@@ -81,10 +82,7 @@ public class Controller_Worker extends Controller_Menu
         }
     }
 
-    public static void addItem(String name, double costPrice, double sellingPrice, String manufacturer, String category, String subCategory, double size, LocalDate expiry, E_Item_Status Status, E_Item_Place place) {
-        item_sql.create( new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, Status, place));
-        inventory.addItem(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, Status, place);
-    }
+ 
 
 
     private static void removeItem() {
@@ -104,20 +102,14 @@ public class Controller_Worker extends Controller_Menu
             // Convert the user's choice into the appropriate enum value for place
             E_Item_Place place = placeChoice == 1 ? E_Item_Place.Store : E_Item_Place.Warehouse;
 //        Item item_to_remove = managerController.findItem(name, category, subCategory, size, place);
-            if (findItem(name, category, subCategory, size, place) == null) {
-                System.out.println("the item dont exists");
-                return;
-            }
 
-            removeItem(findItem(name, category, subCategory, size, place));
+            inventory.removeItemFromProduct(name, category, subCategory, size,place);
+
         }
         catch (Exception e)
         {
             System.out.println("Invalid input. Please try again.");
         }
-    }
-    public static void removeItem(Item item){
-        inventory.removeItem(item);
     }
 
 
@@ -141,12 +133,7 @@ public class Controller_Worker extends Controller_Menu
                 place_item = E_Item_Place.Warehouse;
                 place_to_move = E_Item_Place.Store;
             }
-//        Item item_to_move = managerController.findItem(name, category, subCategory, size, place_item);
-            if (findItem(name, category, subCategory, size, place_item) == null) {
-                System.out.println("the item dont exists");
-                return;
-            }
-            moveItem(findItem(name, category, subCategory, size, place_item), place_to_move);
+            inventory.transferItem(name, category, subCategory, size, place_item, place_to_move);
         }
         catch (Exception e)
         {
@@ -154,9 +141,7 @@ public class Controller_Worker extends Controller_Menu
         }
     }
 
-    public static void moveItem(Item item, E_Item_Place new_palace){
-        inventory.moveItemTo(item, new_palace);
-    }
+
 
 //    public void viewProductDetails(Product product){
 //        System.out.println(inventory.getProduct(product).toString());
@@ -178,12 +163,7 @@ public class Controller_Worker extends Controller_Menu
             String subCategory = scanner.nextLine();
             System.out.print("Enter the size: ");
             double size = Double.parseDouble(scanner.nextLine());
-//        Product product = managerController.findOrProduct(name, category, subCategory, size);
-            if (inventory.findOrProduct(name, category, subCategory, size) == null) {
-                System.out.println("the product dont exists");
-                return;
-            }
-            System.out.println(inventory.findOrProduct(name, category, subCategory, size));
+            inventory.generateProductReport(name, category, subCategory, size);
         }
         catch (Exception e)
         {
@@ -192,9 +172,6 @@ public class Controller_Worker extends Controller_Menu
 
     }
 
-    public static Item findItem(String name, String category, String subCategory, double size, E_Item_Place place) {
-        return inventory.findItem(name, category, subCategory , size, place);
-    }
 
     public boolean registerWorker(String name1, String password)
     {

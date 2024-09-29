@@ -1,3 +1,4 @@
+
 package dev.Inventory.Controllers;
 
 import dev.Inventory.Classes.Product;
@@ -76,15 +77,14 @@ public class Controller_Manager extends Controller_Worker
                     String SubCategory = scanner.nextLine();
                     System.out.print("Enter the Size: ");
                     double Size = Double.parseDouble(scanner.nextLine());
-//                Product product = managerController.inventory.getProduct(name, Category, SubCategory, Size);
-                    applyDiscountToProduct(name, Category, SubCategory, Size, discountPercentage, startDay, endDay);
+                    inventory.applyDiscountToProduct(name, discountPercentage, startDay, endDay);
                     break;
                 case "2":
-                    applyDiscountToCategory(name, discountPercentage, startDay, endDay);
+                    inventory.applyDiscountToCategory(name,discountPercentage,startDay,endDay);
                     break;
 
                 case "3":
-                    applyDiscountToSubCategory(name, discountPercentage, startDay, endDay);
+                    inventory.applyDiscountToSubCategory(name, discountPercentage, startDay, endDay);
                     break;
 
 
@@ -110,41 +110,25 @@ public class Controller_Manager extends Controller_Worker
                 case 1:
                     System.out.print("Enter category: ");
                     String category = scanner.next();
-                    System.out.println("would you like to add a sub-category filter? (y/n)");
-                    String subChoice = scanner.next();
-                    if (subChoice.equals("y")) {
-                        System.out.print("Enter sub-category: ");
-                        String subCategory = scanner.next();
-//                    List<Product> report = managerController.inventory.getProductsBySubCategory(subCategory);
-                        System.out.println(inventory.getProductsByCategory(category).stream().filter(product -> product.getSub_category().equals(subCategory)).toList());
-                    }
-                    if (subChoice.equals("n")) {
-//                    List<Product> report = managerController.inventory.getProductsByCategory(category);
-                        System.out.println(inventory.getProductsByCategory(category));
-                    }
-//                List<Product> report = managerController.inventory.getProductsByCategory(category);
-//                    System.out.println(inventory.getProductsByCategory(category));
+                        inventory.generateCategoryReport(category);
                     break;
                 case 2:
                     System.out.print("Enter sub-category: ");
                     String subCategory = scanner.next();
-//                List<Product> report2 = managerController.inventory.getProductsBySubCategory(subCategory);
-                    System.out.println(inventory.getProductsBySubCategory(subCategory));
+                        inventory.generateSubCategoryReport(subCategory);
                     break;
                 case 3:
-//                List<Product> report3 = managerController.inventory.getProductsByStatus(E_Product_Status.about_to_finish);
-                    System.out.println(inventory.getProductsByStatus(E_Product_Status.about_to_finish));
+                        inventory.generateAboutToFinishReport();
                     break;
                 case 4:
-//                List<Item> report4 = managerController.inventory.getItemsByStatus(E_Item_Status.about_to_expire);
-                    System.out.println(inventory.getItemsByStatus(E_Item_Status.about_to_expire));
+                    inventory.generateAboutToExpireReport();
                     break;
                 case 5:
-//                List<Item> report5 = managerController.inventory.getItemsByStatus(E_Item_Status.EXPIRED);
-                    System.out.println(inventory.getItemsByStatus(E_Item_Status.EXPIRED));
+                    inventory.generateExpiredReport();
+
                     break;
                 case 6:
-                    System.out.println(inventory);
+                    inventory.generateAllProductsReport();
                     break;
                 default:
                     System.out.println("Invalid choice.");
@@ -157,11 +141,7 @@ public class Controller_Manager extends Controller_Worker
         }
     }
 
-    // Generate weekly reports for selected categories
-    public void generateInventoryReport(String category) {
-        var report = inventory.getProductsByName(category);
-        System.out.println(report);
-    }
+
 
     private static void addProduct() {
         try {
@@ -176,9 +156,7 @@ public class Controller_Manager extends Controller_Worker
             System.out.print("Enter minimum quantity: ");
             int minQuantity = scanner.nextInt();
 
-        Product newProduct = new Product(name, category, subCategory, size, minQuantity, null);
-        productSQL.create(newProduct);
-            add_product(name, category, subCategory, size, minQuantity);
+            inventory.addProduct(name, category, subCategory, size, minQuantity);
         }
         catch (Exception e)
         {
@@ -186,28 +164,9 @@ public class Controller_Manager extends Controller_Worker
         }
     }
 
-    public static void add_product(String name, String category, String subCategory, double size, int minQuantity)
-    {
-        inventory.addProduct(name, category, subCategory, size, minQuantity);
-    }
-    // Set a discount on a product
 
-    public static void applyDiscountToProduct(String name, String Category, String SubCategory, double Size, double discountPercentage, LocalDate startDay, LocalDate endDay){
-        inventory.applyDiscountToProduct(inventory.getProduct(name, Category, SubCategory, Size), discountPercentage , startDay , endDay);
-    }
 
-    public static void applyDiscountToCategory(String category, double discountPercentage, LocalDate startDay, LocalDate endDay){
-        inventory.applyDiscountToCategory(category, discountPercentage, startDay, endDay);
-    }
 
-    public static void applyDiscountToSubCategory(String subcategory, double discountPercentage, LocalDate startDay, LocalDate endDay){
-        inventory.applyDiscountToSubCategory(subcategory, discountPercentage, startDay, endDay);
-    }
-
-    public Product findOrProduct(String name, String category, String subCategory, double size) {
-        return inventory.findOrProduct(name, category, subCategory, size);
-
-    }
 
 
     public boolean registerManager(String name1, String password)

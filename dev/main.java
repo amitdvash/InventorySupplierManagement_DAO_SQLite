@@ -23,7 +23,7 @@ import java.util.Scanner;
 public class main
 {
     public static void main(String[] args) throws SQLException {
-       // System.out.println("Hello World");
+        // System.out.println("Hello World");
 ////        System.out.println(item1.toString());
 //        Item item1 = new Item("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
 //        Item item2 = new Item("P2", 20, 30, "Manufacturer2", "Category2", "SubCategory2", 10, LocalDate.now(), E_Item_Status.Available, E_Item_Place.Warehouse);
@@ -107,20 +107,26 @@ public class main
         Item item1 = new Item("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
         Item item2 = new Item("P2", 20, 30, "Manufacturer2", "Category2", "SubCategory2", 10, LocalDate.now(), E_Item_Status.Available, E_Item_Place.Warehouse);
 
-        Product product1=new Product("P1","Category1","SubCategory1",10,4,null);
-        Product product2=new Product("P1","Category","SubCategory1",10,4,null);
+        Product product1 = new Product("P1", "Category1", "SubCategory1", 10, 4, null);
+        Product product2 = new Product("P2", "Category", "SubCategory1", 10, 4, null);
 
-        CreateTable.initializeTables();
-//        Item_SQL itemSql=new Item_SQL(SQLiteDB.connect());
-//        itemSql.create(item1);
-//        item1.setSelling_price(32131311);
-//        itemSql.update(item1);
-//      //  itemSql.delete(item1);
-//        System.out.println(itemSql.readAll());
+        Inventory inventory = new Inventory(SQLiteDB.connect());
+        CreateTable.initializeTables(SQLiteDB.connect());
 
-        ProductSQL productSQL=new ProductSQL(SQLiteDB.connect());
-        productSQL.create(product1);
-        productSQL.create(product2);
+
+
+
+//        inventory.addItemToProduct("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
+//        inventory.addItemToProduct("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
+//
+//        inventory.addProduct("P1", "Category1", "SubCategory1", 10, 4);
+//        inventory.addProduct("P2", "Category1", "SubCategory1", 10, 4);
+//
+//        //   inventory.addProduct("P2", "Category1", "SubCategory1", 10, 4);LocalDate.now();
+//        inventory.addItemToProduct("P1", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
+//        inventory.addItemToProduct("P2", 10, 20, "Manufacturer1", "Category1", "SubCategory1", 10, null, E_Item_Status.Available, E_Item_Place.Store);
+//
+//        inventory.applyDiscountToSubCategory("SubCategory1",50,LocalDate.now(),LocalDate.now().plusDays(500));
 
 
 

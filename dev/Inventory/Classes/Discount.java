@@ -1,26 +1,36 @@
 package dev.Inventory.Classes;
 
-//import dev.Inventory.Interfaces.I_Discount;
-
 import java.time.LocalDate;
-import java.util.Date;
 
-public class Discount
-{
-    private double discountRate;
-    private LocalDate start_date;
-    private LocalDate end_date;
-    public Discount(double discountRate, LocalDate start_date, LocalDate end_date)
-    {
-        //Discount rate must be between 0 and 100
-        setDiscountRate(discountRate);
-        //Start date must be before end date
-        if (start_date.isAfter(end_date))
-            throw new IllegalArgumentException("Start date must be before end date");
-        setStart_date(start_date);
-        setEnd_date(end_date);
+public class Discount {
+    private int id;  // Database primary key
+    private double discountRate;  // Discount rate as a percentage (e.g., 10 for 10%)
+    private LocalDate startDate;  // Start date of the discount
+    private LocalDate endDate;  // End date of the discount
 
+    // Constructor for creating a new discount
+    public Discount(double discountRate, LocalDate startDate, LocalDate endDate) {
+        this.setDiscountRate(discountRate);
+        this.setStartDate(startDate);
+        this.setEndDate(endDate);
+    }
 
+    // Constructor for loading a discount from the database with an existing ID
+    public Discount(int id, double discountRate, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.setDiscountRate(discountRate);
+        this.setStartDate(startDate);
+        this.setEndDate(endDate);
+    }
+
+    // Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getDiscountRate() {
@@ -28,38 +38,58 @@ public class Discount
     }
 
     public void setDiscountRate(double discountRate) {
-        if(discountRate < 0 || discountRate > 100)
+        if (discountRate < 0 || discountRate > 100) {
             throw new IllegalArgumentException("Discount rate must be between 0 and 100");
+        }
         this.discountRate = discountRate;
     }
 
-    public LocalDate getStart_date() {
-        return start_date;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStart_date(LocalDate start_date) {
-        this.start_date = start_date;
+    public void setStartDate(LocalDate startDate) {
+        if (startDate == null) {
+            throw new IllegalArgumentException("Start date cannot be null");
+        }
+        if (endDate != null && startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
+        this.startDate = startDate;
     }
 
-    public LocalDate getEnd_date() {
-        return end_date;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setEnd_date(LocalDate end_date) {
-        this.end_date = end_date;
+    public void setEndDate(LocalDate endDate) {
+        if (endDate == null) {
+            throw new IllegalArgumentException("End date cannot be null");
+        }
+        if (startDate != null && endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("End date cannot be before start date");
+        }
+        this.endDate = endDate;
     }
-    public boolean isAvailable()
-    {
-        return LocalDate.now().isAfter(start_date) && LocalDate.now().isBefore(end_date);
+
+    // Method to check if the discount is currently active
+    public boolean isActive() {
+        LocalDate today = LocalDate.now();
+        return !today.isBefore(startDate) && !today.isAfter(endDate);
     }
-    //---------------------------------------------------------------------------------------------
+
+    // Helper method to determine if a discount is expired
+    public boolean isExpired() {
+        return LocalDate.now().isAfter(endDate);
+    }
+
     @Override
     public String toString() {
         return "Discount{" +
-                "discountRate=" + discountRate +
-                "% , start_date=" + start_date +
-                ", end_date=" + end_date +
+                "id=" + id +
+                ", discountRate=" + discountRate +
+                "%, startDate=" + startDate +
+                ", endDate=" + endDate +
                 '}';
     }
-    //-------------------------------------------------------------------------------------------
 }
