@@ -98,6 +98,7 @@ public class Inventory {
             return;
         }
 
+
         // Check if the item exists in the product's inventory
         Item item = itemSQL.readByCompositeKey(name, category, subCategory, size, place);
         if (item == null) {
@@ -418,6 +419,7 @@ public class Inventory {
             if (product != null) {
                 System.out.println("   Associated Product: " + product);  // Print associated product details
             }
+
         }
     }
 
