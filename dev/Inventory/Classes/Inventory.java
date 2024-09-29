@@ -70,12 +70,22 @@ public class Inventory {
             return;
         }
 
+        Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, status, place);
+
+        double finalSellingPrice = sellingPrice;
+        if (product.getDiscount() != null) {
+            // Apply the discount to the selling price
+            finalSellingPrice = sellingPrice - (sellingPrice * ((product.getDiscount().getDiscountRate()))/100);
+            newItem.setPriceAfterDiscount(finalSellingPrice);
+        }
+
 
 
         // Create a new item
-        Item newItem = new Item(name, costPrice, sellingPrice, manufacturer, category, subCategory, size, expiry, status, place);
+
 
         // Add the item to the database
+        // i need to check that if have activeate a discount
         newItem.updateStatus();
         if (itemSQL.create(newItem)) {
             // Add the item to the product's list of items
@@ -115,6 +125,7 @@ public class Inventory {
         } else {
             System.out.println("Error: Could not remove the item from the product.");
         }
+
     }
 
 
@@ -153,6 +164,9 @@ public class Inventory {
 
         // Create the discount once and apply it to all products
         Discount discount = new Discount(discountPercentage, startDay, endDay);
+        if(discount.isExpired()){
+            return;
+        }
         discountSQL.create(discount);  // Save the discount in the database
 
         // Iterate through each product and apply the discount

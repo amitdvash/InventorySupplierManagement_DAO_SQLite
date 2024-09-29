@@ -164,6 +164,13 @@ public class Product {
 
     }
 
+
+
+
+
+
+
+
     // Check if an item matches the product details
     public boolean matchesItem(Item item) {
         return item.getName().equals(this.name) &&

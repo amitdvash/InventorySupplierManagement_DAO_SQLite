@@ -165,6 +165,13 @@ public class Item {
         }
     }
 
+    public void setPriceAfterDiscount(double priceAfterDiscount) {
+        this.priceAfterDiscount = priceAfterDiscount;
+    }
+
+    // i need b\\
+    //exipert
+
 
     @Override
     public String toString() {
@@ -184,4 +191,5 @@ public class Item {
                 '}';
     }
 }
+
 
