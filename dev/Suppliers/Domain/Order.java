@@ -121,17 +121,21 @@ public class Order {
     }
 
     // Helper method to calculate discount based on quantity
-    private double calculateHighestDiscount(Product product, int quantity) {
+    public double calculateHighestDiscount(Product product, int quantity) {
         HashMap<Integer, Double> discountDetails = product.getDiscountDetails();
-        double discount = 0.0;
+        double highestDiscount = 0.0;
 
-        for (Integer minQuantity : discountDetails.keySet()) {
-            if (quantity >= minQuantity) {
-                discount = discountDetails.get(minQuantity);
+        // Iterate over discount details, and find the highest discount applicable
+        for (Map.Entry<Integer, Double> entry : discountDetails.entrySet()) {
+            int minQuantity = entry.getKey();
+            double discount = entry.getValue();
+
+            if (quantity >= minQuantity && discount > highestDiscount) {
+                highestDiscount = discount;
             }
         }
 
-        return discount;
+        return highestDiscount;
     }
 
     // Check if the order is relevant based on delivery date

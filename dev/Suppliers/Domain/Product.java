@@ -1,6 +1,7 @@
 package dev.Suppliers.Domain;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Product {
     private int catalogID; // ID managed by the database, changed to int
@@ -110,4 +111,18 @@ public class Product {
         }
         System.out.println("-------------------------------");
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return catalogID == product.catalogID; // Assuming catalogID uniquely identifies a product
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(catalogID);
+    }
+
 }

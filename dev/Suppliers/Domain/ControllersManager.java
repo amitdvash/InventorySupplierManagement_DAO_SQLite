@@ -549,9 +549,14 @@ public class ControllersManager {
                     continue;
                 }
 
-                // Add the product and quantity to the supplier's product map
-                supplierProductMap.computeIfAbsent(cheapestSupplier, k -> new HashMap<>())
-                        .merge(product, quantity, Integer::sum);
+                // Get the supplier's product map or create a new one if the supplier isn't already in the map
+                HashMap<Product, Integer> productQuantityMap = supplierProductMap.getOrDefault(cheapestSupplier, new HashMap<>());
+
+                // Update the quantity for the product, setting the last entered quantity
+                productQuantityMap.put(product, quantity);
+
+                // Update the supplier's entry in the supplierProductMap
+                supplierProductMap.put(cheapestSupplier, productQuantityMap);
 
                 addMoreProducts = inputValidator.getValidatedYesNoInput("Add another product? (yes/no): ").equalsIgnoreCase("yes");
             } while (addMoreProducts);
@@ -570,100 +575,110 @@ public class ControllersManager {
     }
 
 
-//    public void updateConstantOrder() {
-//        try {
-//            // Step 1: Display all constant orders
-//            List<Order> constantOrders = orderController.getActiveOrders().stream()
-//                    .filter(Order::isConstantDelivery)
-//                    .toList();
-//
-//            if (constantOrders.isEmpty()) {
-//                System.out.println("No constant orders available.");
-//                return;
-//            }
-//
-//            System.out.println("Available constant orders:");
-//            for (Order order : constantOrders) {
-//                order.printOrderDetails();
-//            }
-//
-//            // Step 2: Select an order to update
-//            Order orderToUpdate = null;
-//            while (orderToUpdate == null) {
-//                String orderID = inputValidator.getValidatedInput("Enter Order ID to update: ");
-//                orderToUpdate = constantOrders.stream()
-//                        .filter(order -> order.getOrderID().equals(orderID))
-//                        .findFirst()
-//                        .orElse(null);
-//
-//                if (orderToUpdate == null) {
-//                    System.out.println("Order not found. Please provide a valid Order ID.");
-//                }
-//            }
-//
-//            // Step 3: Provide update options
-//            String updateOption = inputValidator.getValidatedInput(
-//                    "Choose an option to update the order:\n1. Turn into non-constant order\n2. Update product list\nEnter 1 or 2: ",
-//                    input -> input.equals("1") || input.equals("2"),
-//                    "Invalid choice. Please enter 1 or 2."
-//            );
-//
-//            if (updateOption.equals("1")) {
-//                // Turn order into non-constant and exit
-//                orderController.turnConstantOrderToRegular(orderToUpdate.getOrderID());
-//                System.out.println("Order has been changed to a non-constant order.");
-//                return;
-//            } else if (updateOption.equals("2")) {
-//                // Check if the order is arriving tomorrow
-//
-//                Calendar calendar = Calendar.getInstance();
-//                int todayDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // Get current day of the week (e.g., Sunday = 1, Monday = 2, ...)
-//
-//                calendar.setTime(orderToUpdate.getDeliveryDate());
-//                int deliveryDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // Get delivery day of the week
-//
-//                if ((todayDayOfWeek + 1) % 7 == deliveryDayOfWeek) { // Check if tomorrow is the delivery day
-//                    System.out.println("It is not possible to update the order a day before its arrival.");
-//                    return;
-//                }
-//
-//                // Display available products from the supplier
-//                Supplier supplier = orderToUpdate.getSupplier();
-//                List<Product> availableProducts = supplier.getSupplierAgreement().getProductList();
-//                System.out.println("Available products from Supplier " + supplier.getContact().getName() + ":");
-//                for (Product product : availableProducts) {
-//                    System.out.println("Product Name: " + product.getName());
-//                }
-//
-//                // Create a new product-quantity map
-//                HashMap<Product, Integer> newProductQuantityMap = new HashMap<>();
-//                boolean addMoreProducts = true;
-//                do {
-//                    String productName = inputValidator.getValidatedInput("Enter Product's name to order: ");
-//                    Product selectedProduct = availableProducts.stream()
-//                            .filter(product -> product.getName().equalsIgnoreCase(productName))
-//                            .findFirst()
-//                            .orElse(null);
-//
-//                    if (selectedProduct == null) {
-//                        System.out.println("Product not found. Please enter a valid product name.");
-//                        continue;
-//                    }
-//
-//                    int quantity = inputValidator.getValidatedInt("Enter quantity to order: ");
-//                    newProductQuantityMap.put(selectedProduct, quantity);
-//
-//                    addMoreProducts = inputValidator.getValidatedYesNoInput("Add another product? (yes/no): ").equalsIgnoreCase("yes");
-//                } while (addMoreProducts);
-//
-//                // Update the order with the new product list
-//                orderController.updateOrder(orderToUpdate.getOrderID(), newProductQuantityMap);
-//                System.out.println("Order product list has been successfully updated.");
-//            }
-//        } catch (ExitException e) {
-//            System.out.println("Action cancelled.");
-//        }
-//    }
+    public void updateConstantOrder() {
+        try {
+            // Step 1: Display all constant orders
+            List<Order> constantOrders = orderController.getActiveOrders().stream()
+                    .filter(Order::isConstantDelivery)
+                    .toList();
+
+            if (constantOrders.isEmpty()) {
+                System.out.println("No constant orders available.");
+                return;
+            }
+
+            System.out.println("Available constant orders:");
+            for (Order order : constantOrders) {
+                order.printOrderDetails();
+            }
+
+            // Step 2: Select an order to update
+            Order orderToUpdate = null;
+            while (orderToUpdate == null) {
+                int orderID = inputValidator.getValidatedInt("Enter Order ID to update: ");
+                orderToUpdate = constantOrders.stream()
+                        .filter(order -> order.getOrderID() == orderID)
+                        .findFirst()
+                        .orElse(null);
+
+                if (orderToUpdate == null) {
+                    System.out.println("Order not found. Please provide a valid Order ID.");
+                }
+            }
+
+            // Step 3: Provide update options
+            String updateOption = inputValidator.getValidatedInput(
+                    "Choose an option to update the order:\n1. Turn into non-constant order\n2. Update product list\nEnter 1 or 2: ",
+                    input -> input.equals("1") || input.equals("2"),
+                    "Invalid choice. Please enter 1 or 2."
+            );
+
+            if (updateOption.equals("1")) {
+                // Turn order into non-constant and exit
+                orderController.turnConstantOrderToRegular(orderToUpdate.getOrderID());
+                System.out.println("Order has been changed to a non-constant order.");
+                return;
+            } else if (updateOption.equals("2")) {
+                // Check if the order is arriving tomorrow
+                Date today = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(today);
+                calendar.add(Calendar.DAY_OF_MONTH, 1); // Add one day to current date
+
+                Date tomorrow = calendar.getTime();
+                if (orderToUpdate.getDeliveryDate().equals(tomorrow)) {
+                    System.out.println("It is not possible to update the order a day before its arrival.");
+                    return;
+                }
+
+                // Display available products from the supplier
+                Supplier supplier = orderToUpdate.getSupplier();
+                List<Product> availableProducts = supplier.getSupplierAgreement().getProductList();
+                if (availableProducts.isEmpty()) {
+                    System.out.println("No available products for this supplier.");
+                    return;
+                }
+
+                System.out.println("Available products from Supplier " + supplier.getContact().getName() + ":");
+                for (Product product : availableProducts) {
+                    System.out.println("Product Name: " + product.getName());
+                }
+
+                // Create a new product-quantity map
+                HashMap<Product, Integer> newProductQuantityMap = new HashMap<>();
+                boolean addMoreProducts = true;
+                do {
+                    String productName = inputValidator.getValidatedInput("Enter Product's name to order: ");
+                    Product selectedProduct = availableProducts.stream()
+                            .filter(product -> product.getName().equalsIgnoreCase(productName))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (selectedProduct == null) {
+                        System.out.println("Product not found. Please enter a valid product name.");
+                        continue;
+                    }
+
+                    int quantity = inputValidator.getValidatedInt("Enter quantity to order: ");
+                    newProductQuantityMap.put(selectedProduct, quantity);
+
+                    addMoreProducts = inputValidator.getValidatedYesNoInput("Add another product? (yes/no): ").equalsIgnoreCase("yes");
+                } while (addMoreProducts);
+
+                // Validate that the new product list is not empty
+                if (newProductQuantityMap.isEmpty()) {
+                    System.out.println("No products selected. Update cancelled.");
+                    return;
+                }
+
+                // Update the order with the new product list
+                orderController.updateOrder(orderToUpdate.getOrderID(), newProductQuantityMap);
+                System.out.println("Order product list has been successfully updated.");
+            }
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
 
 
     // Helper method for validated quantity input with retry mechanism
@@ -734,7 +749,7 @@ public class ControllersManager {
         return supplyDays;
     }
 
-    // Updated uploadBasicInformation method
+// Updated uploadBasicInformation method
 //    public void uploadBasicInformation() {
 //        Supplier supplier1 = supplierController.createSupplier("S1", "Bank1", PaymentMethod.CreditCard, null, "Supplier One", "123456", "email1@example.com");
 //

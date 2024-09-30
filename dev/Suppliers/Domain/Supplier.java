@@ -2,6 +2,8 @@ package dev.Suppliers.Domain;
 
 import dev.Suppliers.Enums.PaymentMethod;
 
+import java.util.Objects;
+
 public class Supplier {
     private int supplierID; // Changed to integer to match the database
     private String companyID;
@@ -91,5 +93,18 @@ public class Supplier {
             System.out.println("  No agreement available.");
         }
         System.out.println("----------------------------");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // Check if both references are identical
+        if (o == null || getClass() != o.getClass()) return false; // Check if the object is null or of a different class
+        Supplier supplier = (Supplier) o; // Cast the object to Supplier
+        return supplierID == supplier.supplierID; // Compare by supplierID
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(supplierID); // Generate hash code using supplierID
     }
 }

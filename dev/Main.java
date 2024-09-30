@@ -2,6 +2,7 @@ package dev;
 
 import dev.Suppliers.DataBase.DatabaseConnection;
 import dev.Suppliers.Domain.*;
+import dev.Suppliers.Presentation.UI;
 //import dev.Suppliers.Presentation.UI;
 
 import java.sql.Connection;
@@ -27,16 +28,16 @@ public class Main {
         //controllersManager.deleteProductFromSupplier();
         //controllersManager.updateSupplierFields();
         //controllersManager.updateDiscountDetails();
-        controllersManager.openNewOrder();
+        //controllersManager.openNewOrder();
+        //controllersManager.updateConstantOrder();
+        //controllersManager.printActiveOrders();
+        // Initialize the UI
+        UI ui = new UI(controllersManager);
 
+        // First, ask the user how to start the system (basic info, orders, or no info)
+        //ui.displayStartupOptions();
 
-//        // Initialize the UI
-//        UI ui = new UI(controllersManager);
-//
-//        // First, ask the user how to start the system (basic info, orders, or no info)
-//        ui.displayStartupOptions();
-//
-//        // Then, prompt the user for login and show the corresponding menu based on access level
-//        ui.displayLoginAndMenu();
+        // Then, prompt the user for login and show the corresponding menu based on access level
+        ui.displayLoginAndMenu();
     }
 }
