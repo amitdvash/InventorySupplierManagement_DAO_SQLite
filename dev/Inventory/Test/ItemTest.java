@@ -46,7 +46,7 @@
 //
 //    @Test
 //    void testGetCostPrice() {
-//        assertEquals(10.0, item.getCost_price());
+//        assertEquals(10.0, item.getCostPrice());
 //    }
 //
 //    @Test

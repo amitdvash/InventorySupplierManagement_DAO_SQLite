@@ -1,3 +1,4 @@
+
 package dev.Inventory.Classes;
 
 import java.time.LocalDate;
@@ -6,10 +7,10 @@ public class Discount {
     private int id;  // Database primary key
     private double discountRate;  // Discount rate as a percentage (e.g., 10 for 10%)
     private LocalDate startDate;  // Start date of the discount
-    private LocalDate endDate;  // End date of the discount
+    private LocalDate endDate;  // End date of the discount\
 
     // Constructor for creating a new discount
-    public Discount(double discountRate, LocalDate startDate, LocalDate endDate) {
+    public Discount(double discountRate, LocalDate startDate, LocalDate endDate ) {
         this.setDiscountRate(discountRate);
         this.setStartDate(startDate);
         this.setEndDate(endDate);
@@ -23,7 +24,8 @@ public class Discount {
         this.setEndDate(endDate);
     }
 
-    // Getters and Setters
+
+// Getters and Setters
 
     public int getId() {
         return id;
@@ -39,7 +41,8 @@ public class Discount {
 
     public void setDiscountRate(double discountRate) {
         if (discountRate < 0 || discountRate > 100) {
-            throw new IllegalArgumentException("Discount rate must be between 0 and 100");
+            System.out.println("Discount rate must be between 0 and 100");
+            return;
         }
         this.discountRate = discountRate;
     }
@@ -50,12 +53,15 @@ public class Discount {
 
     public void setStartDate(LocalDate startDate) {
         if (startDate == null) {
-            throw new IllegalArgumentException("Start date cannot be null");
+            System.out.println("Error: Start date cannot be null.");
+            return;  // Exit the method if start date is null
         }
         if (endDate != null && startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("Start date cannot be after end date");
+            System.out.println("Error: Start date cannot be after end date.");
+            return;  // Exit the method if start date is after the end date
         }
-        this.startDate = startDate;
+        this.startDate = startDate;  // Set the start date only if it's valid
+        System.out.println("Start date set to: " + startDate);
     }
 
     public LocalDate getEndDate() {
@@ -64,12 +70,15 @@ public class Discount {
 
     public void setEndDate(LocalDate endDate) {
         if (endDate == null) {
-            throw new IllegalArgumentException("End date cannot be null");
+            System.out.println("Error: End date cannot be null.");
+            return;  // Exit the method if end date is null
         }
         if (startDate != null && endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("End date cannot be before start date");
+            System.out.println("Error: End date cannot be before start date.");
+            return;  // Exit the method if end date is before the start date
         }
-        this.endDate = endDate;
+        this.endDate = endDate;  // Set the end date only if it's valid
+        System.out.println("End date set to: " + endDate);
     }
 
     // Method to check if the discount is currently active

@@ -1,8 +1,9 @@
-package dev.Inventory.SqlLite;
+package dev.Inventory.ClassesDTO;
 
 import dev.Inventory.Classes.Product;
 import dev.Inventory.Classes.Discount;
 import dev.Inventory.Classes.Item;
+import dev.Inventory.DB.SQLiteDB;
 import dev.Inventory.Enums.E_Product_Status;
 import dev.Inventory.Interface.IDTO;
 
@@ -10,15 +11,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductSQL implements IDTO<Product> {
+public class ProductDTO implements IDTO<Product> {
     private Connection connection;
-    private Discount_SQL discountSQL;
-    private Item_SQL itemSQL;
+    private DiscountDTO discountSQL;
+    private ItemDTO itemSQL;
 
-    public ProductSQL(Connection connection) {
+    public ProductDTO(Connection connection) {
         this.connection = connection;
-        this.discountSQL = new Discount_SQL(connection); // Initialize DiscountSQL for handling discounts
-        this.itemSQL = new Item_SQL(connection); // Initialize ItemSQL for handling items
+        this.discountSQL = new DiscountDTO(connection); // Initialize DiscountSQL for handling discounts
+        this.itemSQL = new ItemDTO(connection); // Initialize ItemSQL for handling items
     }
 
     @Override
@@ -73,6 +74,7 @@ public class ProductSQL implements IDTO<Product> {
             } else {
                 pstmt.setNull(3, Types.INTEGER);
             }
+
 
             // Set the quantity value (how many items this product has)
             pstmt.setInt(4, product.getQuantity_in_store()+product.getQuantity_in_warehouse());
@@ -271,6 +273,44 @@ public class ProductSQL implements IDTO<Product> {
         }
 
         return products;
+    }
+
+    // Method to get a list of products where the quantity is below the minimum quantity
+    public List<Product> ProductsBellowQuntity() {
+        List<Product> productsToOrder = new ArrayList<>();
+
+        // SQL query to select products where quantity is less than the minimum quantity
+        String sql = "SELECT name, category, sub_category, size, min_quantity, quantity, discount_id " +
+                "FROM products WHERE quantity < min_quantity";
+
+        try (Connection conn = SQLiteDB.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = pstmt.executeQuery();
+
+            // Loop through the result set and populate the list of products
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String category = rs.getString("category");
+                String subCategory = rs.getString("sub_category");
+                double size = rs.getDouble("size");
+                int minQuantity = rs.getInt("min_quantity");
+                int quantity = rs.getInt("quantity");
+                int discountId = rs.getInt("discount_id");
+
+                // Create a Product object for each row
+                Product product = new Product(name, category, subCategory, size, minQuantity, quantity, discountId);
+
+                // Add the product to the list if it needs to be reordered
+                productsToOrder.add(product);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        // Return the list of products that need to be reordered
+        return productsToOrder;
     }
 
 }

@@ -1,14 +1,10 @@
+
 package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;
-import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
-import dev.Inventory.SqlLite.Item_SQL;
-import dev.Inventory.SqlLite.ProductSQL;
-import dev.Inventory.SqlLite.SQLiteDB;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class Product {
 
@@ -22,6 +18,8 @@ public class Product {
     private int quantity_in_warehouse;
     private Discount discount;
     private E_Product_Status status;
+    private int quantity;
+
 
     // Constructor for creating a new product
     public Product(String name, String category, String sub_category, double size, int min_quantity, Discount discount) throws SQLException {
@@ -36,7 +34,29 @@ public class Product {
         this.quantity_in_warehouse = 0;
     }
 
+
+    // Full constructor with all fields
+    public Product(String name, String category, String sub_category, double size, int min_quantity,
+                   int quantity,int id) {
+        this.name = name;
+        this.category = category;
+        this.sub_category = sub_category;
+        this.size = size;
+        this.min_quantity = min_quantity;
+        this.id = id;
+        this.quantity=quantity;
+
+    }
+
+
+
     // Getters and Setters
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+
 
     public int getId() {
         return id;

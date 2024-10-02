@@ -1,4 +1,4 @@
-package dev.Inventory.SqlLite;
+package dev.Inventory.DB;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -71,14 +71,12 @@ public class CreateTable {
         }
     }
 
-
-    // Method to create the discounts table
     public static void createDiscountsTable(Connection conn) throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS discounts (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "discount_rate REAL NOT NULL, " +
                 "start_date TEXT NOT NULL, " +
-                "end_date TEXT NOT NULL" +
+                "end_date TEXT NOT NULL" +  // Removed the applied_to_field
                 ");";
 
         try (Statement stmt = conn.createStatement()) {
@@ -89,6 +87,7 @@ public class CreateTable {
             throw e;
         }
     }
+
 
     // Method to initialize all tables
     public static void initializeTables(Connection conn) throws SQLException {

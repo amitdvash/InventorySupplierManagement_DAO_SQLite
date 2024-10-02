@@ -1,7 +1,7 @@
-package dev.Inventory.SqlLite;
+package dev.Inventory.ClassesDTO;
 
 import dev.Inventory.Classes.Discount;
-import dev.Inventory.Classes.Product;
+import dev.Inventory.DB.SQLiteDB;
 import dev.Inventory.Interface.IDTO;
 
 import java.sql.*;
@@ -9,10 +9,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Discount_SQL implements IDTO<Discount> {
+public class DiscountDTO implements IDTO<Discount> {
     private Connection connection;
 
-    public Discount_SQL(Connection connection) {
+    public DiscountDTO(Connection connection) {
         this.connection = connection;
     }
 
@@ -119,7 +119,7 @@ public class Discount_SQL implements IDTO<Discount> {
                 rs.getInt("id"),
                 rs.getDouble("discount_rate"),
                 LocalDate.parse(rs.getString("start_date")),
-                LocalDate.parse(rs.getString("end_date"))  // Set the discount ID
+                LocalDate.parse(rs.getString("end_date"))
         );
     }
 
@@ -193,8 +193,35 @@ public class Discount_SQL implements IDTO<Discount> {
         }
     }
 
+    // DiscountDTO class
+    public Discount findDiscountByCategoryOrSubCategory(String category, String subCategory) throws SQLException {
+        String sql = "SELECT * FROM discounts " +
+                "WHERE (category = ?) " +
+                "OR (sub_category = ?) " +
+                "LIMIT 1";  // We prioritize the match by category or subcategory
 
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            // Bind the parameters for category and subcategory
+            pstmt.setString(1, category);
+            pstmt.setString(2, subCategory);
 
+            ResultSet rs = pstmt.executeQuery();
 
+            // If a discount is found, return the Discount object
+            if (rs.next()) {
+                int discountRate = rs.getInt("discount_rate");
+                LocalDate startDate = rs.getDate("start_date").toLocalDate();
+                LocalDate endDate = rs.getDate("end_date").toLocalDate();
 
+                // Create a discount object
+                return new Discount(discountRate, startDate, endDate);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Return null if no discount is found
+        return null;
+    }
 }

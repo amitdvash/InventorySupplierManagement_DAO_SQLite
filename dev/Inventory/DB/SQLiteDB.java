@@ -1,9 +1,5 @@
-package dev.Inventory.SqlLite;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
+package dev.Inventory.DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,4 +18,3 @@ public class SQLiteDB {
         return conn;
     }
 }
-

@@ -1,22 +1,15 @@
 package dev;
 
-import dev.Inventory.Classes.Discount;
-import dev.Inventory.Classes.Inventory;
 import dev.Inventory.Classes.Item;
 import dev.Inventory.Classes.Product;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
-import dev.Inventory.Enums.E_Product_Status;
-import dev.Inventory.SqlLite.CreateTable;
-import dev.Inventory.SqlLite.Item_SQL;
-import dev.Inventory.SqlLite.ProductSQL;
-import dev.Inventory.SqlLite.SQLiteDB;
+import dev.Inventory.DB.CreateTable;
+
+import dev.Inventory.DB.SQLiteDB;
 
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Scanner;
 
 //import  dev.Inventory.Controllers.Controller_Menu.scanner;
 
@@ -110,7 +103,6 @@ public class main
         Product product1 = new Product("P1", "Category1", "SubCategory1", 10, 4, null);
         Product product2 = new Product("P2", "Category", "SubCategory1", 10, 4, null);
 
-        Inventory inventory = new Inventory(SQLiteDB.connect());
         CreateTable.initializeTables(SQLiteDB.connect());
 
 

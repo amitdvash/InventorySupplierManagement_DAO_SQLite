@@ -1,4 +1,5 @@
-package dev.Inventory.SqlLite;
+
+package dev.Inventory.ClassesDTO;
 
 import dev.Inventory.Classes.Item;
 import dev.Inventory.Enums.E_Item_Place;
@@ -10,10 +11,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Item_SQL implements IDTO<Item> {
+public class ItemDTO implements IDTO<Item> {
     private Connection connection;
 
-    public Item_SQL(Connection connection) {
+    public ItemDTO(Connection connection) {
         this.connection = connection;
     }
 
@@ -159,12 +160,14 @@ public class Item_SQL implements IDTO<Item> {
                         rs.getString("category"),
                         rs.getString("sub_category"),
                         rs.getDouble("size"),
-                        expiryDate,  // Set null if expiry_date was null
+                expiryDate,  // Set null if expiry_date was null
                         E_Item_Status.valueOf(rs.getString("status")),
                         E_Item_Place.valueOf(rs.getString("place"))
                 );
                 item.setId(rs.getInt("id"));  // Set the id on the item
                 items.add(item);
+                item.setPriceAfterDiscount(rs.getDouble("priceAfterDiscount"));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -172,39 +175,7 @@ public class Item_SQL implements IDTO<Item> {
         return items;
     }
 
-    // New methods
 
-    // Read an item by its ID
-    public Item readById(int id) {
-        String sql = "SELECT * FROM items WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                LocalDate expiryDate = null;
-                if (rs.getString("expiry_date") != null) {
-                    expiryDate = LocalDate.parse(rs.getString("expiry_date"));
-                }
-                Item item = new Item(
-                        rs.getString("name"),
-                        rs.getDouble("cost_price"),
-                        rs.getDouble("selling_price"),
-                        rs.getString("manufacturer"),
-                        rs.getString("category"),
-                        rs.getString("sub_category"),
-                        rs.getDouble("size"),
-                        expiryDate,
-                        E_Item_Status.valueOf(rs.getString("status")),
-                        E_Item_Place.valueOf(rs.getString("place"))
-                );
-                item.setId(rs.getInt("id"));
-                return item;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     // Read all items that match a specific product (by name, category, sub_category, size)
     public List<Item> readAllByProduct(String name, String category, String sub_category, double size) {
@@ -236,6 +207,8 @@ public class Item_SQL implements IDTO<Item> {
                 );
                 item.setId(rs.getInt("id"));
                 items.add(item);
+                item.setPriceAfterDiscount(rs.getDouble("priceAfterDiscount"));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -243,115 +216,11 @@ public class Item_SQL implements IDTO<Item> {
         return items;
     }
 
-    // Read all items by product and status
-    public List<Item> readAllByProductAndStatus(String name, String category, String sub_category, double size, E_Item_Status status) {
-        List<Item> items = new ArrayList<>();
-        String sql = "SELECT * FROM items WHERE name = ? AND category = ? AND sub_category = ? AND size = ? AND status = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, name);
-            pstmt.setString(2, category);
-            pstmt.setString(3, sub_category);
-            pstmt.setDouble(4, size);
-            pstmt.setString(5, status.toString());
-            ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                LocalDate expiryDate = null;
-                if (rs.getString("expiry_date") != null) {
-                    expiryDate = LocalDate.parse(rs.getString("expiry_date"));
-                }
-                Item item = new Item(
-                        rs.getString("name"),
-                        rs.getDouble("cost_price"),
-                        rs.getDouble("selling_price"),
-                        rs.getString("manufacturer"),
-                        rs.getString("category"),
-                        rs.getString("sub_category"),
-                        rs.getDouble("size"),
-                        expiryDate,
-                        E_Item_Status.valueOf(rs.getString("status")),
-                        E_Item_Place.valueOf(rs.getString("place"))
-                );
-                item.setId(rs.getInt("id"));
-                items.add(item);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return items;
-    }
 
-    // Read all items by product and place
-    public List<Item> readAllByProductAndPlace(String name, String category, String sub_category, double size, E_Item_Place place) {
-        List<Item> items = new ArrayList<>();
-        String sql = "SELECT * FROM items WHERE name = ? AND category = ? AND sub_category = ? AND size = ? AND place = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, name);
-            pstmt.setString(2, category);
-            pstmt.setString(3, sub_category);
-            pstmt.setDouble(4, size);
-            pstmt.setString(5, place.toString());
-            ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                LocalDate expiryDate = null;
-                if (rs.getString("expiry_date") != null) {
-                    expiryDate = LocalDate.parse(rs.getString("expiry_date"));
-                }
-                Item item = new Item(
-                        rs.getString("name"),
-                        rs.getDouble("cost_price"),
-                        rs.getDouble("selling_price"),
-                        rs.getString("manufacturer"),
-                        rs.getString("category"),
-                        rs.getString("sub_category"),
-                        rs.getDouble("size"),
-                        expiryDate,
-                        E_Item_Status.valueOf(rs.getString("status")),
-                        E_Item_Place.valueOf(rs.getString("place"))
-                );
-                item.setId(rs.getInt("id"));
-                items.add(item);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return items;
-    }
 
-    // Read all items by place
-    public List<Item> readAllByPlace(E_Item_Place place) {
-        List<Item> items = new ArrayList<>();
-        String sql = "SELECT * FROM items WHERE place = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, place.toString());
-            ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                LocalDate expiryDate = null;
-                if (rs.getString("expiry_date") != null) {
-                    expiryDate = LocalDate.parse(rs.getString("expiry_date"));
-                }
-                Item item = new Item(
-                        rs.getString("name"),
-                        rs.getDouble("cost_price"),
-                        rs.getDouble("selling_price"),
-                        rs.getString("manufacturer"),
-                        rs.getString("category"),
-                        rs.getString("sub_category"),
-                        rs.getDouble("size"),
-                        expiryDate,
-                        E_Item_Status.valueOf(rs.getString("status")),
-                        E_Item_Place.valueOf(rs.getString("place"))
-                );
-                item.setId(rs.getInt("id"));
-                items.add(item);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return items;
-    }
 
     // Read all items by status
     public List<Item> readAllByStatus(E_Item_Status status) {
@@ -380,6 +249,8 @@ public class Item_SQL implements IDTO<Item> {
                 );
                 item.setId(rs.getInt("id"));
                 items.add(item);
+                item.setPriceAfterDiscount(rs.getDouble("priceAfterDiscount"));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -411,6 +282,8 @@ public class Item_SQL implements IDTO<Item> {
                         E_Item_Place.valueOf(rs.getString("place"))
                 );
             }
+            // ofter that i make the item i can set the price ofter discount
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

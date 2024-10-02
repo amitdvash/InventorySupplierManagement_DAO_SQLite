@@ -1,3 +1,4 @@
+
 package dev.Inventory.Controllers;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -7,10 +8,8 @@ import dev.Inventory.Classes.Inventory;
 //---------------------------------------------------------------------
 //To Take the following classes from the Inventory package
 import dev.Inventory.Data.SystemInitializer;
-import dev.Inventory.SqlLite.CreateTable;
-import dev.Inventory.SqlLite.Item_SQL;
-import dev.Inventory.SqlLite.ProductSQL;
-import dev.Inventory.SqlLite.SQLiteDB;
+import dev.Inventory.DB.CreateTable;
+import dev.Inventory.DB.SQLiteDB;
 //---------------------------------------------------------------------
 
 

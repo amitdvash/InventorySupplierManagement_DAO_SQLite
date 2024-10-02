@@ -1,7 +1,9 @@
 
+
 package dev.Inventory.Controllers;
 
 import dev.Inventory.Classes.Product;
+import dev.Inventory.ClassesDTO.DiscountDTO;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
 
@@ -16,6 +18,7 @@ public class Controller_Manager extends Controller_Worker
         while(true)
         {
             System.out.println("===== Inventory Management System Menu - Manager menu =====");
+            System.out.println("4. Apply order");
             System.out.println("5. Generate Inventory Report (Manager)");
             System.out.println("6. Add Product (Manager)");
             System.out.println("7. Set a discount (Manager)");
@@ -26,6 +29,9 @@ public class Controller_Manager extends Controller_Worker
             String choice = scanner.next();
             scanner.nextLine();  // Consume newline
             switch (choice) {
+                case "4":
+                    createOrder();
+                    break;
                 case "5":
                     generateInventoryReport();
                     break;
@@ -49,6 +55,12 @@ public class Controller_Manager extends Controller_Worker
 
 
 
+
+    private static void createOrder() {
+        inventory.createOrder();
+    }
+
+
     private static void setDiscount()
     {
         try {
@@ -61,9 +73,20 @@ public class Controller_Manager extends Controller_Worker
             System.out.println("Enter the End date (yyyy-mm-dd): ");
             String endString = scanner.next();
             LocalDate endDay = LocalDate.parse(endString);
+            // Check if start date is before end date
+            if (startDay.isAfter(endDay)) {
+                System.out.println("Error: Start date cannot be after the end date.");
+                return;  // Exit method if the dates are invalid
+            }
 
-//        Discount discount = new Discount(discountPercentage, startDay, endDay);
-            // Get the target for the discount (Product, Category, or Subcategory)
+            // Check if today's date is between the start day and the end day
+            LocalDate today = LocalDate.now();
+            if (today.isBefore(startDay) || today.isAfter(endDay)) {
+                System.out.println("Error: Today's date (" + today + ") is not within the discount period (" +
+                        startDay + " to " + endDay + ").");
+                return;  // Exit method if today's date is not within the discount period
+            }
+
             System.out.println("Apply discount to: 1. Product  2. Category  3. Subcategory");
             String choice = scanner.next();
             scanner.nextLine();
@@ -77,7 +100,7 @@ public class Controller_Manager extends Controller_Worker
                     String SubCategory = scanner.nextLine();
                     System.out.print("Enter the Size: ");
                     double Size = Double.parseDouble(scanner.nextLine());
-                    inventory.applyDiscountToProduct(name, discountPercentage, startDay, endDay);
+                    inventory.applyDiscountToProduct(name ,Category,SubCategory,Size,discountPercentage, startDay, endDay);
                     break;
                 case "2":
                     inventory.applyDiscountToCategory(name,discountPercentage,startDay,endDay);
@@ -110,15 +133,15 @@ public class Controller_Manager extends Controller_Worker
                 case 1:
                     System.out.print("Enter category: ");
                     String category = scanner.next();
-                        inventory.generateCategoryReport(category);
+                    inventory.generateCategoryReport(category);
                     break;
                 case 2:
                     System.out.print("Enter sub-category: ");
                     String subCategory = scanner.next();
-                        inventory.generateSubCategoryReport(subCategory);
+                    inventory.generateSubCategoryReport(subCategory);
                     break;
                 case 3:
-                        inventory.generateAboutToFinishReport();
+                    inventory.generateAboutToFinishReport();
                     break;
                 case 4:
                     inventory.generateAboutToExpireReport();

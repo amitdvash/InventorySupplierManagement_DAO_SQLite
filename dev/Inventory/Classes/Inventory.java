@@ -1,11 +1,12 @@
+
 package dev.Inventory.Classes;
 
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
-import dev.Inventory.SqlLite.ProductSQL;
-import dev.Inventory.SqlLite.Item_SQL;
-import dev.Inventory.SqlLite.Discount_SQL;
+import dev.Inventory.ClassesDTO.ProductDTO;
+import dev.Inventory.ClassesDTO.ItemDTO;
+import dev.Inventory.ClassesDTO.DiscountDTO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,19 +16,18 @@ import java.util.List;
 public class Inventory {
 
     private Connection connection;
-    private ProductSQL productSQL;
-    private Item_SQL itemSQL;
-    private Discount_SQL discountSQL;
+    private ProductDTO productSQL;
+    private ItemDTO itemSQL;
+    private DiscountDTO discountSQL;
 
     public Inventory(Connection connection) throws SQLException {
         // Initialize database connection for products, items, and discounts
         this.connection = connection; // Reuse this connection across operations
-        this.productSQL = new ProductSQL(connection);
-        this.itemSQL = new Item_SQL(connection);
-        this.discountSQL = new Discount_SQL(connection);
+        this.productSQL = new ProductDTO(connection);
+        this.itemSQL = new ItemDTO(connection);
+        this.discountSQL = new DiscountDTO(connection);
     }
 
-    // Add a product to the inventory
     public void addProduct(String name, String category, String subCategory, double size, int minQuantity) throws SQLException {
         // Create a new product
         Product product = new Product(name, category, subCategory, size, minQuantity, null);
@@ -40,22 +40,11 @@ public class Inventory {
 
         // Insert the product into the database
         productSQL.create(product);
+
+        // Check if a discount applies to the product by name, category, or subcategory
+
+
         System.out.println("Product " + name + " added successfully.");
-    }
-
-    // Remove a product from the inventory
-    public void removeProduct(String name, String category, String subCategory, double size) throws SQLException {
-        // Find the product in the database
-        Product product = productSQL.readByCompositeKey(name, category, subCategory, size);
-
-        if (product == null) {
-            System.out.println("Error: Product " + name + " does not exist in the inventory.");
-            return;
-        }
-
-        // Delete the product from the database
-        productSQL.delete(product);
-        System.out.println("Product " + name + " removed successfully.");
     }
 
     // Add an item to a product in the inventory
@@ -75,10 +64,9 @@ public class Inventory {
         double finalSellingPrice = sellingPrice;
         if (product.getDiscount() != null) {
             // Apply the discount to the selling price
-            finalSellingPrice = sellingPrice - (sellingPrice * ((product.getDiscount().getDiscountRate()))/100);
+            finalSellingPrice = sellingPrice - (sellingPrice * ((product.getDiscount().getDiscountRate())) / 100);
             newItem.setPriceAfterDiscount(finalSellingPrice);
         }
-
 
 
         // Create a new item
@@ -152,26 +140,26 @@ public class Inventory {
     }
     // Apply a discount to a specific product
 
-    public void applyDiscountToProduct(String name, double discountPercentage, LocalDate startDay, LocalDate endDay) throws SQLException {
+    public void applyDiscountToProduct(String name,String Category,String SubCategory,double size, double discountPercentage, LocalDate startDay, LocalDate endDay) throws SQLException {
         // Find all products by name (returns a list)
-        List<Product> products = productSQL.readByName(name);
+        Product product = productSQL.readByCompositeKey(name,Category,SubCategory,size);
 
         // Check if the list is empty
-        if (products == null || products.isEmpty()) {
+        if (product == null) {
             System.out.println("Error: No products found with the name " + name);
             return;
         }
 
         // Create the discount once and apply it to all products
         Discount discount = new Discount(discountPercentage, startDay, endDay);
-        if(discount.isExpired()){
+        if (discount.isExpired()) {
             return;
         }
+
         discountSQL.create(discount);  // Save the discount in the database
 
         // Iterate through each product and apply the discount
-        for (Product product : products) {
-            product.setDiscount(discount);
+
 
             // Update the priceAfterDiscount using Discount_SQL
             discountSQL.updatePricesByName(product.getName(), discountPercentage);
@@ -180,7 +168,7 @@ public class Inventory {
             productSQL.update(product);
 
             System.out.println("Discount applied to product " + product.getName() + " and prices updated.");
-        }
+
     }
 
     public void applyDiscountToCategory(String category, double discountPercentage, LocalDate startDay, LocalDate endDay) throws SQLException {
@@ -194,6 +182,7 @@ public class Inventory {
 
         // Create the discount
         Discount discount = new Discount(discountPercentage, startDay, endDay);
+
         discountSQL.create(discount);
 
         // Iterate through all products in the category
@@ -239,19 +228,8 @@ public class Inventory {
         System.out.println("Discount applied to all products in sub-category " + subCategory + " and prices updated.");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
     public void generateAllProductsReport() {
         List<Product> products = productSQL.readAll();  // Fetch all products from the database
 
@@ -440,14 +418,6 @@ public class Inventory {
 
 
 
-
-
-
-
-
-
-
-
     @Override
     public String toString() {
         List<Product> products = productSQL.readAll();
@@ -457,4 +427,26 @@ public class Inventory {
         }
         return result.toString();
     }
+
+
+    public void createOrder() {
+        // Get the list of products that need to be reordered
+        List<Product> productsToOrder = productSQL.ProductsBellowQuntity();
+
+        // If no products need to be ordered, print a message
+        if (productsToOrder.isEmpty()) {
+            System.out.println("All products have sufficient quantity.");
+        } else {
+            // Loop through the list and print the product details
+            for (Product product : productsToOrder) {
+                int unitsToOrder = product.getMin_quantity() - (product.getQuantity());
+                System.out.println("Product: " + product.getName() + ", Category: " + product.getCategory() +
+                        ", Sub-Category: " + product.getSub_category() + ", Size: " + product.getSize() +
+                        " needs " + unitsToOrder + " more units.");
+            }
+        }
+    }
+
+
+
 }

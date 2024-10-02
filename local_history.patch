@@ -1,0 +1,281 @@
+cIndex: dev/Inventory/Classes/Item.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/dev/Inventory/Classes/Item.java b/dev/Inventory/Classes/Item.java
+--- a/dev/Inventory/Classes/Item.java	
++++ b/dev/Inventory/Classes/Item.java	(date 1727612087679)
+@@ -2,69 +2,102 @@
+ 
+ import dev.Inventory.Enums.E_Item_Place;
+ import dev.Inventory.Enums.E_Item_Status;
+-//import dev.Inventory.Interfaces.I_Item;
+ 
+ import java.time.LocalDate;
+-import java.util.Date;
+ 
+-public class Item
+-{
+-    private String Name;
+-    private double cost_price;
+-    private double selling_price;
+-    private double price_after_discount;
++public class Item {
++    private int id;  // This will correspond to the auto-incremented ID in the database
++    private String name;
++    private double costPrice;
++    private double sellingPrice;
++    private double priceAfterDiscount;  // For discount management
+     private String manufacturer;
+-    private int id;
+     private String category;
+-    private String sub_category;
++    private String subCategory;
+     private double size;
+-    private LocalDate expiry_date;
++    private LocalDate expiryDate;  // Optional, can be null
+     private E_Item_Status status;
+     private E_Item_Place place;
+-    public Item(String Name, double cost_price, double selling_price, String manufacturer, String category, String sub_category, double size, LocalDate expiry_date, E_Item_Status status, E_Item_Place place)
+-    {
+-        this.Name = Name;
+-        this.cost_price = cost_price;
+-        this.selling_price = selling_price;
+-        this.price_after_discount = selling_price;
++
++    // Constructor for creating a new item
++    public Item(String name, double costPrice, double sellingPrice, String manufacturer,
++                String category, String subCategory, double size, LocalDate expiryDate,
++                E_Item_Status status, E_Item_Place place) {
++        this.name = name;
++        this.costPrice = costPrice;
++        this.sellingPrice = sellingPrice;
++        this.priceAfterDiscount = sellingPrice;  // Initially, no discount applied
+         this.manufacturer = manufacturer;
+-        this.id = this.hashCode();
+         this.category = category;
+-        this.sub_category = sub_category;
++        this.subCategory = subCategory;
+         this.size = size;
+-        this.expiry_date = expiry_date;
++        this.expiryDate = expiryDate;
+         this.status = status;
+         this.place = place;
+     }
+ 
++    // Constructor for loading an item from the database with an existing ID
++    public Item(int id, String name, double costPrice, double sellingPrice, String manufacturer,
++                String category, String subCategory, double size, LocalDate expiryDate,
++                E_Item_Status status, E_Item_Place place) {
++        this.id = id;
++        this.name = name;
++        this.costPrice = costPrice;
++        this.sellingPrice = sellingPrice;
++        this.priceAfterDiscount = sellingPrice;  // Initially, no discount applied
++        this.manufacturer = manufacturer;
++        this.category = category;
++        this.subCategory = subCategory;
++        this.size = size;
++        this.expiryDate = expiryDate;
++        this.status = status;
++        this.place = place;
++    }
++
++    // Getters and Setters
+ 
++    public int getId() {
++        return id;
++    }
++
++    public void setId(int id) {
++        this.id = id;  // The database will provide this value when inserted
++    }
+ 
+     public String getName() {
+-        return Name;
++        return name;
+     }
+ 
+     public void setName(String name) {
+-        Name = name;
++        this.name = name;
++    }
++
++    public double getCostPrice() {
++        return costPrice;
++    }
++
++    public void setCostPrice(double costPrice) {
++        this.costPrice = costPrice;
+     }
+ 
+-    public double getCost_price() {
+-        return cost_price;
++    public double getSellingPrice() {
++        return sellingPrice;
+     }
+ 
+-    public void setCost_price(double cost_price) {
+-        this.cost_price = cost_price;
++    public void setSellingPrice(double sellingPrice) {
++        this.sellingPrice = sellingPrice;
+     }
+ 
+-    public double getSelling_price() {
+-        return selling_price;
++    public double getPriceAfterDiscount() {
++        return priceAfterDiscount;
+     }
+ 
+-    public void setSelling_price(double selling_price) {
+-        this.selling_price = selling_price;
++    public void applyDiscount(double discountRate) {
++        this.priceAfterDiscount = sellingPrice - (sellingPrice * discountRate / 100);
+     }
+ 
+-    public double getPrice_after_discount() {
+-        return price_after_discount;
++    public void cancelDiscount() {
++        this.priceAfterDiscount = sellingPrice;
+     }
+ 
+     public String getManufacturer() {
+@@ -75,14 +108,6 @@
+         this.manufacturer = manufacturer;
+     }
+ 
+-    public int getId() {
+-        return id;
+-    }
+-
+-    public void setId(int id) {
+-        this.id = id;
+-    }
+-
+     public String getCategory() {
+         return category;
+     }
+@@ -91,14 +116,13 @@
+         this.category = category;
+     }
+ 
+-    public String getSub_category() {
+-        return sub_category;
++    public String getSubCategory() {
++        return subCategory;
+     }
+ 
+-    public void setSub_category(String sub_category) {
+-        this.sub_category = sub_category;
++    public void setSubCategory(String subCategory) {
++        this.subCategory = subCategory;
+     }
+-
+ 
+     public double getSize() {
+         return size;
+@@ -108,12 +132,12 @@
+         this.size = size;
+     }
+ 
+-    public LocalDate getExpiry_date() {
+-        return expiry_date;
++    public LocalDate getExpiryDate() {
++        return expiryDate;
+     }
+ 
+-    public void setExpiry_date(LocalDate expiry_date) {
+-        this.expiry_date = expiry_date;
++    public void setExpiryDate(LocalDate expiryDate) {
++        this.expiryDate = expiryDate;
+     }
+ 
+     public E_Item_Status getStatus() {
+@@ -124,64 +148,48 @@
+         this.status = status;
+     }
+ 
+-
+     public E_Item_Place getPlace() {
+         return place;
+     }
+ 
+-
+     public void setPlace(E_Item_Place place) {
+         this.place = place;
+     }
+ 
+-    public void applyDiscount(double discount)
+-    {
+-        price_after_discount = selling_price - (selling_price * discount / 100);
+-    }
+-    public void cancelDiscount()
+-    {
+-        price_after_discount = selling_price;
+-    }
+-    public void updateStatus()
+-    {
+-        if (expiry_date ==null)
+-            return;
+-        if (expiry_date.isBefore(LocalDate.now()))
+-        {
+-            status = E_Item_Status.EXPIRED;
+-            sendNotification_Expired();
+-        }
+-        else if(expiry_date.isBefore(LocalDate.now().plusDays(7)))
+-        {
+-            status = E_Item_Status.about_to_expire;
+-            sendNotification_AboutToExpire();
++    // Update status based on expiry
++    public void updateStatus() {
++        if (expiryDate != null && expiryDate.isBefore(LocalDate.now())) {
++            this.status = E_Item_Status.EXPIRED;
++        } else if (expiryDate != null && expiryDate.isBefore(LocalDate.now().plusDays(7))) {
++            this.status = E_Item_Status.about_to_expire;
+         }
+     }
+ 
+-    private void sendNotification_AboutToExpire() {
+-        System.out.println("Item "+ id + "from product " + Name + " is about to expire - last time to use is in : "+ expiry_date);
++    public void setPriceAfterDiscount(double priceAfterDiscount) {
++        this.priceAfterDiscount = priceAfterDiscount;
+     }
+ 
+-
++    // i need b\\
++    //exipert
+ 
+ 
+-    private void sendNotification_Expired() {
+-        System.out.println("Item "+ id  +  " from product " + Name + " is expired");
+-    }
+-
++    @Override
+     public String toString() {
+-        return Name +" {" +
+-                " id=" + id +
+-                ", cost_price=" + cost_price +
+-                ", selling_price=" + selling_price +
+-                ", price after discount = " + price_after_discount + '\'' +
++        return "Item{" +
++                "id=" + id +
++                ", name='" + name + '\'' +
++                ", costPrice=" + costPrice +
++                ", sellingPrice=" + sellingPrice +
++                ", priceAfterDiscount=" + priceAfterDiscount +
+                 ", manufacturer='" + manufacturer + '\'' +
+                 ", category='" + category + '\'' +
+-                ", sub_category='" + sub_category + '\'' +
++                ", subCategory='" + subCategory + '\'' +
+                 ", size=" + size +
+-                ", expiry_date=" + expiry_date +
++                ", expiryDate=" + expiryDate +
+                 ", status=" + status +
+-                ", plac=e" + place +
++                ", place=" + place +
+                 '}';
+     }
+ }
++
++
