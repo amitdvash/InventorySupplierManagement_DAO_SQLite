@@ -42,9 +42,10 @@ public class SupllierCreatDb {
                 ");";
 
         String ordersTable = "CREATE TABLE IF NOT EXISTS Orders (" +
-                "orderID SERIAL PRIMARY KEY," +
+                "orderID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "supplierID INTEGER," +
                 "orderDate DATE NOT NULL," +
+                "deliveryDay VARCHAR(20) NOT NULL," +
                 "isConstantDelivery BOOLEAN DEFAULT FALSE," +
                 "deliveryDate DATE," +
                 "priceBeforeDiscount NUMERIC(10, 2)," +
@@ -60,7 +61,7 @@ public class SupllierCreatDb {
                 "discount NUMERIC(10, 2) DEFAULT 0," +
                 "PRIMARY KEY (orderID, catalogID)," +
                 "FOREIGN KEY (orderID) REFERENCES Orders(orderID)," +
-                "FOREIGN KEY (catalogID) REFERENCES Products(catalogID)" +
+                "FOREIGN KEY (catalogID) REFERENCES ProductsSuppliers(catalogID)" +
                 ");";
 
         String productDiscountsTable = "CREATE TABLE IF NOT EXISTS productDiscounts (" +
@@ -68,7 +69,7 @@ public class SupllierCreatDb {
                 "quantity INTEGER NOT NULL," +
                 "discount NUMERIC(10, 2) NOT NULL," +
                 "PRIMARY KEY (catalogID, quantity)," +
-                "FOREIGN KEY (catalogID) REFERENCES Products(catalogID) ON DELETE CASCADE" +
+                "FOREIGN KEY (catalogID) REFERENCES ProductsSuppliers(catalogID) ON DELETE CASCADE" +
                 ");";
 
         String supplyDaysTable = "CREATE TABLE IF NOT EXISTS SupplyDays (" +
@@ -83,6 +84,17 @@ public class SupllierCreatDb {
                 "FOREIGN KEY (dayName) REFERENCES SupplyDays(dayName) ON DELETE CASCADE" +
                 ");";
 
+
+        String ordersOnTheWayTable = "CREATE TABLE IF NOT EXISTS OrdersOnTheWay (" +
+                "orderID INTEGER NOT NULL," +
+                "catalogID INTEGER NOT NULL," +
+                "quantity INTEGER NOT NULL," +
+                "deliveryDate DATE," +
+                "PRIMARY KEY (orderID, catalogID)," +
+                "FOREIGN KEY (orderID) REFERENCES Orders(orderID)" +
+                ");";
+
+
         try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
             // Create each table
             stmt.execute(suppliersTable);
@@ -93,6 +105,8 @@ public class SupllierCreatDb {
             stmt.execute(productDiscountsTable);
             stmt.execute(supplyDaysTable);
             stmt.execute(agreementSupplyDaysTable);
+            stmt.execute(ordersOnTheWayTable);
+
 
             System.out.println("Tables created successfully!");
         } catch (SQLException e) {

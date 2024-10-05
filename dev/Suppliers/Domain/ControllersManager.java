@@ -847,4 +847,78 @@ public class ControllersManager {
             order.printOrderDetails();
         }
     }
+
+    public void createOrderForShortage(HashMap<String, Integer> productQuantities) {
+        try {
+            boolean isConstantDelivery = false; // This is a one-time order for product shortage
+
+            // Step 1: Validate the productQuantities map
+            if (productQuantities == null || productQuantities.isEmpty()) {
+                System.out.println("No products or quantities provided for order.");
+                return;
+            }
+
+            // Step 2: Create a map to store suppliers and their associated products and quantities
+            HashMap<Supplier, HashMap<Product, Integer>> supplierProductMap = new HashMap<>();
+
+            // Step 3: Iterate over the provided products and quantities
+            for (Map.Entry<String, Integer> entry : productQuantities.entrySet()) {
+                String productName = entry.getKey();
+                int quantity = entry.getValue();
+
+                // Find the product in the database
+                Product product = productController.getProductByName(productName);
+                if (product == null) {
+                    System.out.println("Product " + productName + " is not supplied by any supplier. Skipping this product.");
+                    continue;
+                }
+
+                // Find the cheapest supplier for the given product and quantity using the database
+                Supplier cheapestSupplier = productController.findCheapestSupplier(productName, quantity);
+
+                if (cheapestSupplier == null) {
+                    System.out.println("No supplier found for product: " + productName + " with the specified quantity: " + quantity);
+                    continue;
+                }
+
+                // Get the supplier's product map or create a new one if the supplier isn't already in the map
+                HashMap<Product, Integer> productQuantityMap = supplierProductMap.getOrDefault(cheapestSupplier, new HashMap<>());
+
+                // Update the quantity for the product, setting the last entered quantity
+                productQuantityMap.put(product, quantity);
+
+                // Update the supplier's entry in the supplierProductMap
+                supplierProductMap.put(cheapestSupplier, productQuantityMap);
+            }
+
+            // Step 4: Create orders for each supplier in the map
+            if (supplierProductMap.isEmpty()) {
+                System.out.println("No valid orders could be created from the provided products.");
+                return;
+            }
+
+            for (Supplier supplier : supplierProductMap.keySet()) {
+                HashMap<Product, Integer> productQuantityMap = supplierProductMap.get(supplier);
+                int orderID = orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
+
+                if (orderID == -1) {
+                    System.out.println("Failed to create order for supplier: " + supplier.getSupplierID());
+                    continue;
+                }
+
+                // Step 5: Insert each product into the OrdersOnTheWay table
+                for (Product product : productQuantityMap.keySet()) {
+                    int quantity = productQuantityMap.get(product);
+
+                    // Call OrderDTO to insert the product into OrdersOnTheWay
+                    orderController.insertOrderOnTheWay(orderID, product.getCatalogID(), quantity);
+                }
+            }
+
+            System.out.println("Orders successfully created for product shortage.");
+
+        } catch (ExitException e) {
+            System.out.println("Action cancelled.");
+        }
+    }
 }

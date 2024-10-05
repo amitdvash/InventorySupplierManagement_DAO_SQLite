@@ -6,6 +6,7 @@ import dev.Suppliers.Presentation.UI;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class main_supplier {
     public static void main() throws SQLException {
@@ -22,15 +23,11 @@ public class main_supplier {
 
         // Initialize the ControllersManager
         ControllersManager controllersManager = new ControllersManager(supplierController, productController, agreementController, orderController);
-        //controllersManager.openNewSupplierCard();
-        //controllersManager.deleteSupplierCard();
-        //controllersManager.addProductToSupplier();
-        //controllersManager.deleteProductFromSupplier();
-        //controllersManager.updateSupplierFields();
-        //controllersManager.updateDiscountDetails();
-        //controllersManager.openNewOrder();
-        //controllersManager.updateConstantOrder();
-        //controllersManager.printActiveOrders();
+        HashMap<String, Integer> productOrderMap = new HashMap<>();
+        productOrderMap.put("banana", 10);
+        productOrderMap.put("table", 15);
+        controllersManager.createOrderForShortage(productOrderMap);
+
         // Initialize the UI
         UI ui = new UI(controllersManager);
 

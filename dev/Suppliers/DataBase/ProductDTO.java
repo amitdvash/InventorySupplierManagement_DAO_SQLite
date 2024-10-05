@@ -64,7 +64,7 @@ public class ProductDTO implements IDTO<Product> {
     @Override
     public List<Product> readAll() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM Products";
+        String sql = "SELECT * FROM ProductsSuppliers";
         try (PreparedStatement pstmt = connection.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
@@ -116,12 +116,13 @@ public class ProductDTO implements IDTO<Product> {
     public Supplier findCheapestSupplier(String productName, int quantity) {
         String sql = "SELECT s.*, p.price, COALESCE(pd.discount, 0) AS discount " +
                 "FROM ProductsSuppliers p " +
-                "LEFT JOIN productDiscounts pd ON p.catalogID = pd.catalogID AND pd.quantity::integer <= ? " +
+                "LEFT JOIN productDiscounts pd ON p.catalogID = pd.catalogID AND pd.quantity <= ? " +
                 "JOIN Agreements a ON p.agreementID = a.agreementID " +
                 "JOIN Suppliers s ON a.supplierID = s.supplierID " +
                 "WHERE p.name = ? " +
                 "ORDER BY (p.price - (p.price * COALESCE(pd.discount, 0) / 100)) ASC " +
                 "LIMIT 1";
+
 
         Supplier supplier = null;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

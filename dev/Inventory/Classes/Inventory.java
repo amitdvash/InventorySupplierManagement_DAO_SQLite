@@ -11,6 +11,7 @@ import dev.Inventory.ClassesDTO.DiscountDTO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 public class Inventory {
@@ -430,20 +431,31 @@ public class Inventory {
 
 
     public void createOrder() {
-        // Get the list of products that need to be reordered
-        List<Product> productsToOrder = productSQL.ProductsBellowQuntity();
+        //1st step: go through the orders_on_the_way rows, and check for orders that the date has already passed (or today).
+        //if you find more than 0, then tell the user to update the inventory first before making a new shortcuts order, and exit.
+        //make sure you have a method that lets the user delete an order that it's date has arrived (first show the order, then delete).
+        //go through all the rows in the table: orders_on_the_way, each order that it's date has already passed or it's the current date:
+        //fill the inventory with the product (based on the quantity ordered)
 
+        //2nd step: check for shortcuts for each product.
+        //
+
+        // Get the list of products that need to be reordered
+        List<Product> productsBellowQuantity = productSQL.ProductsBellowQuntity();
+        HashMap<String,Integer> productsToOrder = new HashMap<>();
         // If no products need to be ordered, print a message
         if (productsToOrder.isEmpty()) {
             System.out.println("All products have sufficient quantity.");
         } else {
             // Loop through the list and print the product details
-            for (Product product : productsToOrder) {
+            for (Product product : productsBellowQuantity) {
                 int unitsToOrder = product.getMin_quantity() - (product.getQuantity());
                 System.out.println("Product: " + product.getName() + ", Category: " + product.getCategory() +
                         ", Sub-Category: " + product.getSub_category() + ", Size: " + product.getSize() +
                         " needs " + unitsToOrder + " more units.");
             }
+
+            //create new order from ControllersManager.createOrderForShortage(productsToOrder);
         }
     }
 

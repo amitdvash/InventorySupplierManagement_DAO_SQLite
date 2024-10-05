@@ -3,6 +3,7 @@ package dev.Suppliers.Domain;
 import dev.Suppliers.DataBase.OrderDTO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +16,11 @@ public class OrderController {
     }
 
     // Method to create a new order
-    public void createOrder(Supplier supplier, HashMap<Product, Integer> productQuantityMap, boolean isConstantDelivery) {
+    public int createOrder(Supplier supplier, HashMap<Product, Integer> productQuantityMap, boolean isConstantDelivery) {
         Order newOrder = new Order(supplier, productQuantityMap, isConstantDelivery);
-        orderDTO.create(newOrder); // Save to database
+        int orderID = orderDTO.create(newOrder); // Save to database
         System.out.println("Order created: " + newOrder.getOrderID());
+        return orderID;
     }
 
     // Method to update an order
@@ -91,5 +93,11 @@ public class OrderController {
             }
         }
         return activeOrders;
+    }
+
+    // Method to insert product details into OrdersOnTheWay table
+    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity) {
+        Date deliveryDate = new java.sql.Date(System.currentTimeMillis());
+        orderDTO.insertOrderOnTheWay(orderID, catalogID, quantity, deliveryDate);
     }
 }

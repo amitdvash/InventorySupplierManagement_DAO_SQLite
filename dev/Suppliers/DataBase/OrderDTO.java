@@ -173,7 +173,7 @@ public class OrderDTO implements IDTO<Order> {
 
     private HashMap<Product, Integer> getProductsForOrder(int orderID) {
         HashMap<Product, Integer> productQuantityMap = new HashMap<>();
-        String sql = "SELECT p.catalogID, p.name, p.price, p.expirationDays, p.weight, op.quantity FROM orderProducts op JOIN Products p ON op.catalogID = p.catalogID WHERE op.orderID = ?";
+        String sql = "SELECT p.catalogID, p.name, p.price, p.expirationDays, p.weight, op.quantity FROM orderProducts op JOIN ProductsSuppliers p ON op.catalogID = p.catalogID WHERE op.orderID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, orderID);
             ResultSet rs = pstmt.executeQuery();
@@ -207,5 +207,20 @@ public class OrderDTO implements IDTO<Order> {
             e.printStackTrace();
         }
         return discountDetails;
+    }
+
+
+    // Method to insert a product into OrdersOnTheWay table
+    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity, Date deliveryDate) {
+        String sql = "INSERT INTO OrdersOnTheWay (orderID, catalogID, quantity, deliveryDate) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, orderID);
+            pstmt.setInt(2, catalogID);
+            pstmt.setInt(3, quantity);
+            pstmt.setDate(4, new java.sql.Date(deliveryDate.getTime()));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
