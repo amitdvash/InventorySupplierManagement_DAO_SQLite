@@ -26,13 +26,10 @@ public class main_supplier {
         HashMap<String, Integer> productOrderMap = new HashMap<>();
         productOrderMap.put("banana", 10);
         productOrderMap.put("table", 15);
-        controllersManager.createOrderForShortage(productOrderMap);
+//        controllersManager.createOrderForShortage(productOrderMap);
 
         // Initialize the UI
         UI ui = new UI(controllersManager);
-
-        // First, ask the user how to start the system (basic info, orders, or no info)
-        //ui.displayStartupOptions();
 
         // Then, prompt the user for login and show the corresponding menu based on access level
         ui.displayLoginAndMenu();

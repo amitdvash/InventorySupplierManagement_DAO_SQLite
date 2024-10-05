@@ -19,23 +19,6 @@ public class UI {
         credentials.put("junior", "2222");
     }
 
-    // Method to display the startup options
-//    public void displayStartupOptions() {
-//        Scanner scanner = new Scanner(System.in);
-//
-//        // Ask the user to choose how to start the system
-//        int startOption = getValidatedStartChoice(scanner);
-//        if (startOption == 1) {
-//            controllersManager.uploadBasicInformation();
-//            System.out.println("Basic information uploaded, System is ready.");
-//        } else if (startOption == 2) {
-//            controllersManager.uploadOnlyOrders();
-//            System.out.println("Only orders uploaded, System is ready.");
-//        } else if (startOption == 3) {
-//            System.out.println("System is ready with no information.");
-//        }
-//    }
-
     // Method to handle the login and display the correct menu based on access level
     public void displayLoginAndMenu() throws SQLException {
         Scanner scanner = new Scanner(System.in);
@@ -52,29 +35,6 @@ public class UI {
             displayLimitedMenu(scanner);  // Junior manager gets the limited menu
         }
     }
-
-    // Method to get and validate the user's start choice
-//    private int getValidatedStartChoice(Scanner scanner) {
-//        int startChoice = -1;
-//        while (startChoice != 1 && startChoice != 2 && startChoice != 3) {
-//            System.out.println("How would you like to start the system?");
-//            System.out.println("1. Start with basic information");
-//            System.out.println("2. Start with orders only");
-//            System.out.println("3. Start with no information at all");
-//            System.out.print("Please enter 1, 2 or 3: ");
-//            String input = scanner.nextLine().trim();
-//
-//            try {
-//                startChoice = Integer.parseInt(input);
-//                if (startChoice != 1 && startChoice != 2 && startChoice != 3) {
-//                    System.out.println("Invalid input. Please enter 1, 2 or 3.");
-//                }
-//            } catch (NumberFormatException e) {
-//                System.out.println("Invalid input. Please enter a valid number (1, 2 or 3).");
-//            }
-//        }
-//        return startChoice;
-//    }
 
     // Method to get and validate the username
     private String getValidatedUsername(Scanner scanner) {
@@ -117,7 +77,7 @@ public class UI {
             System.out.println("6. Update Products Discount Details");
             System.out.println("7. Print All Suppliers Cards");
             System.out.println("8. Print All Orders Reports");
-            System.out.println("9. Open New Order");
+            System.out.println("9. Open New Constant Order");
             System.out.println("10. Update Constant Order");
             System.out.println("11. Print All Active Orders");
             System.out.println("0. Exit");
@@ -178,7 +138,7 @@ public class UI {
             System.out.println("6. Update Products Discount Details");
             System.out.println("7. Print All Suppliers Cards");
             System.out.println("8. Print All Orders Reports");
-            System.out.println("9. Open New Order");
+            System.out.println("9. Open New Constant Order");
             System.out.println("10. Update Constant Order");
             System.out.println("11. Print All Active Orders");
             System.out.println("0. Exit");

@@ -506,14 +506,8 @@ public class ControllersManager {
 
     public void openNewOrder() {
         try {
-            // Step 1: Choose order type
-            String orderType = inputValidator.getValidatedInput(
-                    "Choose the type of order:\n1. Shortage of products (one-time)\n2. Periodic product order (constant delivery)\nEnter 1 or 2: ",
-                    input -> input.equals("1") || input.equals("2"),
-                    "Invalid choice. Please enter 1 or 2."
-            );
 
-            boolean isConstantDelivery = orderType.equals("2");
+            boolean isConstantDelivery = true;
 
             // Step 2: Display all products available in the system (names only)
             List<String> productNames = productController.getAllProductNames();
@@ -749,97 +743,6 @@ public class ControllersManager {
         return supplyDays;
     }
 
-// Updated uploadBasicInformation method
-//    public void uploadBasicInformation() {
-//        Supplier supplier1 = supplierController.createSupplier("S1", "Bank1", PaymentMethod.CreditCard, null, "Supplier One", "123456", "email1@example.com");
-//
-//        // Creating discounts and products for Supplier 1
-//        HashMap<Integer, Double> product1Discounts = new HashMap<>();
-//        product1Discounts.put(10, 5.0);  // 5% discount for 10 or more units
-//        product1Discounts.put(20, 10.0); // 10% discount for 20 or more units
-//
-//        HashMap<Integer, Double> product2Discounts = new HashMap<>();
-//        product2Discounts.put(5, 3.0);   // 3% discount for 5 or more units
-//        product2Discounts.put(15, 7.0);  // 7% discount for 15 or more units
-//
-//        Product product1 = productController.createProduct("Product 1", product1Discounts, 10.0, 30, 2.0, null);
-//        Product product2 = productController.createProduct("Product 2", product2Discounts, 20.0, 50, 3.5, null);
-//
-//        Agreement agreement1 = agreementController.createAgreement(new ArrayList<>(List.of(product1, product2)), new HashMap<>(), new ArrayList<>(List.of("Monday", "Wednesday")), true);
-//
-//        supplier1.setSupplierAgreement(agreement1);  // Link agreement to supplier
-//        productController.addSupplierForProduct("Product 1", supplier1); // Add supplier to product
-//        productController.addSupplierForProduct("Product 2", supplier1);
-//
-//        // Example Orders for Supplier 1
-//        HashMap<Product, Integer> order1Products = new HashMap<>();
-//        order1Products.put(product1, 15);  // 15 units of Product 1
-//        order1Products.put(product2, 7);   // 7 units of Product 2
-//        orderController.createOrder(supplier1, order1Products, true);  // Create one-time order
-//
-//        Supplier supplier2 = supplierController.createSupplier("S2", "Bank2", PaymentMethod.Cash, null, "Supplier Two", "654321", "email2@example.com");
-//
-//        // Creating discounts and products for Supplier 2
-//        HashMap<Integer, Double> product3Discounts = new HashMap<>();
-//        product3Discounts.put(8, 4.0);   // 4% discount for 8 or more units
-//        product3Discounts.put(12, 8.0);  // 8% discount for 12 or more units
-//
-//        HashMap<Integer, Double> product4Discounts = new HashMap<>();
-//        product4Discounts.put(10, 6.0);  // 6% discount for 10 or more units
-//        product4Discounts.put(20, 12.0); // 12% discount for 20 or more units
-//
-//        Product product3 = productController.createProduct("Product 3", product3Discounts, 15.0, 40, 5.0, null);
-//        Product product4 = productController.createProduct("Product 4", product4Discounts, 25.0, 60, 1.5, null);
-//
-//        Agreement agreement2 = agreementController.createAgreement(new ArrayList<>(List.of(product3, product4)), new HashMap<>(), new ArrayList<>(List.of("Tuesday", "Thursday")), false);
-//
-//        supplier2.setSupplierAgreement(agreement2);  // Link agreement to supplier
-//        productController.addSupplierForProduct("Product 3", supplier2);
-//        productController.addSupplierForProduct("Product 4", supplier2);
-//
-//        // Example Orders for Supplier 2
-//        HashMap<Product, Integer> order2Products = new HashMap<>();
-//        order2Products.put(product3, 9);   // 9 units of Product 3
-//        order2Products.put(product4, 12);  // 12 units of Product 4
-//        orderController.createOrder(supplier2, order2Products, true);  // Create one-time order
-//    }
-//    // Updated uploadOnlyOrders method
-//    public void uploadOnlyOrders() {
-//        // Create orders using only the product and supplier objects in the orders
-//        Date date = new Date(); // Order date for all orders
-//
-//        Supplier tempSupplier1 = new Supplier("S1", "Bank1", PaymentMethod.CreditCard, null, null); // Temporary Supplier
-//        Supplier tempSupplier2 = new Supplier("S2", "Bank2", PaymentMethod.Cash, null, null); // Temporary Supplier
-//
-//        // Create products
-//        Product tempProduct1 = new Product("Banana", new HashMap<>(), 3, 7, 1, null);
-//        Product tempProduct2 = new Product("Table", new HashMap<>(), 400, 365, 8, null);
-//        Product tempProduct3 = new Product("Notebook", new HashMap<>(), 5, 180, 1.5, null);
-//        Product tempProduct4 = new Product("Phone", new HashMap<>(), 2500, 1000, 2, null);
-//
-//        // Create order 1 for temporary supplier 1
-//        HashMap<Product, Integer> productQuantityMap1 = new HashMap<>();
-//        productQuantityMap1.put(tempProduct1, 12);
-//        productQuantityMap1.put(tempProduct2, 3);
-//        orderController.createOrder(tempSupplier1, productQuantityMap1, false); // One-time order
-//
-//        // Create order 2 for temporary supplier 1
-//        HashMap<Product, Integer> productQuantityMap2 = new HashMap<>();
-//        productQuantityMap2.put(tempProduct3, 15);
-//        orderController.createOrder(tempSupplier1, productQuantityMap2, true); // One-time order
-//
-//        // Create order 3 for temporary supplier 2
-//        HashMap<Product, Integer> productQuantityMap3 = new HashMap<>();
-//        productQuantityMap3.put(tempProduct2, 4);
-//        productQuantityMap3.put(tempProduct4, 1);
-//        orderController.createOrder(tempSupplier2, productQuantityMap3, false); // One-time order
-//
-//        // Create order 4 for temporary supplier 2
-//        HashMap<Product, Integer> productQuantityMap4 = new HashMap<>();
-//        productQuantityMap4.put(tempProduct3, 20);
-//        orderController.createOrder(tempSupplier2, productQuantityMap4, true); // One-time order
-//    }
-
     // Method to print all active orders
     public void printActiveOrders() {
         List<Order> activeOrders = orderController.getActiveOrders();
@@ -899,9 +802,9 @@ public class ControllersManager {
 
             for (Supplier supplier : supplierProductMap.keySet()) {
                 HashMap<Product, Integer> productQuantityMap = supplierProductMap.get(supplier);
-                int orderID = orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
+                Order order = orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
 
-                if (orderID == -1) {
+                if (order.getOrderID() == -1) {
                     System.out.println("Failed to create order for supplier: " + supplier.getSupplierID());
                     continue;
                 }
@@ -911,7 +814,7 @@ public class ControllersManager {
                     int quantity = productQuantityMap.get(product);
 
                     // Call OrderDTO to insert the product into OrdersOnTheWay
-                    orderController.insertOrderOnTheWay(orderID, product.getCatalogID(), quantity);
+                    orderController.insertOrderOnTheWay(order.getOrderID(), product.getCatalogID(), quantity, order.getDeliveryDate());
                 }
             }
 

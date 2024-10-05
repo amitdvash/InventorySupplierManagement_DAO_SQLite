@@ -16,11 +16,12 @@ public class OrderController {
     }
 
     // Method to create a new order
-    public int createOrder(Supplier supplier, HashMap<Product, Integer> productQuantityMap, boolean isConstantDelivery) {
+    public Order createOrder(Supplier supplier, HashMap<Product, Integer> productQuantityMap, boolean isConstantDelivery) {
         Order newOrder = new Order(supplier, productQuantityMap, isConstantDelivery);
         int orderID = orderDTO.create(newOrder); // Save to database
+        newOrder.setOrderID(orderID);
         System.out.println("Order created: " + newOrder.getOrderID());
-        return orderID;
+        return newOrder;
     }
 
     // Method to update an order
@@ -96,8 +97,7 @@ public class OrderController {
     }
 
     // Method to insert product details into OrdersOnTheWay table
-    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity) {
-        Date deliveryDate = new java.sql.Date(System.currentTimeMillis());
+    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity, java.util.Date deliveryDate) {
         orderDTO.insertOrderOnTheWay(orderID, catalogID, quantity, deliveryDate);
     }
 }

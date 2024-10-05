@@ -27,7 +27,7 @@ public class Main {
                 System.out.println("You have selected Supplier.");
                 DatabaseConnection.connect();
                 SupllierCreatDb.createTables();
-                DatabaseConnection.main();
+//                DatabaseConnection.main();
                 main_supplier.main();
 
                 break;
