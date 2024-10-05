@@ -1,7 +1,9 @@
 package dev.Suppliers.Presentation;
 
+import dev.ControllerInventorySupplier.Main;
 import dev.Suppliers.Domain.ControllersManager;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -35,7 +37,7 @@ public class UI {
 //    }
 
     // Method to handle the login and display the correct menu based on access level
-    public void displayLoginAndMenu() {
+    public void displayLoginAndMenu() throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
         // Login process
@@ -103,7 +105,7 @@ public class UI {
     }
 
     // Method to display the full menu for senior managers
-    private void displayFullMenu(Scanner scanner) {
+    private void displayFullMenu(Scanner scanner) throws SQLException {
         int choice;
         do {
             System.out.println("\n--- Supplier Management System ---");
@@ -158,6 +160,7 @@ public class UI {
                     break;
                 case 0:
                     System.out.println("Exiting the system...");
+                    Main.main(new String[]{});  // Call Main class to return to main menu
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");
@@ -166,7 +169,7 @@ public class UI {
     }
 
     // Method to display the limited menu for junior managers
-    private void displayLimitedMenu(Scanner scanner) {
+    private void displayLimitedMenu(Scanner scanner) throws SQLException {
         int choice;
         do {
             System.out.println("\n--- Supplier Management System (Junior Manager) ---");
@@ -209,6 +212,7 @@ public class UI {
                     break;
                 case 0:
                     System.out.println("Exiting the system...");
+                    Main.main(new String[]{});  // Call Main class to return to main menu
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");

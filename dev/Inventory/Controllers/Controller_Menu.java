@@ -3,6 +3,8 @@ package dev.Inventory.Controllers;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import dev.ControllerInventorySupplier.Main;
 import dev.Inventory.Classes.Inventory;
 
 //---------------------------------------------------------------------
@@ -77,8 +79,7 @@ public class Controller_Menu
 
 
 
-    static void registerMenu()
-    {
+    static void registerMenu() throws SQLException {
         while(true)
         {
             System.out.println("===== Register Menu =====");
@@ -116,7 +117,8 @@ public class Controller_Menu
                     break;
                 case "3":
                     System.out.println("Exiting...");
-                    System.exit(0);
+                    Main.main(new String[]{});  // Call Main class to return to main menu
+                    break;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }

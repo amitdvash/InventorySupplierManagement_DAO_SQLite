@@ -5,9 +5,10 @@ import dev.Suppliers.Presentation.UI;
 //import dev.Suppliers.Presentation.UI;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class main_supplier {
-    public static void main() {
+    public static void main() throws SQLException {
 
 
         Connection connection = DatabaseConnection.connect();
