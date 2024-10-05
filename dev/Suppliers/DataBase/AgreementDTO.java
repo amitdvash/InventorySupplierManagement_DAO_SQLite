@@ -159,7 +159,7 @@ public class AgreementDTO implements IDTO<Agreement> {
     // Get the list of products associated with a specific agreement from the database
     private List<Product> getProductsForAgreement(int agreementID) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM Products WHERE agreementID = ?";
+        String sql = "SELECT * FROM ProductsSuppliers WHERE agreementID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, agreementID);
             ResultSet rs = pstmt.executeQuery();

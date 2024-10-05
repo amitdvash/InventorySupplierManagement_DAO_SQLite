@@ -1,14 +1,13 @@
-package dev;
+package dev.Suppliers.DataBase;
 
-import dev.Suppliers.DataBase.DatabaseConnection;
 import dev.Suppliers.Domain.*;
 import dev.Suppliers.Presentation.UI;
 //import dev.Suppliers.Presentation.UI;
 
 import java.sql.Connection;
 
-public class Main {
-    public static void main(String[] args) {
+public class main_supplier {
+    public static void main() {
 
 
         Connection connection = DatabaseConnection.connect();

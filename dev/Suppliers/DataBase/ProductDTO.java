@@ -21,7 +21,7 @@ public class ProductDTO implements IDTO<Product> {
 
     @Override
     public int create(Product product) {
-        String sql = "INSERT INTO Products (name, price, expirationDays, weight, agreementID) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ProductsSuppliers (name, price, expirationDays, weight, agreementID) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, product.getName());
             pstmt.setDouble(2, product.getPrice());
@@ -87,7 +87,7 @@ public class ProductDTO implements IDTO<Product> {
 
     @Override
     public void update(Product product) {
-        String sql = "UPDATE Products SET name = ?, price = ?, expirationDays = ?, weight = ?, agreementID = ? WHERE catalogID = ?";
+        String sql = "UPDATE ProductsSuppliers SET name = ?, price = ?, expirationDays = ?, weight = ?, agreementID = ? WHERE catalogID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, product.getName());
             pstmt.setDouble(2, product.getPrice());
@@ -103,7 +103,7 @@ public class ProductDTO implements IDTO<Product> {
 
     @Override
     public void delete(int catalogID) {
-        String sql = "DELETE FROM Products WHERE catalogID = ?";
+        String sql = "DELETE FROM ProductsSuppliers WHERE catalogID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, catalogID);
             pstmt.executeUpdate();
@@ -115,7 +115,7 @@ public class ProductDTO implements IDTO<Product> {
     // Find the cheapest supplier for a product and quantity using SQL queries
     public Supplier findCheapestSupplier(String productName, int quantity) {
         String sql = "SELECT s.*, p.price, COALESCE(pd.discount, 0) AS discount " +
-                "FROM Products p " +
+                "FROM ProductsSuppliers p " +
                 "LEFT JOIN productDiscounts pd ON p.catalogID = pd.catalogID AND pd.quantity::integer <= ? " +
                 "JOIN Agreements a ON p.agreementID = a.agreementID " +
                 "JOIN Suppliers s ON a.supplierID = s.supplierID " +
@@ -147,7 +147,7 @@ public class ProductDTO implements IDTO<Product> {
     // Get all product names from the database
     public List<String> getAllProductNames() {
         List<String> productNames = new ArrayList<>();
-        String sql = "SELECT name FROM Products";
+        String sql = "SELECT name FROM ProductsSuppliers";
         try (PreparedStatement pstmt = connection.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
@@ -178,7 +178,7 @@ public class ProductDTO implements IDTO<Product> {
 
     // Method to read product by name
     public Product readByName(String productName) {
-        String sql = "SELECT * FROM Products WHERE name = ?";
+        String sql = "SELECT * FROM ProductsSuppliers WHERE name = ?";
         Product product = null;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, productName);
