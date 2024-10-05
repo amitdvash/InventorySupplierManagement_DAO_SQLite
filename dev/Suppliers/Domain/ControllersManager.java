@@ -555,13 +555,21 @@ public class ControllersManager {
                 addMoreProducts = inputValidator.getValidatedYesNoInput("Add another product? (yes/no): ").equalsIgnoreCase("yes");
             } while (addMoreProducts);
 
-            // Step 4: Create orders for each supplier in the map
+            // Step 4: Create orders for each supplier in the map and insert into OrdersOnTheWay
             for (Supplier supplier : supplierProductMap.keySet()) {
                 HashMap<Product, Integer> productQuantityMap = supplierProductMap.get(supplier);
-                orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
+
+                // Create the order and get the order ID
+                Order newOrder = orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
+
+                // Step 5: Insert each product's information into OrdersOnTheWay table
+                for (Product product : productQuantityMap.keySet()) {
+                    int quantity = productQuantityMap.get(product);
+                    orderController.insertOrderOnTheWay(newOrder.getOrderID(), product.getCatalogID(), quantity, newOrder.getDeliveryDate());
+                }
             }
 
-            System.out.println("Orders successfully created.");
+            System.out.println("Orders successfully created and added to OrdersOnTheWay.");
 
         } catch (ExitException e) {
             System.out.println("Action cancelled.");
