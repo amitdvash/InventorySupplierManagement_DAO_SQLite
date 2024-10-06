@@ -1,5 +1,6 @@
 package dev.Suppliers.Domain;
 
+import dev.Inventory.Classes.Inventory;
 import dev.Suppliers.Domain.Exception.ExitException;
 import dev.Suppliers.Enums.PaymentMethod;
 
@@ -20,6 +21,7 @@ public class ControllersManager {
         this.agreementController = agreementController;
         this.orderController = orderController;
     }
+
 
     // 1. Open New Supplier Card
     public void openNewSupplierCard() {
@@ -565,7 +567,7 @@ public class ControllersManager {
                 // Step 5: Insert each product's information into OrdersOnTheWay table
                 for (Product product : productQuantityMap.keySet()) {
                     int quantity = productQuantityMap.get(product);
-                    orderController.insertOrderOnTheWay(newOrder.getOrderID(), product.getCatalogID(), quantity, newOrder.getDeliveryDate());
+                    orderController.insertOrderOnTheWay(newOrder.getOrderID(), product.getCatalogID(), quantity, newOrder.getDeliveryDate(),product.getName());
                 }
             }
 
@@ -759,7 +761,7 @@ public class ControllersManager {
         }
     }
 
-    public void createOrderForShortage(HashMap<String, Integer> productQuantities) {
+    public  void createOrderForShortage(HashMap<String, Integer> productQuantities) {
         try {
             boolean isConstantDelivery = false; // This is a one-time order for product shortage
 
@@ -778,7 +780,7 @@ public class ControllersManager {
                 int quantity = entry.getValue();
 
                 // Find the product in the database
-                Product product = productController.getProductByName(productName);
+                Product product =productController.getProductByName(productName);
                 if (product == null) {
                     System.out.println("Product " + productName + " is not supplied by any supplier. Skipping this product.");
                     continue;
@@ -822,7 +824,7 @@ public class ControllersManager {
                     int quantity = productQuantityMap.get(product);
 
                     // Call OrderDTO to insert the product into OrdersOnTheWay
-                    orderController.insertOrderOnTheWay(order.getOrderID(), product.getCatalogID(), quantity, order.getDeliveryDate());
+                    orderController.insertOrderOnTheWay(order.getOrderID(), product.getCatalogID(), quantity, order.getDeliveryDate(),product.getName());
                 }
             }
 

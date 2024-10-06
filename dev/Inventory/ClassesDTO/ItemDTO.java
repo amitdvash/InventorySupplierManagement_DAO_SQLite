@@ -2,6 +2,7 @@
 package dev.Inventory.ClassesDTO;
 
 import dev.Inventory.Classes.Item;
+import dev.Inventory.Classes.Product;
 import dev.Inventory.Enums.E_Item_Place;
 import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Interface.IDTO;

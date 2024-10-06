@@ -7,16 +7,7 @@ import java.sql.Statement;
 public class CreateTable {
 
     // Method to drop the products table if it exists
-    public static void dropTable(Connection conn, String tableName) throws SQLException {
-        String sql = "DROP TABLE IF EXISTS " + tableName;
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            System.out.println(tableName + " table dropped successfully.");
-        } catch (SQLException e) {
-            System.out.println("Error dropping " + tableName + " table: " + e.getMessage());
-            throw e;
-        }
-    }
+
 
     // Method to create the products table with a 'quantity' column
     public static void createProductsTable(Connection conn) throws SQLException {

@@ -211,16 +211,18 @@ public class OrderDTO implements IDTO<Order> {
 
 
     // Method to insert a product into OrdersOnTheWay table
-    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity, java.util.Date deliveryDate) {
-        String sql = "INSERT INTO OrdersOnTheWay (orderID, catalogID, quantity, deliveryDate) VALUES (?, ?, ?, ?)";
+    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity, java.util.Date deliveryDate, String name) {
+        String sql = "INSERT INTO OrdersOnTheWay (orderID, catalogID, quantity, deliveryDate, name) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, orderID);
             pstmt.setInt(2, catalogID);
             pstmt.setInt(3, quantity);
             pstmt.setDate(4, new java.sql.Date(deliveryDate.getTime()));
+            pstmt.setString(5, name);  // Add the new column value here
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 }

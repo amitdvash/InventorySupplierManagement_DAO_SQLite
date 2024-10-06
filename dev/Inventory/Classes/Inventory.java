@@ -7,12 +7,15 @@ import dev.Inventory.Enums.E_Product_Status;
 import dev.Inventory.ClassesDTO.ProductDTO;
 import dev.Inventory.ClassesDTO.ItemDTO;
 import dev.Inventory.ClassesDTO.DiscountDTO;
+import dev.Suppliers.Domain.ControllersManager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Inventory {
 
@@ -429,13 +432,34 @@ public class Inventory {
         return result.toString();
     }
 
+    //1st step: go through the orders_on_the_way rows, and check for orders that the date has already passed (or today).
+    //if you find more than 0, then tell the user to update the inventory first before making a new shortcuts order, and exit.
+    //make sure you have a method that lets the user delete an order that it's date has arrived (first show the order, then delete).
+    //go through all the rows in the table: orders_on_the_way, each order that it's date has already passed or it's the current date:
+    //fill the inventory with the product (based on the quantity ordered)
 
-    public void createOrder() {
-        //1st step: go through the orders_on_the_way rows, and check for orders that the date has already passed (or today).
-        //if you find more than 0, then tell the user to update the inventory first before making a new shortcuts order, and exit.
-        //make sure you have a method that lets the user delete an order that it's date has arrived (first show the order, then delete).
-        //go through all the rows in the table: orders_on_the_way, each order that it's date has already passed or it's the current date:
-        //fill the inventory with the product (based on the quantity ordered)
+    public  HashMap<String,Integer> createOrder() {
+
+        boolean flag = productSQL.checkProductsArrived();
+        if (flag) {
+            Scanner scanner = new Scanner(System.in);
+
+            // Print message about products arrival and ask the user if they have updated quantities
+            System.out.println("Products have arrived. Have you updated the inventory to reflect the minimum quantity of each products that arival?");
+            System.out.print("Enter 'yes' or 'no': ");
+            String userInput = scanner.nextLine().trim().toLowerCase();
+
+            // Handle user input
+            if ("yes".equals(userInput)) {
+                System.out.println("You confirmed that the products have been added to the minimum quantity all the products that arival.");
+                productSQL.OrderONTheWayRemove();
+            } else if ("no".equals(userInput)) {
+                System.out.println("You haven't added the products to the minimum quantity yet.");
+                    return null;
+            } else {
+                System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+            }
+        }
 
         //2nd step: check for shortcuts for each product.
         //
@@ -450,13 +474,11 @@ public class Inventory {
             // Loop through the list and print the product details
             for (Product product : productsBellowQuantity) {
                 int unitsToOrder = product.getMin_quantity() - (product.getQuantity());
-                System.out.println("Product: " + product.getName() + ", Category: " + product.getCategory() +
-                        ", Sub-Category: " + product.getSub_category() + ", Size: " + product.getSize() +
-                        " needs " + unitsToOrder + " more units.");
+                productsToOrder.put(product.getName(), unitsToOrder);
             }
 
-            //create new order from ControllersManager.createOrderForShortage(productsToOrder);
         }
+        return productsToOrder;
     }
 
 

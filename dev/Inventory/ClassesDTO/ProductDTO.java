@@ -8,8 +8,11 @@ import dev.Inventory.Enums.E_Product_Status;
 import dev.Inventory.Interface.IDTO;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDTO implements IDTO<Product> {
     private Connection connection;
@@ -313,4 +316,56 @@ public class ProductDTO implements IDTO<Product> {
         return productsToOrder;
     }
 
+
+    // Function to check for expired products and print their names and quantities
+    public boolean checkProductsArrived() {
+        // SQL query to find products that are expired (including today)
+        String sql = "SELECT name, quantity FROM OrdersOnTheWay WHERE deliveryDate <= ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            // Set the current date as the parameter for the query
+            pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
+
+            // Execute the query
+            ResultSet rs = pstmt.executeQuery();
+
+            // Check if any expired products exist
+            if (!rs.isBeforeFirst()) {
+                System.out.println("No products that arrival");
+                return false;
+            }
+
+            // Iterate through the result set and print the product name and quantity;
+            System.out.println("Products arrival");
+            while (rs.next()) {
+                String name = rs.getString("name");
+                int quantity = rs.getInt("quantity");
+
+                // Print the product details
+                System.out.println("Product: " + name + ", Quantity: " + quantity);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public void OrderONTheWayRemove() {
+        // SQL query to delete all expired records (including today)
+        String sql = "DELETE FROM OrdersOnTheWay WHERE deliveryDate <= ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            // Set the current date as the parameter
+            pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
+
+            // Execute the delete query
+            int rowsAffected = pstmt.executeUpdate();
+
+      ;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        }
 }

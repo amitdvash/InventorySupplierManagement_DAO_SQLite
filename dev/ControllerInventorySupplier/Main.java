@@ -1,5 +1,6 @@
 package dev.ControllerInventorySupplier;
 
+import dev.Inventory.Controllers.Controller_Menu;
 import dev.Inventory.Controllers.main_Controller;
 import dev.Suppliers.DataBase.DatabaseConnection;
 import dev.Suppliers.DataBase.SupllierCreatDb;
@@ -12,6 +13,11 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {  //
         Scanner scanner = new Scanner(System.in);
+        DatabaseConnection.connect();
+        SupllierCreatDb.createTables();
+        DatabaseConnection.main();
+        Controller_Menu.initializeInventorySystem();
+
 
         System.out.println("Welcome! Would you like to manage Inventory or Supplier?");
         System.out.println("Type '1' for Inventory or '2' for Supplier:");
@@ -25,9 +31,7 @@ public class Main {
                 break;
             case 2:
                 System.out.println("You have selected Supplier.");
-                DatabaseConnection.connect();
-                SupllierCreatDb.createTables();
-//                DatabaseConnection.main();
+
                 main_supplier.main();
 
                 break;

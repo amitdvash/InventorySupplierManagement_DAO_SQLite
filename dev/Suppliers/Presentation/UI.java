@@ -1,6 +1,7 @@
 package dev.Suppliers.Presentation;
 
 import dev.ControllerInventorySupplier.Main;
+import dev.Inventory.Controllers.Controller_Menu;
 import dev.Suppliers.Domain.ControllersManager;
 
 import java.sql.SQLException;
@@ -11,13 +12,21 @@ public class UI {
 
     private final ControllersManager controllersManager;
     private final HashMap<String, String> credentials;
-
+    private  Controller_Menu controller_menu_inventory;
     public UI(ControllersManager controllersManager) {
         this.controllersManager = controllersManager;
         credentials = new HashMap<>();
         credentials.put("senior", "1111");
         credentials.put("junior", "2222");
     }
+
+
+
+
+    public void ShipProductsToOrder(){
+        controllersManager.createOrderForShortage(controller_menu_inventory.getInventory().createOrder());
+    }
+
 
     // Method to handle the login and display the correct menu based on access level
     public void displayLoginAndMenu() throws SQLException {

@@ -10,6 +10,7 @@ import dev.Inventory.Enums.E_Product_Status;
 import java.time.LocalDate;
 
 
+
 public class Controller_Manager extends Controller_Worker
 {
     static void ManagerMenu()

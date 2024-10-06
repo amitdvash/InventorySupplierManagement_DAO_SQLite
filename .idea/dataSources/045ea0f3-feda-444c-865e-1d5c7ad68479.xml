@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="inventory">
-  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.53">
+  <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.52">
     <root id="1">
       <ServerVersion>3.45.1</ServerVersion>
     </root>
@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-10-05.13:18:36</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-10-05.15:23:17</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1597,335 +1597,500 @@
     <table id="559" parent="191" name="ProductsSuppliers"/>
     <table id="560" parent="191" name="Suppliers"/>
     <table id="561" parent="191" name="SupplyDays"/>
-    <table id="562" parent="191" name="orderProducts"/>
-    <table id="563" parent="191" name="productDiscounts"/>
-    <table id="564" parent="191" name="sqlite_master">
+    <table id="562" parent="191" name="discounts"/>
+    <table id="563" parent="191" name="items"/>
+    <table id="564" parent="191" name="orderProducts"/>
+    <table id="565" parent="191" name="productDiscounts"/>
+    <table id="566" parent="191" name="products"/>
+    <table id="567" parent="191" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="565" parent="191" name="sqlite_sequence">
+    <table id="568" parent="191" name="sqlite_sequence">
       <System>1</System>
     </table>
-    <column id="566" parent="555" name="agreementID">
+    <column id="569" parent="555" name="agreementID">
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="567" parent="555" name="dayName">
+    <column id="570" parent="555" name="dayName">
+      <DasType>VARCHAR(20)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>VARCHAR(20)|0s</StoredType>
     </column>
-    <foreign-key id="568" parent="555">
+    <foreign-key id="571" parent="555">
       <ColNames>agreementID</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>agreementID</RefColNames>
       <RefTableName>Agreements</RefTableName>
     </foreign-key>
-    <foreign-key id="569" parent="555">
+    <foreign-key id="572" parent="555">
       <ColNames>dayName</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>dayName</RefColNames>
       <RefTableName>SupplyDays</RefTableName>
     </foreign-key>
-    <index id="570" parent="555" name="sqlite_autoindex_AgreementSupplyDays_1">
+    <index id="573" parent="555" name="sqlite_autoindex_AgreementSupplyDays_1">
       <ColNames>agreementID
 dayName</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="571" parent="555">
+    <key id="574" parent="555">
       <ColNames>agreementID
 dayName</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_AgreementSupplyDays_1</UnderlyingIndexName>
     </key>
-    <check id="572" parent="556">
+    <check id="575" parent="556">
       <Predicate>selfSupply IN (0, 1)</Predicate>
     </check>
-    <column id="573" parent="556" name="agreementID">
+    <column id="576" parent="556" name="agreementID">
       <AutoIncrement>1</AutoIncrement>
+      <DasType>INTEGER|0s</DasType>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="574" parent="556" name="supplierID">
+    <column id="577" parent="556" name="supplierID">
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="575" parent="556" name="selfSupply">
+    <column id="578" parent="556" name="selfSupply">
+      <DasType>INTEGER|0s</DasType>
       <Position>3</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="576" parent="556">
+    <foreign-key id="579" parent="556">
       <ColNames>supplierID</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>supplierID</RefColNames>
       <RefTableName>Suppliers</RefTableName>
     </foreign-key>
-    <key id="577" parent="556">
+    <key id="580" parent="556">
       <ColNames>agreementID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="578" parent="557" name="orderID">
-      <AutoIncrement>1</AutoIncrement>
+    <column id="581" parent="557" name="orderID">
+      <DasType>SERIAL|0s</DasType>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="579" parent="557" name="supplierID">
+    <column id="582" parent="557" name="supplierID">
+      <DasType>INTEGER|0s</DasType>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="580" parent="557" name="orderDate">
+    <column id="583" parent="557" name="orderDate">
+      <DasType>DATE|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>DATE|0s</StoredType>
     </column>
-    <column id="581" parent="557" name="deliveryDay">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>VARCHAR(20)|0s</StoredType>
-    </column>
-    <column id="582" parent="557" name="isConstantDelivery">
+    <column id="584" parent="557" name="isConstantDelivery">
+      <DasType>BOOLEAN|0s</DasType>
       <DefaultExpression>FALSE</DefaultExpression>
+      <Position>4</Position>
+    </column>
+    <column id="585" parent="557" name="deliveryDate">
+      <DasType>DATE|0s</DasType>
       <Position>5</Position>
-      <StoredType>BOOLEAN|0s</StoredType>
     </column>
-    <column id="583" parent="557" name="deliveryDate">
+    <column id="586" parent="557" name="priceBeforeDiscount">
+      <DasType>NUMERIC(10,2)|0s</DasType>
       <Position>6</Position>
-      <StoredType>DATE|0s</StoredType>
     </column>
-    <column id="584" parent="557" name="priceBeforeDiscount">
+    <column id="587" parent="557" name="discountAmount">
+      <DasType>NUMERIC(10,2)|0s</DasType>
       <Position>7</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
     </column>
-    <column id="585" parent="557" name="discountAmount">
+    <column id="588" parent="557" name="priceAfterDiscount">
+      <DasType>NUMERIC(10,2)|0s</DasType>
       <Position>8</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
     </column>
-    <column id="586" parent="557" name="priceAfterDiscount">
-      <Position>9</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
-    </column>
-    <key id="587" parent="557">
+    <index id="589" parent="557" name="sqlite_autoindex_Orders_1">
+      <ColNames>orderID</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <Unique>1</Unique>
+    </index>
+    <key id="590" parent="557">
       <ColNames>orderID</ColNames>
       <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_Orders_1</UnderlyingIndexName>
     </key>
-    <column id="588" parent="558" name="orderID">
+    <column id="591" parent="558" name="orderID">
+      <DasType>INTEGER|0s</DasType>
+      <NotNull>1</NotNull>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="589" parent="558" name="catalogID">
+    <column id="592" parent="558" name="catalogID">
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="590" parent="558" name="quantity">
+    <column id="593" parent="558" name="quantity">
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="591" parent="558" name="deliveryDate">
+    <column id="594" parent="558" name="deliveryDate">
+      <DasType>DATE|0s</DasType>
       <Position>4</Position>
-      <StoredType>DATE|0s</StoredType>
     </column>
-    <foreign-key id="592" parent="558">
+    <foreign-key id="595" parent="558">
       <ColNames>orderID</ColNames>
       <RefColNames>orderID</RefColNames>
       <RefTableName>Orders</RefTableName>
     </foreign-key>
-    <key id="593" parent="558">
-      <ColNames>orderID</ColNames>
+    <index id="596" parent="558" name="sqlite_autoindex_OrdersOnTheWay_1">
+      <ColNames>orderID
+catalogID</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <Unique>1</Unique>
+    </index>
+    <key id="597" parent="558">
+      <ColNames>orderID
+catalogID</ColNames>
       <Primary>1</Primary>
+      <UnderlyingIndexName>sqlite_autoindex_OrdersOnTheWay_1</UnderlyingIndexName>
     </key>
-    <column id="594" parent="559" name="catalogID">
+    <column id="598" parent="559" name="catalogID">
       <AutoIncrement>1</AutoIncrement>
+      <DasType>INTEGER|0s</DasType>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="595" parent="559" name="name">
+    <column id="599" parent="559" name="name">
+      <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>VARCHAR(255)|0s</StoredType>
     </column>
-    <column id="596" parent="559" name="price">
+    <column id="600" parent="559" name="price">
+      <DasType>NUMERIC(10,2)|0s</DasType>
       <Position>3</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
     </column>
-    <column id="597" parent="559" name="expirationDays">
+    <column id="601" parent="559" name="expirationDays">
+      <DasType>INTEGER|0s</DasType>
       <Position>4</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="598" parent="559" name="weight">
+    <column id="602" parent="559" name="weight">
+      <DasType>NUMERIC(10,2)|0s</DasType>
       <Position>5</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
     </column>
-    <column id="599" parent="559" name="agreementID">
+    <column id="603" parent="559" name="agreementID">
+      <DasType>INTEGER|0s</DasType>
       <Position>6</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="600" parent="559">
+    <foreign-key id="604" parent="559">
       <ColNames>agreementID</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>agreementID</RefColNames>
       <RefTableName>Agreements</RefTableName>
     </foreign-key>
-    <key id="601" parent="559">
+    <key id="605" parent="559">
       <ColNames>catalogID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="602" parent="560" name="supplierID">
+    <column id="606" parent="560" name="supplierID">
       <AutoIncrement>1</AutoIncrement>
+      <DasType>INTEGER|0s</DasType>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="603" parent="560" name="name">
+    <column id="607" parent="560" name="name">
+      <DasType>VARCHAR(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>VARCHAR(255)|0s</StoredType>
     </column>
-    <column id="604" parent="560" name="phone">
+    <column id="608" parent="560" name="phone">
+      <DasType>VARCHAR(50)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>VARCHAR(50)|0s</StoredType>
     </column>
-    <column id="605" parent="560" name="email">
+    <column id="609" parent="560" name="email">
+      <DasType>VARCHAR(255)|0s</DasType>
       <Position>4</Position>
-      <StoredType>VARCHAR(255)|0s</StoredType>
     </column>
-    <column id="606" parent="560" name="companyID">
+    <column id="610" parent="560" name="companyID">
+      <DasType>VARCHAR(50)|0s</DasType>
       <Position>5</Position>
-      <StoredType>VARCHAR(50)|0s</StoredType>
     </column>
-    <column id="607" parent="560" name="bankAccount">
+    <column id="611" parent="560" name="bankAccount">
+      <DasType>VARCHAR(50)|0s</DasType>
       <Position>6</Position>
-      <StoredType>VARCHAR(50)|0s</StoredType>
     </column>
-    <column id="608" parent="560" name="paymentMethod">
+    <column id="612" parent="560" name="paymentMethod">
+      <DasType>VARCHAR(50)|0s</DasType>
       <Position>7</Position>
-      <StoredType>VARCHAR(50)|0s</StoredType>
     </column>
-    <key id="609" parent="560">
+    <key id="613" parent="560">
       <ColNames>supplierID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="610" parent="561" name="dayName">
+    <column id="614" parent="561" name="dayName">
+      <DasType>VARCHAR(20)|0s</DasType>
       <Position>1</Position>
-      <StoredType>VARCHAR(20)|0s</StoredType>
     </column>
-    <index id="611" parent="561" name="sqlite_autoindex_SupplyDays_1">
+    <index id="615" parent="561" name="sqlite_autoindex_SupplyDays_1">
       <ColNames>dayName</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="612" parent="561">
+    <key id="616" parent="561">
       <ColNames>dayName</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_SupplyDays_1</UnderlyingIndexName>
     </key>
-    <column id="613" parent="562" name="orderID">
-      <NotNull>1</NotNull>
+    <column id="617" parent="562" name="id">
+      <AutoIncrement>1</AutoIncrement>
+      <DasType>INTEGER|0s</DasType>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="614" parent="562" name="catalogID">
+    <column id="618" parent="562" name="discount_rate">
+      <DasType>REAL|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="615" parent="562" name="quantity">
+    <column id="619" parent="562" name="start_date">
+      <DasType>TEXT|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="616" parent="562" name="price">
+    <column id="620" parent="562" name="end_date">
+      <DasType>TEXT|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
     </column>
-    <column id="617" parent="562" name="discount">
+    <key id="621" parent="562">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="622" parent="563" name="id">
+      <AutoIncrement>1</AutoIncrement>
+      <DasType>INTEGER|0s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="623" parent="563" name="name">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="624" parent="563" name="category">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="625" parent="563" name="sub_category">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <column id="626" parent="563" name="size">
+      <DasType>REAL|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <column id="627" parent="563" name="cost_price">
+      <DasType>REAL|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+    </column>
+    <column id="628" parent="563" name="selling_price">
+      <DasType>REAL|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+    </column>
+    <column id="629" parent="563" name="priceAfterDiscount">
+      <DasType>REAL|0s</DasType>
+      <Position>8</Position>
+    </column>
+    <column id="630" parent="563" name="manufacturer">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>9</Position>
+    </column>
+    <column id="631" parent="563" name="expiry_date">
+      <DasType>TEXT|0s</DasType>
+      <Position>10</Position>
+    </column>
+    <column id="632" parent="563" name="status">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>11</Position>
+    </column>
+    <column id="633" parent="563" name="place">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>12</Position>
+    </column>
+    <column id="634" parent="563" name="product_id">
+      <DasType>INTEGER|0s</DasType>
+      <Position>13</Position>
+    </column>
+    <foreign-key id="635" parent="563">
+      <ColNames>product_id</ColNames>
+      <RefColNames>rowid</RefColNames>
+      <RefTableName>products</RefTableName>
+    </foreign-key>
+    <key id="636" parent="563">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="637" parent="564" name="orderID">
+      <DasType>INTEGER|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="638" parent="564" name="catalogID">
+      <DasType>INTEGER|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="639" parent="564" name="quantity">
+      <DasType>INTEGER|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="640" parent="564" name="price">
+      <DasType>NUMERIC(10,2)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <column id="641" parent="564" name="discount">
+      <DasType>NUMERIC(10,2)|0s</DasType>
       <DefaultExpression>0</DefaultExpression>
       <Position>5</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
     </column>
-    <foreign-key id="618" parent="562">
+    <foreign-key id="642" parent="564">
       <ColNames>orderID</ColNames>
       <RefColNames>orderID</RefColNames>
       <RefTableName>Orders</RefTableName>
     </foreign-key>
-    <foreign-key id="619" parent="562">
+    <foreign-key id="643" parent="564">
       <ColNames>catalogID</ColNames>
       <RefColNames>catalogID</RefColNames>
-      <RefTableName>ProductsSuppliers</RefTableName>
+      <RefTableName>products</RefTableName>
     </foreign-key>
-    <index id="620" parent="562" name="sqlite_autoindex_orderProducts_1">
+    <index id="644" parent="564" name="sqlite_autoindex_orderProducts_1">
       <ColNames>orderID
 catalogID</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="621" parent="562">
+    <key id="645" parent="564">
       <ColNames>orderID
 catalogID</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_orderProducts_1</UnderlyingIndexName>
     </key>
-    <column id="622" parent="563" name="catalogID">
+    <column id="646" parent="565" name="catalogID">
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="623" parent="563" name="quantity">
+    <column id="647" parent="565" name="quantity">
+      <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="624" parent="563" name="discount">
+    <column id="648" parent="565" name="discount">
+      <DasType>NUMERIC(10,2)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>NUMERIC(10,2)|0s</StoredType>
     </column>
-    <foreign-key id="625" parent="563">
+    <foreign-key id="649" parent="565">
       <ColNames>catalogID</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>catalogID</RefColNames>
-      <RefTableName>ProductsSuppliers</RefTableName>
+      <RefTableName>products</RefTableName>
     </foreign-key>
-    <index id="626" parent="563" name="sqlite_autoindex_productDiscounts_1">
+    <index id="650" parent="565" name="sqlite_autoindex_productDiscounts_1">
       <ColNames>catalogID
 quantity</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="627" parent="563">
+    <key id="651" parent="565">
       <ColNames>catalogID
 quantity</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_productDiscounts_1</UnderlyingIndexName>
     </key>
-    <column id="628" parent="564" name="type">
+    <column id="652" parent="566" name="name">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
       <Position>1</Position>
-      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="629" parent="564" name="name">
+    <column id="653" parent="566" name="category">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="630" parent="564" name="tbl_name">
+    <column id="654" parent="566" name="sub_category">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="631" parent="564" name="rootpage">
+    <column id="655" parent="566" name="size">
+      <DasType>REAL|0s</DasType>
+      <NotNull>1</NotNull>
       <Position>4</Position>
-      <StoredType>INT|0s</StoredType>
     </column>
-    <column id="632" parent="564" name="sql">
+    <column id="656" parent="566" name="min_quantity">
+      <DasType>INTEGER|0s</DasType>
       <Position>5</Position>
-      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="633" parent="565" name="name">
+    <column id="657" parent="566" name="quantity">
+      <DasType>INTEGER|0s</DasType>
+      <DefaultExpression>0</DefaultExpression>
+      <Position>6</Position>
+    </column>
+    <column id="658" parent="566" name="status">
+      <DasType>TEXT|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+    </column>
+    <column id="659" parent="566" name="discount_id">
+      <DasType>INTEGER|0s</DasType>
+      <Position>8</Position>
+    </column>
+    <foreign-key id="660" parent="566">
+      <ColNames>discount_id</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>discounts</RefTableName>
+    </foreign-key>
+    <index id="661" parent="566" name="sqlite_autoindex_products_1">
+      <ColNames>name
+category
+sub_category
+size</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <Unique>1</Unique>
+    </index>
+    <key id="662" parent="566">
+      <ColNames>name
+category
+sub_category
+size</ColNames>
+      <UnderlyingIndexName>sqlite_autoindex_products_1</UnderlyingIndexName>
+    </key>
+    <column id="663" parent="567" name="type">
+      <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="634" parent="565" name="seq">
+    <column id="664" parent="567" name="name">
+      <DasType>TEXT|0s</DasType>
+      <Position>2</Position>
+    </column>
+    <column id="665" parent="567" name="tbl_name">
+      <DasType>TEXT|0s</DasType>
+      <Position>3</Position>
+    </column>
+    <column id="666" parent="567" name="rootpage">
+      <DasType>INT|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <column id="667" parent="567" name="sql">
+      <DasType>TEXT|0s</DasType>
+      <Position>5</Position>
+    </column>
+    <column id="668" parent="568" name="name">
+      <Position>1</Position>
+    </column>
+    <column id="669" parent="568" name="seq">
       <Position>2</Position>
     </column>
   </database-model>

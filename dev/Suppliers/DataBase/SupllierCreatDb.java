@@ -90,9 +90,11 @@ public class SupllierCreatDb {
                 "catalogID INTEGER NOT NULL," +
                 "quantity INTEGER NOT NULL," +
                 "deliveryDate DATE," +
+                "name VARCHAR(255) NOT NULL," + // Added the new 'name' column
                 "PRIMARY KEY (orderID, catalogID)," +
                 "FOREIGN KEY (orderID) REFERENCES Orders(orderID)" +
                 ");";
+
 
 
         try (Connection conn = connect(); Statement stmt = conn.createStatement()) {

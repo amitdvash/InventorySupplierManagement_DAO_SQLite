@@ -175,10 +175,11 @@ public class Controller_Worker extends Controller_Menu
 
     public boolean registerWorker(String name1, String password)
     {
-        if (password.equals("1111"))
+        if (password.equals("1111") || password.equals("2222"))
             return true;
         else
             return false;
+
 //            return inventory.registerWorker(name1, password);
     }
 

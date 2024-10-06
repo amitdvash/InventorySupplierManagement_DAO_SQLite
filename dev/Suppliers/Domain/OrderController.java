@@ -97,7 +97,7 @@ public class OrderController {
     }
 
     // Method to insert product details into OrdersOnTheWay table
-    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity, java.util.Date deliveryDate) {
-        orderDTO.insertOrderOnTheWay(orderID, catalogID, quantity, deliveryDate);
+    public void insertOrderOnTheWay(int orderID, int catalogID, int quantity, java.util.Date deliveryDate,String nameProduct) {
+        orderDTO.insertOrderOnTheWay(orderID, catalogID, quantity, deliveryDate,nameProduct);
     }
 }

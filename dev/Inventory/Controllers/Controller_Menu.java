@@ -12,6 +12,7 @@ import dev.Inventory.Classes.Inventory;
 import dev.Inventory.Data.SystemInitializer;
 import dev.Inventory.DB.CreateTable;
 import dev.Inventory.DB.SQLiteDB;
+import dev.Suppliers.Domain.ControllersManager;
 //---------------------------------------------------------------------
 
 
@@ -21,6 +22,7 @@ public class Controller_Menu
     private static Controller_Worker workerController = new Controller_Worker();
     protected static Scanner scanner = new Scanner(System.in);
     protected static Connection sql_Connection;
+
 
     protected static Inventory inventory;
 
@@ -40,7 +42,7 @@ public class Controller_Menu
     }
 
     public static void runProgram() throws SQLException {
-        initializeInventorySystem();
+//        initializeInventorySystem();
         Controller_Menu.dataMenu();
         Controller_Menu.registerMenu();
     }
@@ -107,7 +109,7 @@ public class Controller_Menu
                 case "2":
                     System.out.print("Enter your name: ");
                     String name2 = scanner.nextLine();
-                    System.out.print("Enter your password:(1111) ");
+                    System.out.print("Enter your password:(2222) ");
                     String password2 = scanner.nextLine();
                     if (workerController.registerWorker(name2,password2)) {
                         workerController.WorkerMenu();
