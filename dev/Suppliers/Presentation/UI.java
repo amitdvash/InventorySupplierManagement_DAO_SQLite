@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Scanner;
 
+
 public class UI {
 
     private final ControllersManager controllersManager;
     private final HashMap<String, String> credentials;
-    private  Controller_Menu controller_menu_inventory;
     public UI(ControllersManager controllersManager) {
         this.controllersManager = controllersManager;
         credentials = new HashMap<>();
@@ -23,9 +23,7 @@ public class UI {
 
 
 
-    public void ShipProductsToOrder(){
-        controllersManager.createOrderForShortage(controller_menu_inventory.getInventory().createOrder());
-    }
+
 
 
     // Method to handle the login and display the correct menu based on access level

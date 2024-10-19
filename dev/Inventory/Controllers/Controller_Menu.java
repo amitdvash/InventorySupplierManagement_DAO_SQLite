@@ -11,8 +11,7 @@ import dev.Inventory.Classes.Inventory;
 //To Take the following classes from the Inventory package
 import dev.Inventory.Data.SystemInitializer;
 import dev.Inventory.DB.CreateTable;
-import dev.Inventory.DB.SQLiteDB;
-import dev.Suppliers.Domain.ControllersManager;
+import dev.Inventory.ClassesDTO.SQLiteDB;
 //---------------------------------------------------------------------
 
 
@@ -21,7 +20,6 @@ public class Controller_Menu
     private static Controller_Manager managerController = new Controller_Manager();
     private static Controller_Worker workerController = new Controller_Worker();
     protected static Scanner scanner = new Scanner(System.in);
-    protected static Connection sql_Connection;
 
 
     protected static Inventory inventory;
@@ -37,13 +35,10 @@ public class Controller_Menu
 
 
 
-    public static Connection getSqlConnection(){
-        return Controller_Menu.sql_Connection;
-    }
 
     public static void runProgram() throws SQLException {
 //        initializeInventorySystem();
-        Controller_Menu.dataMenu();
+       // Controller_Menu.dataMenu();
         Controller_Menu.registerMenu();
     }
 
@@ -131,16 +126,13 @@ public class Controller_Menu
     public static void initializeInventorySystem() {
         try {
             // Establish the SQLite connection
-            sql_Connection = SQLiteDB.connect();
-            System.out.println("Database connection established successfully.");
+           Connection sql_Connection = SQLiteDB.connect();
 
             // Initialize the Inventory object
             inventory = new Inventory(sql_Connection);
-            System.out.println("Inventory initialized successfully.");
 
             CreateTable.initializeTables(sql_Connection);
 
-            System.out.println("initializeTables was tables successfully");
 
         } catch (SQLException e) {
             // If there's an error during initialization, throw a runtime exception

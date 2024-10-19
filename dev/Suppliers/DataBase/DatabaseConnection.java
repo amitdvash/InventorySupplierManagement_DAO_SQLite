@@ -1,6 +1,6 @@
 package dev.Suppliers.DataBase;
 
-import dev.Inventory.DB.SQLiteDB;
+import dev.Inventory.ClassesDTO.SQLiteDB;
 
 import java.sql.*;
 
@@ -13,9 +13,7 @@ public class DatabaseConnection {
         Connection conn = null;
         try {
             conn = SQLiteDB.connect();
-            System.out.println("Connected to the PostgreSQL server successfully.");
         } catch (SQLException e) {
-            System.out.println("Failed to connect to the database.");
             e.printStackTrace();
         }
         return conn;

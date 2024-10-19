@@ -1,7 +1,6 @@
 package dev.Inventory.ClassesDTO;
 
 import dev.Inventory.Classes.Discount;
-import dev.Inventory.DB.SQLiteDB;
 import dev.Inventory.Interface.IDTO;
 
 import java.sql.*;

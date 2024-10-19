@@ -8,7 +8,7 @@ import dev.Inventory.Enums.E_Item_Status;
 import dev.Inventory.Enums.E_Product_Status;
 
 import java.time.LocalDate;
-
+import java.util.HashMap;
 
 
 public class Controller_Manager extends Controller_Worker
@@ -31,7 +31,7 @@ public class Controller_Manager extends Controller_Worker
             scanner.nextLine();  // Consume newline
             switch (choice) {
                 case "4":
-                    createOrder();
+                    ApplyOrderSupplier();
                     break;
                 case "5":
                     generateInventoryReport();
@@ -57,8 +57,12 @@ public class Controller_Manager extends Controller_Worker
 
 
 
-    private static void createOrder() {
-        inventory.createOrder();
+    public static void ApplyOrderSupplier() {
+            inventory.ApplyOrderSupplier();
+
+
+
+
     }
 
 

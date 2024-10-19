@@ -19,14 +19,12 @@ import java.util.Scanner;
 
 public class Inventory {
 
-    private Connection connection;
     private ProductDTO productSQL;
     private ItemDTO itemSQL;
     private DiscountDTO discountSQL;
 
     public Inventory(Connection connection) throws SQLException {
         // Initialize database connection for products, items, and discounts
-        this.connection = connection; // Reuse this connection across operations
         this.productSQL = new ProductDTO(connection);
         this.itemSQL = new ItemDTO(connection);
         this.discountSQL = new DiscountDTO(connection);
@@ -438,9 +436,11 @@ public class Inventory {
     //go through all the rows in the table: orders_on_the_way, each order that it's date has already passed or it's the current date:
     //fill the inventory with the product (based on the quantity ordered)
 
-    public  HashMap<String,Integer> createOrder() {
+    public void ApplyOrderSupplier() {
 
         boolean flag = productSQL.checkProductsArrived();
+
+
         if (flag) {
             Scanner scanner = new Scanner(System.in);
 
@@ -453,9 +453,10 @@ public class Inventory {
             if ("yes".equals(userInput)) {
                 System.out.println("You confirmed that the products have been added to the minimum quantity all the products that arival.");
                 productSQL.OrderONTheWayRemove();
+
             } else if ("no".equals(userInput)) {
                 System.out.println("You haven't added the products to the minimum quantity yet.");
-                    return null;
+                return;
             } else {
                 System.out.println("Invalid input. Please enter 'yes' or 'no'.");
             }
@@ -466,9 +467,10 @@ public class Inventory {
 
         // Get the list of products that need to be reordered
         List<Product> productsBellowQuantity = productSQL.ProductsBellowQuntity();
-        HashMap<String,Integer> productsToOrder = new HashMap<>();
+        HashMap<String, Integer> productsToOrder = new HashMap<>();
         // If no products need to be ordered, print a message
-        if (productsToOrder.isEmpty()) {
+        HashMap<String, Integer> products_hash = null;
+        if (productsBellowQuantity.isEmpty()) {
             System.out.println("All products have sufficient quantity.");
         } else {
             // Loop through the list and print the product details
@@ -477,10 +479,13 @@ public class Inventory {
                 productsToOrder.put(product.getName(), unitsToOrder);
             }
 
+
+            products_hash = productSQL.CheckIfthatOlradyOrderTheProducts(productsToOrder);
+
+
         }
-        return productsToOrder;
+        ControllersManager.createOrderForShortage(products_hash);
+
     }
-
-
 
 }

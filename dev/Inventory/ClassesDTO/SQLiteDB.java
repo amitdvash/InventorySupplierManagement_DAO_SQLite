@@ -1,5 +1,5 @@
 
-package dev.Inventory.DB;
+package dev.Inventory.ClassesDTO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

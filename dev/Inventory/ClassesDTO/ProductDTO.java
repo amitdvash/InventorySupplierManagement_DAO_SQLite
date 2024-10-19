@@ -3,16 +3,14 @@ package dev.Inventory.ClassesDTO;
 import dev.Inventory.Classes.Product;
 import dev.Inventory.Classes.Discount;
 import dev.Inventory.Classes.Item;
-import dev.Inventory.DB.SQLiteDB;
 import dev.Inventory.Enums.E_Product_Status;
 import dev.Inventory.Interface.IDTO;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ProductDTO implements IDTO<Product> {
     private Connection connection;
@@ -241,18 +239,19 @@ public class ProductDTO implements IDTO<Product> {
         return products;
     }
 
-    public List<Product> readByName(String name) {
-        List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM products WHERE name = ?";
+    // Method to get a single product by name
+    public Product readByName(String name) {
+        Product product = null;
+        String sql = "SELECT * FROM products WHERE name = ? LIMIT 1";  // Using LIMIT 1 to get only one product
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             // Set the name parameter in the query
             pstmt.setString(1, name);
             ResultSet rs = pstmt.executeQuery();
 
-            // Loop through the result set and create Product objects
-            while (rs.next()) {
-                Product product = new Product(
+            // If a result is found, create a Product object
+            if (rs.next()) {
+                product = new Product(
                         rs.getString("name"),
                         rs.getString("category"),
                         rs.getString("sub_category"),
@@ -261,22 +260,21 @@ public class ProductDTO implements IDTO<Product> {
                         null  // Assuming discount will be loaded separately
                 );
 
-                // Optionally, you can add logic to retrieve and set the discount if it's available
+                // Optionally, load the discount if available
                 int discountId = rs.getInt("discount_id");
                 if (discountId != 0) {
                     Discount discount = discountSQL.readById(discountId);  // Assuming there's a method to read discounts by ID
                     product.setDiscount(discount);
                 }
-
-                // Add the product to the list
-                products.add(product);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return products;
+        // Return the product if found, otherwise return null
+        return product;
     }
+
 
     // Method to get a list of products where the quantity is below the minimum quantity
     public List<Product> ProductsBellowQuntity() {
@@ -368,4 +366,81 @@ public class ProductDTO implements IDTO<Product> {
             e.printStackTrace();
         }
         }
+
+
+    // Function to get a list of product names where the delivery date has expired or is today
+//    public List<String> getExpiredProducts_string() {
+//        List<String> expiredProducts = new ArrayList<>();
+//
+//        // SQL query to select products where the delivery date is today or earlier
+//        String sql = "SELECT name FROM OrdersOnTheWay WHERE deliveryDate <= ?";
+//
+//        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+//            // Set the current date as the parameter for the query
+//            pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
+//
+//            // Execute the query
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            // Iterate through the result set and add product names to the list
+//            while (rs.next()) {
+//                String name = rs.getString("name");
+//                expiredProducts.add(name);
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Return the list of expired product names
+//        return expiredProducts;
+//    }
+    public HashMap<String, Integer> CheckIfthatOlradyOrderTheProducts(HashMap<String, Integer> productsToOrder) {
+        // SQL query to check if products are already in OrdersOnTheWay table
+        String sql = "SELECT name, SUM(quantity) as totalOrderedQuantity FROM OrdersOnTheWay WHERE name = ? GROUP BY name";
+        HashMap<String, Integer> productsStillNeeded = new HashMap<>(); // New HashMap to store products that still need to be ordered
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            for (String productName : productsToOrder.keySet()) {
+                pstmt.setString(1, productName);  // Set the product name parameter
+
+                ResultSet rs = pstmt.executeQuery();
+
+                // If the product exists in OrdersOnTheWay and has pending orders
+                if (rs.next()) {
+                    int totalOrderedQuantity = rs.getInt("totalOrderedQuantity");
+                    int neededQuantity = productsToOrder.get(productName);
+
+                    // Calculate the remaining quantity needed
+                    int remainingQuantity = neededQuantity - totalOrderedQuantity;
+
+                    if (remainingQuantity > 0) {
+                        System.out.println("Product " + productName + ", Needed: "  + remainingQuantity );
+                        // Add to the new HashMap only if the remaining quantity is greater than 0
+                        productsStillNeeded.put(productName, remainingQuantity);
+                    } else {
+                        System.out.println("Product " + productName + " already has enough");
+                    }
+                } else {
+                    // If product is not found in OrdersOnTheWay, it means it hasn't been ordered yet
+                    System.out.println("Product " + productName + " has not been ordered yet.");
+                    int neededQuantity = productsToOrder.get(productName);
+
+                    // Add to the new HashMap only if the needed quantity is greater than 0
+                    if (neededQuantity > 0) {
+                        productsStillNeeded.put(productName, neededQuantity);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Return the updated HashMap with products still needing to be ordered
+        return productsStillNeeded;
+    }
+
+
+
+
 }

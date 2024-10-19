@@ -15,7 +15,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         DatabaseConnection.connect();
         SupllierCreatDb.createTables();
-        DatabaseConnection.main();
+        //DatabaseConnection.main();
         Controller_Menu.initializeInventorySystem();
 
 

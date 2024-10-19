@@ -761,7 +761,12 @@ public class ControllersManager {
         }
     }
 
-    public  void createOrderForShortage(HashMap<String, Integer> productQuantities) {
+    public static void createOrderForShortage(HashMap<String, Integer> productQuantities) {
+        Connection connection = DatabaseConnection.connect();
+        final ProductController productController = new ProductController(connection);
+        final OrderController orderController = new OrderController(connection);
+
+
         try {
             boolean isConstantDelivery = false; // This is a one-time order for product shortage
 

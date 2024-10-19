@@ -19,7 +19,7 @@ public class OrderDTO implements IDTO<Order> {
     public OrderDTO(Connection connection) {
         this.connection = connection;
         this.supplierDTO = new SupplierDTO(connection);
-        this.productDTO = new ProductDTO(connection); // Initialize ProductDTO
+        this.productDTO = new ProductDTO(connection);// Initialize ProductDTO
     }
 
     @Override
@@ -34,9 +34,7 @@ public class OrderDTO implements IDTO<Order> {
             pstmt.setDouble(6, order.getDiscountAmount()); // Set discountAmount
             pstmt.setDouble(7, order.getPriceAfterDiscount()); // Set priceAfterDiscount
             pstmt.setBoolean(8, order.isConstantDelivery()); // Set isConstantDelivery
-
             pstmt.executeUpdate();
-
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 int orderID = rs.getInt(1); // Get generated orderID
@@ -61,7 +59,6 @@ public class OrderDTO implements IDTO<Order> {
                 Supplier supplier = supplierDTO.read(rs.getInt("supplierID"));
                 HashMap<Product, Integer> productQuantityMap = getProductsForOrder(rs.getInt("orderID"));
                 boolean isConstantDelivery = rs.getBoolean("isConstantDelivery");
-
                 Order order = new Order(supplier, productQuantityMap, isConstantDelivery);
                 order.setOrderID(rs.getInt("orderID"));
                 order.setOrderDate(rs.getDate("orderDate"));
@@ -138,21 +135,16 @@ public class OrderDTO implements IDTO<Order> {
             for (Map.Entry<Product, Integer> entry : order.getProductQuantityMap().entrySet()) {
                 Product product = entry.getKey();
                 int quantity = entry.getValue();
-
                 double price = product.getPrice() * quantity; // Total price without discount
-
                 // Use calculateHighestDiscount to get the discount percentage based on the quantity
                 double discountPercentage = order.calculateHighestDiscount(product, quantity);
-
                 // Calculate the actual discount value based on the price
                 double discountValue = price * (discountPercentage / 100);
-
                 pstmt.setInt(1, order.getOrderID());
                 pstmt.setInt(2, product.getCatalogID());
                 pstmt.setInt(3, quantity);
                 pstmt.setDouble(4, price);
                 pstmt.setDouble(5, discountValue); // Insert the actual discount value
-
                 pstmt.addBatch();
             }
             pstmt.executeBatch(); // Execute all the batches together
@@ -224,5 +216,4 @@ public class OrderDTO implements IDTO<Order> {
             e.printStackTrace();
         }
     }
-
 }
