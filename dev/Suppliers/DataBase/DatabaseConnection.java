@@ -19,22 +19,22 @@ public class DatabaseConnection {
         return conn;
     }
 
-    public static void main() {
-        String insertSQL = "INSERT INTO SupplyDays (dayName) VALUES (?)";
-        String[] days = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
-
-            // Loop through each day and insert into the database
-            for (String day : days) {
-                pstmt.setString(1, day);
-                pstmt.executeUpdate();
-            }
-
-            System.out.println("Days inserted successfully!");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    public static void main() {
+//        String insertSQL = "INSERT INTO SupplyDays (dayName) VALUES (?)";
+//        String[] days = {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
+//        try (Connection conn = connect();
+//             PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+//
+//            // Loop through each day and insert into the database
+//            for (String day : days) {
+//                pstmt.setString(1, day);
+//                pstmt.executeUpdate();
+//            }
+//
+//            System.out.println("Days inserted successfully!");
+//
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 }
