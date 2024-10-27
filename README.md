@@ -33,8 +33,8 @@ Upon registering or logging in as a Manager, the following menu is shown:
 6. Add Product (Manager)
 7. Set a discount (Manager)
 8. Go to Worker Menu (Manager)
-9. Exit
-   ============================================
+10. exit
+   
    Select an option
    Key Functions for Manager:
    Apply Order: Automatically processes an order for the supplier.
@@ -50,8 +50,8 @@ Upon registering or logging in as a Manager, the following menu is shown:
 2. Remove Item (Worker)
 3. Move Item (Worker)
 4. View Product Details (Worker)
-9. Exit
-   ============================================
+5. exit
+6. 
    Select an option:
    Supplier Management
    Supplier Management functionality allows users to manage supplier details, update products associated with suppliers and manage orders.
@@ -68,8 +68,8 @@ Upon registering or logging in as a Manager, the following menu is shown:
 9. Open New Constant Order
 10. Update Constant Order
 11. Print All Active Orders
-0. Exit
-   =========================================
+12. exit
+
    Key Functions for Senior Manager:
    Open New Supplier Card: Create a new supplier profile by entering supplier details
    Delete Supplier Card: Remove a supplier from the system.
@@ -94,8 +94,6 @@ Limited Menu for Junior Managers:
 9. Open New Constant Order
 10. Update Constant Order
 11. Print All Active Orders
-0. Exit
-   =======================================================
 
 
 
@@ -119,8 +117,7 @@ When you start the system, you need to register as either a manager or a Worker.
 **===== Register Menu =====**
 1. Register as Manager
 2. Register as Worker
-3. Exit
-   =========================
+exit
 
 
 
@@ -137,5 +134,3 @@ Worker Registration:
 Enter Name: Provide your name.
 Enter Password: Enter the default password (2222).
 Outcome: If the password matches, registration is successful, and you'll access the Worker Menu.
-Exit:
-Retu
