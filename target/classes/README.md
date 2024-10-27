@@ -2,8 +2,25 @@
 Guy Amzalag - 207698911 Omri Hershkovich - 318760477 (Inventory)
 Hadar Kanfo - 206747792 Amit Dvash - 316127653 (Suppliers)
 
-import that have in the project is 
-
+import that have in the project is
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Scanner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import Java.util.Date,
+import java.sql.Connections, 
+import java.util.function.Predicate, 
+import java.text.SimpleDateFormat, 
+import java.util.Objects,
+import java.sql.SQLException, 
+import java.sql.*, java.sql.Statement,
+import  java.sql.PreparedStatement, 
+import  java.sql.ResultSet, java.time.LocalDate, 
+import  java.sql.DriverManager
 
 **Introduction**
 This system allows users to manage both inventory and supplier data. Users can choose to either manage inventory or suppliers when they start the system. There are also options to log in as either a manager or worker, each with their own set of permissions and features.
@@ -25,8 +42,8 @@ Upon registering or logging in as a Manager, the following menu is shown:
 6. Add Product (Manager)
 7. Set a discount (Manager)
 8. Go to Worker Menu (Manager)
-9. Exit
-   ============================================
+10. exit
+   
    Select an option
    Key Functions for Manager:
    Apply Order: Automatically processes an order for the supplier.
@@ -42,8 +59,8 @@ Upon registering or logging in as a Manager, the following menu is shown:
 2. Remove Item (Worker)
 3. Move Item (Worker)
 4. View Product Details (Worker)
-9. Exit
-   ============================================
+5. exit
+6. 
    Select an option:
    Supplier Management
    Supplier Management functionality allows users to manage supplier details, update products associated with suppliers and manage orders.
@@ -60,8 +77,8 @@ Upon registering or logging in as a Manager, the following menu is shown:
 9. Open New Constant Order
 10. Update Constant Order
 11. Print All Active Orders
-0. Exit
-   =========================================
+12. exit
+
    Key Functions for Senior Manager:
    Open New Supplier Card: Create a new supplier profile by entering supplier details
    Delete Supplier Card: Remove a supplier from the system.
@@ -86,8 +103,6 @@ Limited Menu for Junior Managers:
 9. Open New Constant Order
 10. Update Constant Order
 11. Print All Active Orders
-0. Exit
-   =======================================================
 
 
 
@@ -111,8 +126,7 @@ When you start the system, you need to register as either a manager or a Worker.
 **===== Register Menu =====**
 1. Register as Manager
 2. Register as Worker
-3. Exit
-   =========================
+exit
 
 
 
@@ -129,5 +143,3 @@ Worker Registration:
 Enter Name: Provide your name.
 Enter Password: Enter the default password (2222).
 Outcome: If the password matches, registration is successful, and you'll access the Worker Menu.
-Exit:
-Retu
