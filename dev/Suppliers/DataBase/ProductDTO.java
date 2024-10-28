@@ -114,20 +114,21 @@ public class ProductDTO implements IDTO<Product> {
 
     // Find the cheapest supplier for a product and quantity using SQL queries
     public Supplier findCheapestSupplier(String productName, int quantity) {
-        String sql = "SELECT s.*, p.price, COALESCE(pd.discount, 0) AS discount " +
+        String sql = "SELECT s.*, p.price, COALESCE(pd.discount, 0) AS discount, " +
+                "(p.price - (p.price * COALESCE(pd.discount, 0) / 100)) AS finalPrice " +
                 "FROM ProductsSuppliers p " +
-                "LEFT JOIN productDiscounts pd ON p.catalogID = pd.catalogID AND pd.quantity <= ? " +
+                "LEFT JOIN productDiscounts pd ON p.catalogID = pd.catalogID " +
+                "AND pd.quantity <= ? " +  // Ensure discount is applied for quantities equal to or less than the given quantity
                 "JOIN Agreements a ON p.agreementID = a.agreementID " +
                 "JOIN Suppliers s ON a.supplierID = s.supplierID " +
                 "WHERE p.name = ? " +
-                "ORDER BY (p.price - (p.price * COALESCE(pd.discount, 0) / 100)) ASC " +
-                "LIMIT 1";
-
+                "ORDER BY finalPrice ASC " +  // Order by final price after discount
+                "LIMIT 1";  // Fetch the cheapest supplier
 
         Supplier supplier = null;
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(2, productName);
-            pstmt.setInt(1, quantity);
+            pstmt.setInt(1, quantity);  // Set quantity in the query
+            pstmt.setString(2, productName);  // Set product name in the query
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 supplier = new Supplier(
@@ -238,6 +239,32 @@ public class ProductDTO implements IDTO<Product> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Product getProductBySupplierAndName(int supplierID, String productName) {
+        Product product = null;
+        String sql = "SELECT ps.catalogID, ps.name, ps.price, ps.expirationDays, ps.weight " +
+                "FROM ProductsSuppliers ps " +
+                "JOIN Agreements a ON ps.agreementID = a.agreementID " +
+                "WHERE a.supplierID = ? AND ps.name = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, supplierID);
+            pstmt.setString(2, productName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                product = new Product(
+                        rs.getInt("catalogID"),
+                        rs.getString("name"),
+                        getProductDiscountDetails(rs.getInt("catalogID")), // Assuming this method exists
+                        rs.getDouble("price"),
+                        rs.getInt("expirationDays"),
+                        rs.getDouble("weight")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
     }
 
 }

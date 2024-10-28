@@ -11,16 +11,19 @@ import java.util.Scanner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import Java.util.Date,
-import java.sql.Connections, 
-import java.util.function.Predicate, 
-import java.text.SimpleDateFormat, 
-import java.util.Objects,
-import java.sql.SQLException, 
-import java.sql.*, java.sql.Statement,
-import  java.sql.PreparedStatement, 
-import  java.sql.ResultSet, java.time.LocalDate, 
-import  java.sql.DriverManager
+import .util.Date
+import java.sql.Connections
+import java.util.function.Predicate
+import java.text.SimpleDateFormat
+import java.util.Objects
+import java.sql.SQLException
+import java.sql.*
+import java.sql.Statement
+import java.sql.PreparedStatement,
+import java.sql.ResultSet
+import java.time.LocalDate
+import java.sql.DriverManager
+
 
 **Introduction**
 This system allows users to manage both inventory and supplier data. Users can choose to either manage inventory or suppliers when they start the system. There are also options to log in as either a manager or worker, each with their own set of permissions and features.

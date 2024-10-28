@@ -1,9 +1,11 @@
 package dev.Suppliers.Domain;
 
 import dev.Inventory.Classes.Inventory;
+import dev.Suppliers.DataBase.DatabaseConnection;
 import dev.Suppliers.Domain.Exception.ExitException;
 import dev.Suppliers.Enums.PaymentMethod;
 
+import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -511,15 +513,16 @@ public class ControllersManager {
 
             boolean isConstantDelivery = true;
 
-            // Step 2: Display all products available in the system (names only)
-            List<String> productNames = productController.getAllProductNames();
-            if (productNames.isEmpty()) {
+            // Step 2: Collect all unique product names available in the system
+            Set<String> uniqueProductNames = new HashSet<>(productController.getAllProductNames());
+            if (uniqueProductNames.isEmpty()) {
                 System.out.println("No products available in the system.");
                 return;
             }
 
+            // Print unique product names
             System.out.println("Available products:");
-            productNames.forEach(System.out::println); // Print only product names
+            uniqueProductNames.forEach(System.out::println); // Print only unique product names
 
             // Step 3: Select products and quantities
             HashMap<Supplier, HashMap<Product, Integer>> supplierProductMap = new HashMap<>();
@@ -544,12 +547,18 @@ public class ControllersManager {
                     System.out.println("No supplier found for the selected product and quantity.");
                     continue;
                 }
+                // Step 5: Get the product for the cheapest supplier directly from the database
+                Product supplierProduct = productController.getProductBySupplierAndName(cheapestSupplier.getSupplierID(), productName);
 
+                if (supplierProduct == null) {
+                    System.out.println("Product not found for the cheapest supplier. Please try again.");
+                    continue;
+                }
                 // Get the supplier's product map or create a new one if the supplier isn't already in the map
                 HashMap<Product, Integer> productQuantityMap = supplierProductMap.getOrDefault(cheapestSupplier, new HashMap<>());
 
                 // Update the quantity for the product, setting the last entered quantity
-                productQuantityMap.put(product, quantity);
+                productQuantityMap.put(supplierProduct, quantity);
 
                 // Update the supplier's entry in the supplierProductMap
                 supplierProductMap.put(cheapestSupplier, productQuantityMap);
@@ -564,14 +573,14 @@ public class ControllersManager {
                 // Create the order and get the order ID
                 Order newOrder = orderController.createOrder(supplier, productQuantityMap, isConstantDelivery);
 
-                // Step 5: Insert each product's information into OrdersOnTheWay table
-                for (Product product : productQuantityMap.keySet()) {
-                    int quantity = productQuantityMap.get(product);
-                    orderController.insertOrderOnTheWay(newOrder.getOrderID(), product.getCatalogID(), quantity, newOrder.getDeliveryDate(),product.getName());
-                }
+//                // Step 5: Insert each product's information into OrdersOnTheWay table
+//                for (Product product : productQuantityMap.keySet()) {
+//                    int quantity = productQuantityMap.get(product);
+//                    orderController.insertOrderOnTheWay(newOrder.getOrderID(), product.getCatalogID(), quantity, newOrder.getDeliveryDate(),product.getName());
+//                }
             }
 
-            System.out.println("Orders successfully created and added to OrdersOnTheWay.");
+//            System.out.println("Orders successfully created and added to OrdersOnTheWay.");
 
         } catch (ExitException e) {
             System.out.println("Action cancelled.");

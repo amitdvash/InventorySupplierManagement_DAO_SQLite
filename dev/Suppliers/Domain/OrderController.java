@@ -58,6 +58,11 @@ public class OrderController {
             return false;
         }
 
+        for (Product product : order.getProductQuantityMap().keySet()) {
+            int quantity = order.getProductQuantityMap().get(product);
+            insertOrderOnTheWay(order.getOrderID(), product.getCatalogID(), quantity, order.getDeliveryDate(),product.getName());
+        }
+
         // Update the order to a regular order and set the last delivery date
         order.setConstantDelivery(false);
         order.updateDeliveryDate();

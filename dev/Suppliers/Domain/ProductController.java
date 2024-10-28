@@ -63,4 +63,8 @@ public class ProductController {
     public Product getProductByName(String productName) {
         return productDTO.readByName(productName); // Use DTO to get the product by name
     }
+
+    public Product getProductBySupplierAndName(int supplierID, String productName) {
+        return productDTO.getProductBySupplierAndName(supplierID, productName);
+    }
 }
