@@ -1,148 +1,26 @@
-# ADSS_Group_B
-Guy Amzalag - 207698911 Omri Hershkovich - 318760477 (Inventory)
-Hadar Kanfo - 206747792 Amit Dvash - 316127653 (Suppliers)
+# InventorySupplierManagement_DAO_SQLite
 
-import that have in the project is
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import .util.Date
-import java.sql.Connections
-import java.util.function.Predicate
-import java.text.SimpleDateFormat
-import java.util.Objects
-import java.sql.SQLException
-import java.sql.*
-import java.sql.Statement
-import java.sql.PreparedStatement,
-import java.sql.ResultSet
-import java.time.LocalDate
-import java.sql.DriverManager
+## Overview
+This project is an inventory and supplier management system that uses the DAO pattern and SQLite database for efficient data handling. The system supports supplier agreements, product management, and order tracking.
 
+## Features
+- Supplier management, including agreements and contact details.
+- Product management with dynamic discount handling.
+- Order tracking with active and recurring order support.
+- SQLite integration for data storage and retrieval.
+- DAO pattern for clean separation between logic and data access.
 
-**Introduction**
-This system allows users to manage both inventory and supplier data. Users can choose to either manage inventory or suppliers when they start the system. There are also options to log in as either a manager or worker, each with their own set of permissions and features.
+## Database
+The system uses SQLite with the following main tables:
+- **Suppliers**: Manages supplier details and agreements.
+- **Products**: Stores product details, including discounts and catalog information.
+- **Orders**: Tracks orders, including quantities, discounts, and delivery information.
+- **SupplyDays**: Handles recurring delivery schedules.
 
-Starting the Program
-Upon starting, the user is greeted with a menu that allows them to select between Inventory management or Supplier management.
-Welcome! Would you like to manage Inventory or Supplier?
-Type '1' for Inventory or '2' for Supplier:
+## Code Structure
+- **Domain**: Contains main business logic classes (e.g., `Order`, `Product`).
+- **Database**: Includes DAO classes for database interaction.
+- **Controllers**: Manages the interaction between the domain and the database.
 
-Inventory Management
-When Inventory Management is selected, the user is prompted to log in as either a manager or a Worker. Each has different permissions:
-Manager has full access to all inventory management functionalities.
-Workers have limited access with essential functions like adding or moving items
-Manager Menu
-Upon registering or logging in as a Manager, the following menu is shown:
-**===== Inventory Management System Menu - Manager menu =====**
-4. Apply order
-5. Generate Inventory Report (Manager)
-6. Add Product (Manager)
-7. Set a discount (Manager)
-8. Go to Worker Menu (Manager)
-10. exit
-   
-   Select an option
-   Key Functions for Manager:
-   Apply Order: Automatically processes an order for the supplier.
-   Generate Inventory Report: The manager can generate detailed reports filtered by category, sub-category, about-to-finish products, expired items, etc.
-   Add Product: Managers can add new products to the inventory by specifying details such as name, category, size, and minimum quantity.
-   Set Discount: Apply discounts to products, categories, or subcategories within a specific date range.
-   Access Worker Menu: Switch to the worker menu for further actions.
-   Exit: Exit the system
-   Worker Menu
-   Upon logging in as a Worker, the following menu is available:
-   ===== Inventory Management System Menu - Worker menu =====
-1. Add Item (Worker)
-2. Remove Item (Worker)
-3. Move Item (Worker)
-4. View Product Details (Worker)
-5. exit
-6. 
-   Select an option:
-   Supplier Management
-   Supplier Management functionality allows users to manage supplier details, update products associated with suppliers and manage orders.
-   Full Menu for Senior Managers:
-   **===== Supplier Management System =====**
-1. Opening New Supplier Card
-2. Delete Supplier Card
-3. Add Product to Supplier
-4. Remove Product from Supplier
-5. Update Supplier Details
-6. Update Product Discounts
-7. Print All Supplier Cards
-8. Print All Orders Reports
-9. Open New Constant Order
-10. Update Constant Order
-11. Print All Active Orders
-12. exit
-
-   Key Functions for Senior Manager:
-   Open New Supplier Card: Create a new supplier profile by entering supplier details
-   Delete Supplier Card: Remove a supplier from the system.
-   Add Product to Supplier: Add products to the supplier's list of items.
-   Remove Product from Supplier: Remove a product from the supplier.
-   Update Supplier Details: Modify existing supplier information.
-   Update Product Discounts: Apply discounts to the supplier's products.
-   Print All Supplier Cards: Print a list of all registered suppliers.
-   Print All Orders Reports: Print reports for all orders.
-   Open New Constant Order: Create a new recurring order for a supplier.
-   Update Constant Order: Modify details of a recurring order.
-   Print All Active Orders: View and print all active orders.
-   Exit: Exit the system.
-
-Limited Menu for Junior Managers:
-**===== Supplier Management System (Junior Manager) =====**
-1. Open New Supplier Card
-3. Add Product to Supplier
-6. Update Product Discounts
-7. Print All Supplier Cards
-8. Print All Orders Reports
-9. Open New Constant Order
-10. Update Constant Order
-11. Print All Active Orders
-
-
-
-
-
-Key Functions for Junior Manager:
-Open New Supplier Card:  Create a new supplier card
-Add Product to Supplier:
-Add products to the supplier's list of items.
-Update Product Discounts:
-Apply discounts to the supplier's products.
-Print All Supplier Cards: Print a list of all registered suppliers.
-Print All Orders Reports:  Print reports for all orders.
-Open New Constant Order: Create a new recurring order for a supplier
-Update Constant Order: Modify details of a recurring order.
-Print All Active Orders: View and print all active orders.
-Exit: Exit the system
-
-Registering New Users:
-When you start the system, you need to register as either a manager or a Worker.
-**===== Register Menu =====**
-1. Register as Manager
-2. Register as Worker
-exit
-
-
-
-
-
-
-
-
-Manager Registration:
-Enter Name: Provide your name.
-Enter Password: Enter the default password (1111).
-Outcome: If the password matches, registration is successful, and you'll access the Manager Menu.
-Worker Registration:
-Enter Name: Provide your name.
-Enter Password: Enter the default password (2222).
-Outcome: If the password matches, registration is successful, and you'll access the Worker Menu.
+## About
+This system was built as a project to showcase integration between Java, SQLite, and the DAO design pattern. It focuses on clean code principles and efficient data handling.
