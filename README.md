@@ -24,3 +24,23 @@ The system uses SQLite with the following main tables:
 
 ## About
 This system was built as a project to showcase integration between Java, SQLite, and the DAO design pattern. It focuses on clean code principles and efficient data handling.
+
+## Running the System
+To run the system, follow these steps:
+
+1. **Build the Project**:
+   - Use your preferred IDE (e.g., IntelliJ IDEA, Eclipse) to build the project and generate a JAR file.
+   - Ensure the JAR file is named `adss2024_v02.jar` (or adjust the command below if the name is different).
+
+2. **Run the JAR File**:
+   - Open a terminal or Command Prompt.
+   - Navigate to the directory containing the JAR file.
+   - Run the following command:
+     ```bash
+     java -jar adss2024_v02.jar
+     ```
+
+3. **Notes**:
+   - Ensure you have **Java Runtime Environment (JRE)** version 8 or higher installed.
+   - If the database file (`inventory.db`) is required, ensure it is in the same directory as the JAR file.
+
